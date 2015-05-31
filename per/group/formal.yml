@@ -1,0 +1,6 @@
+﻿#继承列表
+inherits:
+
+#权限列表
+pers:
+  - per.friend.formal

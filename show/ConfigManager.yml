@@ -1,0 +1,163 @@
+﻿pageMax: 1
+listSize: 15
+refresh: true
+maps:
+page-1: 5 10 15 20 25 30 35 -2
+show-5: <0>
+info-5:
+  '0':
+    text: §7====================[§a§l配置管理§7]====================
+show-10: <0>
+info-10:
+  '0':
+    text: §7-----------------[§a注册的插件列表§7]-----------------
+
+show-15: "  <0>   <1>   <2>"
+info-15:
+  0:
+    text: '[{0.pluginName}]'
+    con: '{getSize} > 0'
+    color: '3'
+    onClick: cmd /f cm r {0.pluginName}
+    onHover: |-
+      §6重新读取描述:
+      {0.getDescription()}
+      §7(点击重新读取)
+  1:
+    text: '[{1.pluginName}]'
+    con: '{getSize} > 1'
+    color: '3'
+    onClick: cmd /f cm r {1.pluginName}
+    onHover: |-
+      §6重新读取描述:
+      {1.getDescription()}
+      §7(点击重新读取)
+  2:
+    text: '[{2.pluginName}]'
+    con: '{getSize} > 2'
+    color: '3'
+    onClick: cmd /f cm r {2.pluginName}
+    onHover: |-
+      §6重新读取描述:
+      {2.getDescription()}
+      §7(点击重新读取)
+
+show-20: "  <0>   <1>   <2>"
+info-20:
+  0:
+    text: '[{3.pluginName}]'
+    con: '{getSize} > 3'
+    color: '3'
+    onClick: cmd /f cm r {3.pluginName}
+    onHover: |-
+      §6重新读取描述:
+      {3.getDescription()}
+      §7(点击重新读取)
+  1:
+    text: '[{4.pluginName}]'
+    con: '{getSize} > 4'
+    color: '3'
+    onClick: cmd /f cm r {4.pluginName}
+    onHover: |-
+      §6重新读取描述:
+      {4.getDescription()}
+      §7(点击重新读取)
+  2:
+    text: '[{5.pluginName}]'
+    con: '{getSize} > 5'
+    color: '3'
+    onClick: cmd /f cm r {5.pluginName}
+    onHover: |-
+      §6重新读取描述:
+      {5.getDescription()}
+      §7(点击重新读取)
+
+show-25: "  <0>   <1>   <2>"
+info-25:
+  0:
+    text: '[{6.pluginName}]'
+    con: '{getSize} > 6'
+    color: '3'
+    onClick: cmd /f cm r {6.pluginName}
+    onHover: |-
+      §6重新读取描述:
+      {6.getDescription()}
+      §7(点击重新读取)
+  1:
+    text: '[{7.pluginName}]'
+    con: '{getSize} > 7'
+    color: '3'
+    onClick: cmd /f cm r {7.pluginName}
+    onHover: |-
+      §6重新读取描述:
+      {7.getDescription()}
+      §7(点击重新读取)
+  2:
+    text: '[{8.pluginName}]'
+    con: '{getSize} > 8'
+    color: '3'
+    onClick: cmd /f cm r {8.pluginName}
+    onHover: |-
+      §6重新读取描述:
+      {8.getDescription()}
+      §7(点击重新读取)
+
+show-30: "  <0>   <1>   <2>"
+info-30:
+  0:
+    text: '[{9.pluginName}]'
+    con: '{getSize} > 9'
+    color: '3'
+    onClick: cmd /f cm r {9.pluginName}
+    onHover: |-
+      §6重新读取描述:
+      {9.getDescription()}
+      §7(点击重新读取)
+  1:
+    text: '[{10.pluginName}]'
+    con: '{getSize} > 10'
+    color: '3'
+    onClick: cmd /f cm r {10.pluginName}
+    onHover: |-
+      §6重新读取描述:
+      {10.getDescription()}
+      §7(点击重新读取)
+  2:
+    text: '[{11.pluginName}]'
+    con: '{getSize} > 11'
+    color: '3'
+    onClick: cmd /f cm r {11.pluginName}
+    onHover: |-
+      §6重新读取描述:
+      {11.getDescription()}
+      §7(点击重新读取)
+
+show-35: "  <0>   <1>   <2>"
+info-35:
+  0:
+    text: '[{12.pluginName}]'
+    con: '{getSize} > 12'
+    color: '3'
+    onClick: cmd /f cm r {12.pluginName}
+    onHover: |-
+      §6重新读取描述:
+      {12.getDescription()}
+      §7(点击重新读取)
+  1:
+    text: '[{13.pluginName}]'
+    con: '{getSize} > 13'
+    color: '3'
+    onClick: cmd /f cm r {13.pluginName}
+    onHover: |-
+      §6重新读取描述:
+      {13.getDescription()}
+      §7(点击重新读取)
+  2:
+    text: '[{14.pluginName}]'
+    con: '{getSize} > 14'
+    color: '3'
+    onClick: cmd /f cm r {14.pluginName}
+    onHover: |-
+      §6重新读取描述:
+      {14.getDescription()}
+      §7(点击重新读取)

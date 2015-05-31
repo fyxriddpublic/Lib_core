@@ -1,0 +1,13 @@
+﻿name: Lib_core
+main: lib.core.api.CorePlugin
+version: 1.0
+load: startup
+depend: [ProtocolLib, PacketWrapper]
+softdepend: [Vault]
+commands:
+  f:
+    description: FuncManager
+    usage: /<command> ?
+  s:
+    description: InputManager
+    usage: /<command> ?
