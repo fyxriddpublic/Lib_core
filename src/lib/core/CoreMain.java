@@ -53,6 +53,7 @@ public class CoreMain implements Listener{
     public static InputManager inputManager;
     public static RealName realName;
     public static Info info;
+    public static EnterBlockTypeManager enterBlockTypeManager;
 
     //配置文件内容
     public static HashList<String> description;
@@ -95,6 +96,7 @@ public class CoreMain implements Listener{
         inputManager = new InputManager();
         realName = new RealName();
         info = new Info();
+        enterBlockTypeManager = new EnterBlockTypeManager();
         //读取配置文件
         loadConfig();
         //注册事件
