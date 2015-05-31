@@ -1,5 +1,6 @@
 package lib.core.eco;
 
+import lib.core.CoreMain;
 import lib.core.api.ConfigApi;
 import lib.core.api.CorePlugin;
 import lib.core.api.event.ReloadConfigEvent;
@@ -36,7 +37,7 @@ public class EcoManager implements Listener {
 
     public EcoManager() {
         eco = new Eco();
-        if (Bukkit.getPluginManager().getPlugin("Vault") != null) vaultHandler = new VaultHandler();
+        if (CoreMain.vaultHook) vaultHandler = new VaultHandler();
 
         //读取配置
         loadConfig();
@@ -45,7 +46,7 @@ public class EcoManager implements Listener {
 
         //添加默认的经济处理器
         register("eco", eco);
-        register("vault", vaultHandler);
+        if (CoreMain.vaultHook) register("vault", vaultHandler);
     }
 
     @EventHandler(priority= EventPriority.LOW)

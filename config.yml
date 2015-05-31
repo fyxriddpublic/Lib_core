@@ -50,7 +50,7 @@ description:                     #字符串列表,Lib插件的配置文件重新
 #####         配置          #####
 #################################
 debug: true                      #是否开启调试模式
-lib_core_admin: "core.admin"  #插件管理权限
+lib_core_admin: "lib.core.admin"  #插件管理权限
 #################################
 #####       哈希列表        #####
 #################################
@@ -64,7 +64,7 @@ names:
 #####       配置管理        #####
 #################################
 config:
-  adminPer: "core.config"     #配置管理的管理权限
+  adminPer: "lib.core.config"     #配置管理的管理权限
   log:
     prefix: "[{1}][{2}] "      #日志前缀格式,'{1}'代表时间,'{2}'代表插件名
     dateFormat: "yyyy-MM-dd HH:mm:ss"  #时间格式
@@ -81,7 +81,7 @@ funcManager:
   banFuncs:                      #禁用的功能列表(有时因各种原因会临时禁用)
     - "xxx"
   perPass: true                  #对于有权限passPer的玩家,是否不进行命令限制
-  passPer: "core.func.pass"
+  passPer: "lib.core.func.pass"
   cancelCmdNoConfig: false       #对于没有绑定到功能的命令,是否取消
   bypassCmds:                    #不检测限制的命令名列表(大小写不敏感)
     - "s"
@@ -146,7 +146,7 @@ show:
 #################################
 eco:
   max: 10000000                  #玩家钱上限,>=0
-  priority:                      #优先级,'名字 优先级(整数)',默认0级,目前有两个处理器:eco,vault
+  priority:                      #优先级,'名字 优先级(整数)',默认0级,目前有两个处理器:eco,vault #!!!vault需要前置Vault插件
     - "eco 100"
     - "vault 50"
   in:                            #自带的经济处理器的配置
@@ -159,7 +159,7 @@ eco:
 per:
   saveInterval: 1000             #玩家两次文件保存的最小间隔,单位毫秒
   removeTime: 600000             #为了节省内存,玩家删除缓存的最大间隔,单位毫秒
-  priority:                      #优先级,'名字 优先级(整数)',默认0级,目前有两个处理器:per,vault
+  priority:                      #优先级,'名字 优先级(整数)',默认0级,目前有两个处理器:per,vault #!!!vault需要前置Vault插件
     - "per 100"
     - "vault 50"
   other:

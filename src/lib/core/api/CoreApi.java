@@ -60,6 +60,28 @@ public class CoreApi {
     private static ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 
     /**
+     * 以UTF-8格式读入文本文件
+     * @param is 输入流
+     * @return 字符串形式的文件内容,异常返回null
+     */
+    public static String getDataAsText(InputStream is) {
+        try {
+            StringBuilder sb = new StringBuilder();
+
+            BufferedReader br = new BufferedReader(new java.io.InputStreamReader(is, Charset.forName("utf-8")));
+            while (br.ready()) {
+                if (sb.length() > 0) sb.append("\n");
+                sb.append(br.readLine());
+            }
+            br.close();
+
+            return sb.toString();
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    /**
      * 获取保存在物品上的数据
      * @param is 物品,不为null
      * @param key 唯一的key,不为null

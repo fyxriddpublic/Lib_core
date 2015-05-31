@@ -29,6 +29,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class CoreMain implements Listener{
+    public static boolean vaultHook;
+
     private static final Lock lock = new ReentrantLock();
 
     //database
@@ -62,6 +64,14 @@ public class CoreMain implements Listener{
 
     //启动插件
     public CoreMain() {
+       //前置检测
+        try {
+            Class.forName("net.milkbowl.vault.Vault");
+            vaultHook = true;
+        } catch (ClassNotFoundException e) {
+            vaultHook = false;
+        }
+
         ProtocolManager pm = ProtocolLibrary.getProtocolManager();
         FancyMessageImpl.init(pm);
         //manager
