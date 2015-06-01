@@ -39,14 +39,14 @@ public class EcoManager implements Listener {
         eco = new Eco();
         if (CoreMain.vaultHook) vaultHandler = new VaultHandler();
 
+        //添加默认的经济处理器
+        register("eco", eco);
+        if (CoreMain.vaultHook) register("vault", vaultHandler);
+
         //读取配置
         loadConfig();
         //注册事件
         Bukkit.getPluginManager().registerEvents(this, CorePlugin.instance);
-
-        //添加默认的经济处理器
-        register("eco", eco);
-        if (CoreMain.vaultHook) register("vault", vaultHandler);
     }
 
     @EventHandler(priority= EventPriority.LOW)
