@@ -4,9 +4,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-/**
- * 如果有其它聊天插件,则对应的插件应该修改聊天信息或取消聊天事件
- */
 public class PlayerChatEvent extends Event{
     private static final HandlerList handlers = new HandlerList();
 
