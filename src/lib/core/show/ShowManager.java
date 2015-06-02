@@ -1,10 +1,6 @@
 package lib.core.show;
 
 import lib.core.api.inter.*;
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketEvent;
 import lib.core.InputManager;
 import lib.core.api.*;
 import lib.core.api.event.PlayerChatEvent;
@@ -98,15 +94,6 @@ public class ShowManager implements Listener, FunctionInterface {
         Bukkit.getPluginManager().registerEvents(this, CorePlugin.instance);
         //注册功能
         FuncManager.register(this);
-        //拦截信息
-        ProtocolLibrary.getProtocolManager().addPacketListener(
-                new PacketAdapter(CorePlugin.instance, PacketType.Play.Server.CHAT) {
-                    @Override
-                    public void onPacketSending(PacketEvent event) {
-                        if (playerContextHash.containsKey(event.getPlayer()))
-                            event.setCancelled(true);
-                    }
-                });
     }
 
     @EventHandler(priority= EventPriority.LOW)

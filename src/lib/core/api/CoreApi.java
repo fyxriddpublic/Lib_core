@@ -60,6 +60,16 @@ public class CoreApi {
     private static ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 
     /**
+     * 其它聊天插件不能自行给玩家发送聊天信息或调用ShowApi.tip方法,而要调用此方法,否则不会有延时显示聊天信息的功能
+     * @param p 玩家,可为null(null时无效果)
+     * @param msg 聊天信息,可为null(null时无效果)
+     * @param force 是否强制显示
+     */
+    public static void addChat(Player p, FancyMessage msg, boolean force) {
+        CoreMain.chatManager.addChat(p, msg, force);
+    }
+
+    /**
      * 以UTF-8格式读入文本文件
      * @param is 输入流
      * @return 字符串形式的文件内容,异常返回null
