@@ -1,10 +1,13 @@
 package lib.core.api;
 
+import com.comphenix.packetwrapper.WrapperPlayServerBlockChange;
 import com.comphenix.packetwrapper.WrapperPlayServerWorldParticles;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketContainer;
+import com.comphenix.protocol.wrappers.BlockPosition;
 import com.comphenix.protocol.wrappers.EnumWrappers;
+import com.comphenix.protocol.wrappers.WrappedBlockData;
 import lib.core.*;
 import lib.core.api.inter.FancyMessage;
 import lib.core.api.inter.InputHandler;
@@ -398,6 +401,42 @@ public class CoreApi {
             }
         }
         return p;
+    }
+
+    /**
+     * 获取某个位置附近的玩家
+     * @param l 位置,可为null(null时返回空列表)
+     * @param range 范围,>=0.0(<0.0时返回空列表)
+     * @return 不为null
+     */
+    public static List<Player> getNearbyPlayers(Location l, double range) {
+        List<Player> result = new ArrayList<Player>();
+        if (l == null || range < 0.0) return result;
+        for (Player p:l.getWorld().getPlayers()) {
+            if (l.distance(p.getLocation()) <= range) result.add(p);
+        }
+        return result;
+    }
+
+    /**
+     * 给附近指定范围内的所有玩家发送方块更新包
+     * @param loc 位置,可为null(null时无效果)
+     * @param range 范围,>=0.0(<0.0时无效果)
+     * @param block 方块,可为null(null时无效果)
+     */
+    public static void updateBlock(Location loc, double range, Block block) {
+        if (loc == null || range < 0.0 || block == null) return;
+
+        WrapperPlayServerBlockChange wrapper = new WrapperPlayServerBlockChange();
+        wrapper.setLocation(new BlockPosition(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+        wrapper.setBlockData(WrappedBlockData.createData(block.getType(), block.getData()));
+        PacketContainer pc = wrapper.getHandle();
+        for (Player p:CoreApi.getNearbyPlayers(loc, range)) {
+            try {
+                ProtocolLibrary.getProtocolManager().sendServerPacket(p, pc, true);
+            } catch (InvocationTargetException e1) {
+            }
+        }
     }
 
     /**
