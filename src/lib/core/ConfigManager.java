@@ -250,12 +250,6 @@ public class ConfigManager implements FunctionInterface, Listener, ShowInterface
         return PerApi.has(name, adminPer);
     }
 
-    @Override
-    public void setOn(String name, String subFunc, boolean on) {
-        if (on) PerApi.add(name, adminPer);
-        else PerApi.del(name, adminPer);
-    }
-
     /**
      * 命令:<br>
      * 'a' 打开注册的插件列表页面<br>
@@ -263,20 +257,20 @@ public class ConfigManager implements FunctionInterface, Listener, ShowInterface
      * 's 插件名' 重新读取指定插件的配置<br>
      */
     @Override
-    public void onOperate(Player p, String data) {
+    public void onOperate(Player p, String... args) {
         try {
-            if (data != null) {
-                String[] args = data.split(" ");
-                FancyMessage msg;
-                int length = args.length;
+            FancyMessage msg;
 
-                if (length == 1) {
+            switch (args.length) {
+                case 1:
                     if (args[0].equalsIgnoreCase("a")) {
                         Collection<ConfigContext> collection = contextHash.values();
                         ShowList showList = ShowApi.getShowList(2, collection);
-                        ShowManager.show(this, data, p, CorePlugin.pn, PAGE_NAME, showList, null, null, null);
+                        ShowManager.show(this, args, p, CorePlugin.pn, PAGE_NAME, showList, null, null, null);
+                        return;
                     }
-                }else if (length == 2) {
+                    break;
+                case 2:
                     String pluginName = args[1];
                     if (args[0].equalsIgnoreCase("r")) {//提示重新读取指定插件的配置
                         //cmd
@@ -290,16 +284,21 @@ public class ConfigManager implements FunctionInterface, Listener, ShowInterface
                         tu.addTransaction(tipTransaction);
                         tu.setRunning(tipTransaction.getId());
                         tipTransaction.updateShow();
+                        return;
                     }else if (args[0].equalsIgnoreCase("s")) {//重新读取指定插件的配置
                         if (loadConfig(pluginName)) msg = get(400);
                         else msg = get(405);
                         ShowApi.tip(p, msg, true);
+                        return;
                     }
-                }
+                    break;
             }
-        } catch (Exception e) {
+        } catch (Exception e) {//操作异常
             ShowApi.tip(p, get(410), true);
+            return;
         }
+        //输入格式错误
+        ShowApi.tip(p, get(5), true);
     }
 
     @Override

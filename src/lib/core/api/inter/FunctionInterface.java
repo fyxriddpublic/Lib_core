@@ -15,23 +15,15 @@ public interface FunctionInterface {
 	/**
 	 * 功能对玩家是否开启
 	 * @param name 玩家名,不为null
-	 * @param subFunc 子功能,可为null
-	 * @return
+	 * @param data 附加数据,可为null
+	 * @return 是否开启
 	 */
-	public boolean isOn(String name, String subFunc);
-	
-	/**
-	 * 设置功能对玩家的开启状态
-	 * @param name 玩家名,不为null
-	 * @param subFunc 子功能,可为null
-	 * @param on 是否开启
-	 */
-	public void setOn(String name, String subFunc, boolean on);
+	public boolean isOn(String name, String data);
 	
 	/**
 	 * 操作时调用
 	 * @param p 操作的玩家,不为null
-	 * @param data 操作的数据,可为null
+	 * @param args 操作的数据,不为null可为空(长度为0)
 	 */
-	public void onOperate(Player p, String data);
+	public void onOperate(Player p, String... args);
 }

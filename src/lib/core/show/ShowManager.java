@@ -767,12 +767,8 @@ public class ShowManager implements Listener, FunctionInterface {
     }
 
     @Override
-    public boolean isOn(String name, String subFunc) {
+    public boolean isOn(String name, String data) {
         return true;
-    }
-
-    @Override
-    public void setOn(String name, String subFunc, boolean on) {
     }
 
     /**
@@ -784,8 +780,8 @@ public class ShowManager implements Listener, FunctionInterface {
      * 'p/l to 页面' 页面/列表 前往指定页<br>
      */
     @Override
-    public void onOperate(Player p, String data) {
-        if(data != null) {
+    public void onOperate(Player p, String... args) {
+        if (args.length > 0) {
             try {
                 //当前没有查看的页面
                 PlayerContext pc = playerContextHash.get(p);
@@ -794,7 +790,6 @@ public class ShowManager implements Listener, FunctionInterface {
                     return;
                 }
                 //检测操作
-                String[] args = data.split(" ");
                 int length = args.length;
                 //变量不定长
                 if (length >= 2) {
@@ -911,6 +906,9 @@ public class ShowManager implements Listener, FunctionInterface {
                 }
             } catch (NumberFormatException e) {//数字格式错误
                 tip(p, get(126), true);
+                return;
+            }  catch (Exception e) {//操作异常
+                tip(p, get(410), true);
                 return;
             }
         }
