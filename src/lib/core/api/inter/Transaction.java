@@ -44,9 +44,9 @@ public abstract class Transaction {
 	
 	/**
 	 * 玩家操作事务时调用
-	 * @param content 操作内容,可为null
+	 * @param args 操作内容
 	 */
-	public abstract void onOperate(String content);
+	public abstract void onOperate(String... args);
 	
 	/**
 	 * 事务过期时调用

@@ -91,18 +91,16 @@ public class TipTransactionImpl extends TipTransaction {
      * 'a' 确认提交<br>
      * 'b 名' 指定正在修改的key(会同时注册输入)
      * 'c' 取消
-     * @param content 操作内容,可为null
      */
     @Override
-    public void onOperate(String content) {
-        if (content == null || content.isEmpty()) return;
+    public void onOperate(String... args) {
+        if (args.length == 0) return;
         Player p = Bukkit.getPlayerExact(getName());
         if (p == null) {//玩家不存在或不在线
             TransactionUser tu = TransactionApi.getTransactionUser(getName());
             if (tu != null) tu.delTransaction(getId());
             return;
         }
-        String[] args = content.split(" ");
         switch (args.length) {
             case 1:
                 if (args[0].equalsIgnoreCase("a")) {//确认提交

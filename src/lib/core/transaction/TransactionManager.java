@@ -47,17 +47,13 @@ public class TransactionManager implements Listener,FunctionInterface {
     }
 
     @Override
-    public boolean isOn(String name, String subFunc) {
+    public boolean isOn(String name, String data) {
         return true;
     }
 
     @Override
-    public void setOn(String name, String subFunc, boolean on) {
-    }
-
-    @Override
-    public void onOperate(Player p, String data) {
-        operate(p, data);
+    public void onOperate(Player p, String... args) {
+        operate(p, args);
     }
 
     /**
@@ -91,10 +87,10 @@ public class TransactionManager implements Listener,FunctionInterface {
     /**
      * 事务处理
      * @param p 玩家,不为null
-     * @param data 操作内容,可为null
+     * @param args 操作内容
      * @return 操作结果
      */
-    private static boolean operate(Player p, String data) {
+    private static boolean operate(Player p, String... args) {
         TransactionUser user = transHash.get(p.getName());
         if (user == null) {//当前没有事务
             ShowApi.tip(p, get(1110), true);
@@ -107,7 +103,7 @@ public class TransactionManager implements Listener,FunctionInterface {
             return false;
         }
         //执行事务
-        trans.onOperate(data);
+        trans.onOperate(args);
         return true;
     }
 

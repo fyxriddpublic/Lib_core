@@ -18,25 +18,25 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import java.util.HashMap;
 
 public class FuncManager implements Listener, CommandExecutor {
+
+    //配置
+
 	private static ChatColor invalidColor;
 	private static ChatColor[] invalidFormat;
 	private static ChatColor offColor;
 	private static ChatColor[] offFormat;
 	private static HashList<String> banFuncs;
-	private static boolean perPass;
-	private static String passPer;
-	private static boolean cancelCmdNoConfig;
-	//命令(忽略大小写) 功能名
-	private static HashMap<String, String> cmdToFuncHash;
-	//功能名 功能
-	private static HashMap<String, FunctionInterface> funcHash = new HashMap<String, FunctionInterface>();
     //使用名 功能名
 	private static HashMap<String, String> funcMap;
+
+    //缓存
+
+    //功能名 功能
+    private static HashMap<String, FunctionInterface> funcHash = new HashMap<String, FunctionInterface>();
 
 	public FuncManager() {
 		//注册事件
@@ -74,12 +74,19 @@ public class FuncManager implements Listener, CommandExecutor {
             ShowManager.tip(p, get(505, funcName), true);
             return true;
         }
-        //调用功能
-        String data;
-        if (length <= 1) data = null;
-        else data = CoreApi.combine(args, " ", 1, length);
-        //限制检测
-        if (operate(p, funcName, null)) func.onOperate(p, data);
+        //功能无效
+        if (!isValid(func)) {
+            ShowManager.tip(p, get(525), true);
+            return true;
+        }
+
+        //发出事件
+        PlayerOperateEvent e = new PlayerOperateEvent(p, func, args);
+        Bukkit.getPluginManager().callEvent(e);
+        if (e.isCancel()) return true;
+
+        //操作
+        func.onOperate(p, args);
         return true;
     }
 
@@ -88,56 +95,6 @@ public class FuncManager implements Listener, CommandExecutor {
 		if (e.getPlugin().equals(CorePlugin.pn)) loadConfig();
 	}
 
-	@EventHandler(priority=EventPriority.LOW,ignoreCancelled=true)
-	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent e) {
-		//有权限不进行限制检测
-		if (perPass && PerApi.has(e.getPlayer(), passPer)) return;
-		//限制检测
-		try {
-			String[] ss = e.getMessage().split(" ");
-			String cmdName = ss[0].substring(1).toLowerCase();
-			String funcName = cmdToFuncHash.get(cmdName);
-			if (funcName == null) {//没有对应的命令->功能配置
-				if (cancelCmdNoConfig) e.setCancelled(true);
-			}else {//功能检测
-				if (!operate(e.getPlayer(), funcName, null)) e.setCancelled(true);
-			}
-		} catch (Exception e1) {//命令异常,取消
-			e.setCancelled(true);
-		}
-	}
-
-    /**
-     * 玩家操作时必须调用<br>
-     * 比如命令调用,功能调用
-     * @param p 玩家,不为null
-     * @param funcName 想要操作的功能名,不为null
-     * @param subFunc 子功能,可为null
-     * @return 操作是否有效,false表示需要取消操作
-     */
-	public boolean operate(Player p, String funcName, String subFunc) {
-        //功能不存在
-		FunctionInterface func = getFunc(funcName);
-		if (func == null) {
-            ShowManager.tip(p, get(520), true);
-            return false;
-        }
-        //功能无效
-        if (!isValid(func)) {
-            ShowManager.tip(p, get(525), true);
-            return false;
-        }
-        //功能对玩家未开启
-        if (!func.isOn(p.getName(), subFunc)) {
-			ShowManager.tip(p, get(530), true);
-			return false;
-		}
-        //检测
-        PlayerOperateEvent e = new PlayerOperateEvent(p, func, subFunc);
-        Bukkit.getPluginManager().callEvent(e);
-        return !e.isCancel();
-	}
-	
 	/**
 	 * 获取功能
 	 * @param name 功能名,不为null
@@ -230,17 +187,6 @@ public class FuncManager implements Listener, CommandExecutor {
 		//banFuncs
 		banFuncs = new HashListImpl<String>();
 		banFuncs.convert(config.getStringList("banFuncs"), false);
-		//perPass,passPer,cancelCmdNoConfig
-		perPass = config.getBoolean("funcManager.perPass");
-		passPer = config.getString("funcManager.passPer");
-		cancelCmdNoConfig = config.getBoolean("funcManager.cancelCmdNoConfig");
-		//cmdToFunc
-		cmdToFuncHash = new HashMap<String, String>();
-		for (String ss:config.getStringList("funcManager.cmdToFunc")) {
-			String cmd = ss.split(" ")[0].toLowerCase();
-			String funcName = ss.split(" ")[1];
-			cmdToFuncHash.put(cmd, funcName);
-		}
         //func map
         funcMap = new HashMap<String, String>();
         for (String func:config.getStringList("funcManager.funcMap")) {

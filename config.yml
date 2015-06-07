@@ -82,13 +82,6 @@ funcManager:
     format: ""
   banFuncs:                      #禁用的功能列表(有时因各种原因会临时禁用)
     - "xxx"
-  perPass: true                  #对于有权限passPer的玩家,是否不进行命令限制
-  passPer: "lib.core.func.pass"
-  cancelCmdNoConfig: false       #对于没有绑定到功能的命令,是否取消
-  bypassCmds:                    #不检测限制的命令名列表(大小写不敏感)
-    - "s"
-  cmdToFunc:                     #命令绑定到功能'命令名(大小写不敏感) 功能名(大小写敏感)'
-    - "go Land"
   funcMap:                       #功能映射,'使用名 功能名',使用名以短为标准,功能名以容易理解为标准(改动可能会出异常)
     - "cm ConfigManager"         #配置管理
     - "sm ShowManager"           #显示管理

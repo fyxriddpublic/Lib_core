@@ -13,14 +13,14 @@ public class PlayerOperateEvent extends Event{
 	private static final HandlerList handlers = new HandlerList();
 	private Player p;
 	private FunctionInterface func;
-    private String subFunc;
+    private String[] args;
 	
 	private boolean cancel;
 	
-	public PlayerOperateEvent(Player p, FunctionInterface func, String subFunc) {
+	public PlayerOperateEvent(Player p, FunctionInterface func, String... args) {
 		this.p = p;
 		this.func = func;
-		this.subFunc = subFunc;
+		this.args = args;
 	}
 	
 	@Override
@@ -40,8 +40,8 @@ public class PlayerOperateEvent extends Event{
 		this.cancel = cancel;
 	}
 
-    public String getSubFunc() {
-        return subFunc;
+    public String[] getArgs() {
+        return args;
     }
 
     public FunctionInterface getFunc() {

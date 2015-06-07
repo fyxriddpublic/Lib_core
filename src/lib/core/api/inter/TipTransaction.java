@@ -23,10 +23,10 @@ public abstract class TipTransaction extends Transaction {
      * 'a' 确认提交<br>
      * 'b 名' 指定正在修改的key(会同时注册输入)
      * 'c' 取消
-     * @param content 操作内容,可为null
+     * @param args 操作内容
      */
     @Override
-    public void onOperate(String content) {
+    public void onOperate(String... args) {
     }
 
     @Override
