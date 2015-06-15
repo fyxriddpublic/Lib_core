@@ -3,9 +3,7 @@
   <component name="FacetManager">
     <facet type="hibernate" name="Hibernate">
       <configuration>
-        <datasource-map>
-          <unit-entry name="hibernate.cfg.xml" value="463246b0-061e-43f8-8f3b-c28d1a24429d" />
-        </datasource-map>
+        <datasource-map />
         <naming-strategy-map />
         <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/src/main/resources/hibernate.cfg.xml" />
       </configuration>
@@ -18,10 +16,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/target" type="java-resource" />
-      <excludeFolder url="file://$MODULE_DIR$/target/classes" />
-      <excludeFolder url="file://$MODULE_DIR$/target/maven-archiver" />
-      <excludeFolder url="file://$MODULE_DIR$/target/maven-status" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -45,7 +40,7 @@
     <orderEntry type="library" name="Maven: com.zaxxer:HikariCP-java6:2.3.3" level="project" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:5.1.35" level="project" />
     <orderEntry type="library" name="Maven: org.xerial:sqlite-jdbc:3.8.10.1" level="project" />
-    <orderEntry type="module" module-name="SqliteDialect" />
+    <orderEntry type="library" name="Maven: com.fyxridd:SqliteDialect:1.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.fyxridd.lib:spigot:1.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.fyxridd.lib:Vault:1.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.fyxridd.lib:PacketWrapper:1.0" level="project" />
