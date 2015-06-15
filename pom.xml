@@ -49,6 +49,7 @@
         </resources>
 
         <plugins>
+            <!--Manifest-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -61,55 +62,6 @@
                     </archive>
                 </configuration>
             </plugin>
-
-            <!--<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>1.2.1</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <archive>
-                                        <manifest>
-                                            <addClasspath>true</addClasspath>
-                                            <classpathPrefix>../lib/</classpathPrefix>
-                                        </manifest>
-                                    </archive>
-                                    &lt;!&ndash;<manifestEntries>
-                                        <Class-Path>../lib/json-20140107.jar
-                                        ../lib/snakeyaml-1.15.jar
-                                        ../lib/mail-1.4.7.jar
-                                        ../lib/hibernate-core-4.3.10.Final.jar
-                                        ../lib/activation-1.1.jar
-                                        ../lib/xml-apis-1.0.b2.jar
-                                        ../lib/antlr-2.7.7.jar
-                                        ../lib/dom4j-1.6.1.jar
-                                        ../lib/slf4j-api-1.7.12.jar
-                                        ../lib/hibernate-commons-annotations-4.0.5.Final.jar
-                                        ../lib/hibernate-jpa-2.1-api-1.0.0.Final.jar
-                                        ../lib/jandex-1.1.0.Final.jar
-                                        ../lib/javassist-3.18.1-GA.jar
-                                        ../lib/jboss-logging-3.1.3.GA.jar
-                                        ../lib/jboss-logging-annotations-1.2.0.Beta1.jar
-                                        ../lib/jboss-transaction-api_1.2_spec-1.0.0.Final.jar
-                                        ../lib/HikariCP-java6-2.3.3.jar
-                                        ../lib/hibernate-hikaricp-4.3.10.Final.jar
-                                        ../lib/mysql-connector-java-5.1.35.jar
-                                        ../lib/sqlite-jdbc-3.8.10.1.jar
-                                        ../lib/SqliteDialect-1.0.jar</Class-Path>
-                                    </manifestEntries>&ndash;&gt;
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>-->
 
             <!--复制-->
             <plugin>
