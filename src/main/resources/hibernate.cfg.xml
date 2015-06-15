@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+<session-factory>
+    <!-- 禁用二级缓存  -->
+    <property name="cache.provider_class">org.hibernate.cache.internal.NoCachingRegionFactory</property>
+
+    <!-- 策略 -->
+    <property name="hbm2ddl.auto">update</property>
+
+    <!--方言-->
+    <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
+
+    <!--连接池-->
+    <property name="hibernate.connection.provider_class">org.hibernate.hikaricp.internal.HikariCPConnectionProvider</property>
+    <property name="hibernate.hikari.dataSourceClassName">com.mysql.jdbc.jdbc2.optional.MysqlDataSource</property>
+    <property name="hibernate.hikari.dataSource.url">jdbc:mysql://localhost:3306/eworld183l</property>
+    <property name="hibernate.hikari.dataSource.user">root</property>
+    <property name="hibernate.hikari.dataSource.password">root</property>
+    <property name="hibernate.hikari.idleTimeout">600000</property>
+    <!--We strongly recommend setting this value, and it should be at least 30 seconds less than any database-level connection timeout-->
+    <property name="hibernate.hikari.maxLifetime">1800000</property>
+    <!--This sets the number of prepared statements that the MySQL driver will cache per connection-->
+    <!--The default is a conservative 25.We recommend setting this to between 250-500.-->
+    <property name="hibernate.hikari.dataSource.prepStmtCacheSize">350</property>
+    <!--This is the maximum length of a prepared SQL statement that the driver will cache-->
+    <!--The MySQL default is 256. In our experience, especially with ORM frameworks like Hibernate, this default is well below the threshold of generated statement lengths. Our recommended setting is 2048.-->
+    <property name="hibernate.hikari.dataSource.prepStmtCacheSqlLimit">2048</property>
+    <!--Neither of the above parameters have any effect if the cache is in fact disabled, as it is by default. You must set this parameter to true.-->
+    <property name="hibernate.hikari.dataSource.cachePrepStmts">true</property>
+</session-factory>
+</hibernate-configuration>

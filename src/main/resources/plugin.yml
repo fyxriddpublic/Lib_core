@@ -1,0 +1,13 @@
+﻿name: Lib_core
+main: com.fyxridd.lib.core.api.CorePlugin
+version: 1.4
+load: startup
+depend: [ProtocolLib, PacketWrapper]
+softdepend: [Vault]
+commands:
+  f:
+    description: FuncManager
+    usage: /<command> ?
+  s:
+    description: InputManager
+    usage: /<command> ?
