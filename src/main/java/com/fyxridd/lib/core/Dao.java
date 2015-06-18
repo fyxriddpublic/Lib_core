@@ -25,6 +25,10 @@ public class Dao {
 		sessionFactory = config.buildSessionFactory(service);
 	}
 
+    public static SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+
     /**
      * @see com.fyxridd.lib.core.api.CorePlugin#registerHbm(java.io.File)
      */

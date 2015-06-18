@@ -8,8 +8,10 @@ import com.fyxridd.lib.core.Info;
 import com.fyxridd.lib.core.per.PerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.hibernate.SessionFactory;
 
 import java.io.File;
+import java.util.List;
 
 public class CorePlugin extends JavaPlugin{
     public static CorePlugin instance;
@@ -25,6 +27,25 @@ public class CorePlugin extends JavaPlugin{
 
     @Override
     public void onLoad() {
+        //生成文件
+        List<String> filter = ConfigManager.getDefaultFilter();
+        filter.add("names.yml");
+        filter.add("EcoUser.hbm.xml");
+        filter.add("InfoUser.hbm.xml");
+        filter.add("User.hbm.xml");
+
+        filter.add("per/group/admin.yml");
+        filter.add("per/group/default.yml");
+        filter.add("per/group/formal.yml");
+        filter.add("per/user/default.yml");
+
+        filter.add("show/ConfigManager.yml");
+        filter.add("show/ConfigManager_description.yml");
+        filter.add("show/Description.yml");
+        filter.add("show/xxx_description.yml");
+
+        CoreApi.generateFiles(getFile(), getDataFolder().getAbsolutePath(), filter);
+
         //注册hbm
         registerHbm(new File(getDataFolder(), "EcoUser.hbm.xml"));
         registerHbm(new File(getDataFolder(), "InfoUser.hbm.xml"));
@@ -77,4 +98,12 @@ public class CorePlugin extends JavaPlugin{
     public static void registerHbm(File hbm) {
         Dao.registerHbm(hbm);
     }
+
+    /**
+     * 获取SessionFactory
+     */
+    public static SessionFactory getSessionFactory() {
+        return Dao.getSessionFactory();
+    }
+
 }
