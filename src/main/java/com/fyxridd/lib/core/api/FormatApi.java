@@ -7,17 +7,47 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class FormatApi {
     /**
-     * @see FormatManager#get(String, int)
+     * 获取文本(默认语言)
+     * @param pluginName 文本所属插件名,可为null(null时返回null)
+     * @param id 文本id
+     * @return 文本(复制版),如果没有或异常则返回null
      */
     public static FancyMessage get(String pluginName, int id) {
         return FormatManager.get(pluginName, id);
     }
 
     /**
-     * @see FormatManager#get(String, int, Object...)
+     * 获取格式转换后的文本(默认语言)
+     * @param pluginName 文本所属插件名,可为null(null时返回null)
+     * @param id 文本id
+     * @param args 变量列表,null项变量会被变成"".会将替换符{0},{1},{2}...替换成对应的变量
+     * @return 转换后的字符串(复制版),异常返回null
      */
     public static FancyMessage get(String pluginName, int id, Object... args) {
         return FormatManager.get(pluginName, id, args);
+    }
+
+    /**
+     * 获取文本
+     * @param lang 指定语言
+     * @param pluginName 文本所属插件名,可为null(null时返回null)
+     * @param id 文本id
+     * @return 文本(复制版),如果没有或异常则返回null
+     */
+    public static FancyMessage get(String lang, String pluginName, int id) {
+        return FormatManager.get(lang, pluginName, id);
+    }
+
+    /**
+     * 获取格式转换后的文本
+     * @param lang 指定语言
+     * @param pluginName 文本所属插件名,可为null(null时返回null)
+     * @param id 文本id
+     * @param args 变量列表,null项变量会被变成"".会将替换符{0},{1},{2}...替换成对应的变量
+     * @return 转换后的字符串(复制版),异常返回null
+     */
+    public static FancyMessage get(String lang, String pluginName, int id, Object... args) {
+        return FormatManager.get(lang, pluginName, id, args);
     }
 
     /**

@@ -16,6 +16,9 @@ import org.bukkit.event.Listener;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
+import java.util.regex.Pattern;
 
 public class ConfigManager implements FunctionInterface, Listener, ShowInterface {
     /**
@@ -24,14 +27,12 @@ public class ConfigManager implements FunctionInterface, Listener, ShowInterface
 	private static class ConfigContext {
 		File sourceJarFile;
 		String destPath;//存放配置文件的路径
-		List<String> filter;
 		String pluginName;
         HashList<String> description;
 
-		public ConfigContext(File sourceJarFile, String destPath, List<String> filter, String pluginName, HashList<String> description) {
+		public ConfigContext(File sourceJarFile, String destPath, String pluginName, HashList<String> description) {
 			this.sourceJarFile = sourceJarFile;
 			this.destPath = destPath;
-			this.filter = filter;
 			this.pluginName = pluginName;
             this.description = description;
 		}
@@ -60,12 +61,7 @@ public class ConfigManager implements FunctionInterface, Listener, ShowInterface
     private static PrintStream log;
 
     //默认过滤器
-	private static List<String> defaultFilter = new ArrayList<String>();
-    static {
-        defaultFilter.add("config.yml");
-        defaultFilter.add("language_cn.yml");
-        defaultFilter.add("hibernate.cfg.xml");
-    }
+    private static Pattern filter = Pattern.compile("resources/[\\S]+");
 
 	//插件名 配置上下文
 	private static HashMap<String, ConfigContext> contextHash = new HashMap<String, ConfigContext>();
@@ -169,32 +165,19 @@ public class ConfigManager implements FunctionInterface, Listener, ShowInterface
     }
 
 	/**
-	 * 获取默认的过滤器<br>
-     * 包含"config.yml","language_cn.yml","hibernate.cfg.xml"三个文件
-     * @return  默认的过滤器(副本)
-	 */
-	public static List<String> getDefaultFilter() {
-        List<String> result = new ArrayList<String>();
-        for (String s:defaultFilter) result.add(s);
-		return result;
-	}
-
-	/**
 	 * 注册配置,同时生成缺少的文件<br>
 	 * 注意: 第一次注册后需要调用一次loadConfig(pluginName)否则不会读取配置
 	 * @param sourceJarFile 配置文件所在的jar文件
 	 * @param destPath 放置配置文件的目标文件夹路径
-	 * @param filter 文件过滤器,确定jar中哪些文件需要解压到目标文件夹路径,为null表示使用默认过滤器(文件不能是目录)
 	 * @param pluginName 注册的插件名
      * @param description 描述,具体描述重新读取配置文件将会读取的内容,可为null
      * @return 注册是否成功.如果插件名已经被注册则返回false
 	 */
-	public static boolean register(File sourceJarFile, String destPath, List<String> filter, String pluginName, HashList<String> description) {
+	public static boolean register(File sourceJarFile, String destPath, String pluginName, HashList<String> description) {
         if (contextHash.containsKey(pluginName)) return false;
-		if (filter == null) filter = defaultFilter;
-		ConfigContext configItem = new ConfigContext(sourceJarFile, destPath, filter, pluginName, description);
+		ConfigContext configItem = new ConfigContext(sourceJarFile, destPath, pluginName, description);
 		contextHash.put(pluginName, configItem);
-		CoreApi.generateFiles(sourceJarFile, destPath, filter);
+		generateFiles(sourceJarFile, CorePlugin.pn);
         return true;
 	}
 
@@ -209,7 +192,7 @@ public class ConfigManager implements FunctionInterface, Listener, ShowInterface
         //生成
 		ConfigContext configContext = contextHash.get(pluginName);
 		if (configContext == null) return false;
-        CoreApi.generateFiles(configContext.sourceJarFile, configContext.destPath, configContext.filter);
+        generateFiles(configContext.sourceJarFile, CorePlugin.pn);
         //读取
 		YamlConfiguration config = CoreApi.loadConfigByUTF8(new File(configContext.destPath+File.separator+"config.yml"));
 		if (config == null) return false;
@@ -238,6 +221,51 @@ public class ConfigManager implements FunctionInterface, Listener, ShowInterface
     public static void setDescription(String pluginName, HashList<String> description) {
         ConfigContext configContext = contextHash.get(pluginName);
         if (configContext != null) configContext.description = description;
+    }
+
+    /**
+     * @see com.fyxridd.lib.core.api.ConfigApi#generateFiles(java.io.File, String)
+     */
+    public static boolean generateFiles(File sourceJarFile, String pluginName){
+        JarInputStream jis = null;
+        FileOutputStream fos = null;
+        try {
+            jis = new JarInputStream(new FileInputStream(sourceJarFile));
+            String destPath = CoreApi.pluginPath+File.separator+pluginName;
+            new File(destPath).mkdirs();
+            JarEntry entry;
+            byte[] buff = new byte[1024];
+            int read;
+            while ((entry = jis.getNextJarEntry()) != null) {
+                String fileName = entry.getName();
+                if (filter.matcher(fileName).matches()) {
+                    File file = new File(destPath+File.separator+fileName.substring("resources/".length()));
+                    if (!file.exists()) {
+                        if (entry.isDirectory()) file.mkdirs();
+                        else {
+                            file.getParentFile().mkdirs();
+                            file.createNewFile();
+                            fos = new FileOutputStream(file);
+                            while((read = jis.read(buff)) > 0) fos.write(buff, 0, read);
+                            fos.close();
+                        }
+                    }
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }finally {
+            try {
+                if (jis != null) jis.close();
+            } catch (IOException e) {
+            }
+            try {
+                if (fos != null) fos.close();
+            } catch (IOException e) {
+            }
+        }
     }
 
     @Override

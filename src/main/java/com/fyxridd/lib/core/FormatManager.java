@@ -27,9 +27,12 @@ import java.util.List;
 public class FormatManager implements Listener {
 	private static final String NUM_LIST = "0123456789";
 
+    //配置
+    private static String langDefault, langError;
+
 	//language
 	//插件名 文本id 内容
-	private static HashMap<String, HashMap<Integer, FancyMessage>> msgHash = new HashMap<String, HashMap<Integer, FancyMessage>>();
+	private static HashMap<String, HashMap<String, HashMap<Integer, FancyMessage>>> msgHash = new HashMap<String, HashMap<String, HashMap<Integer, FancyMessage>>>();
 
 	public FormatManager() {
 		//注册事件
@@ -38,43 +41,54 @@ public class FormatManager implements Listener {
 	
 	/**
 	 * 检测重新读取语言文件<br>
-	 * 会检测配置文件config.yml中的"language"项
+     * 语言文件需要放置在插件数据文件夹内,名字格式为'lang_xx.yml',其中xx为语言名
 	 */
 	@EventHandler(priority=EventPriority.LOWEST)
 	public void onReloadConfig(ReloadConfigEvent e) {
-		if (!ConfigApi.getConfig(e.getPlugin()).contains("language")) return;
-		YamlConfiguration languageConfig = CoreApi.loadConfigByUTF8(new File(ConfigApi.getConfig(e.getPlugin()).getString("language")));
-		if (languageConfig != null) register(e.getPlugin(), languageConfig);
+        if (e.getPlugin().equals(CorePlugin.pn)) loadConfig();
+
+        register(e.getPlugin(), new File(CoreApi.pluginPath, e.getPlugin()));
 	}
-	
-	/**
-	 * 获取文本
-	 * @param pluginName 文本所属插件名,null表示lib插件名
-	 * @param id 文本id
-	 * @return 文本,如果没有或异常则返回null
-	 */
+
+    /**
+     * @see com.fyxridd.lib.core.api.FormatApi#get(String, int)
+     */
 	public static FancyMessage get(String pluginName, int id) {
-		try {
-			if (pluginName == null) pluginName = CorePlugin.pn;
-			return msgHash.get(pluginName).get(id).clone();
-		} catch (Exception e) {
-            //不做处理
-		}
-		return null;
+        return get(langDefault, pluginName, id);
 	}
-	
-	/**
-	 * 格式转换
-	 * @param pluginName 文本所属插件名,null表示lib插件名
-	 * @param id 文本id
-	 * @param args 变量列表,null项变量会被变成"".会将替换符{0},{1},{2}...替换成对应的变量
-	 * @return 转换后的字符串(复制版),异常返回null
-	 */
+
+    /**
+     * @see com.fyxridd.lib.core.api.FormatApi#get(String, int, Object...)
+     */
 	public static FancyMessage get(String pluginName, int id, Object... args) {
-		FancyMessage result = get(pluginName, id);
-		if (result != null) MessageApi.convert(result, args);
-		return result;
+        return get(langDefault, pluginName, id, args);
 	}
+
+    /**
+     * @see com.fyxridd.lib.core.api.FormatApi#get(String, String, int)
+     */
+    public static FancyMessage get(String lang, String pluginName, int id) {
+        //无插件信息
+        HashMap<String, HashMap<Integer, FancyMessage>> langHash = msgHash.get(pluginName);
+        if (langHash == null) return null;
+        //无指定语言信息
+        HashMap<Integer, FancyMessage> hash = langHash.get(lang);
+        if (hash == null) hash = langHash.get(langError);
+        if (hash == null) return null;
+        //返回
+        FancyMessage msg = hash.get(id);
+        if (msg != null) return msg.clone();
+        else return null;
+    }
+
+    /**
+     * @see com.fyxridd.lib.core.api.FormatApi#get(String, String, int, Object...)
+     */
+    public static FancyMessage get(String lang, String pluginName, int id, Object... args) {
+        FancyMessage result = get(lang, pluginName, id);
+        if (result != null) MessageApi.convert(result, args);
+        return result;
+    }
 
 	/**
 	 * 把字符串以占位符分割,分割后的长度=占位符数量+1
@@ -217,24 +231,51 @@ public class FormatManager implements Listener {
     /**
 	 * 注册<b>普通</b>语言与<b>格式</b>语言
 	 * @param pn 插件名,不为null
-	 * @param languageConfig 语言文件config,不为null
+     * @param dataDir 插件数据文件夹
 	 * @return 成功返回true,否则返回false
 	 */
-	private boolean register(String pn,YamlConfiguration languageConfig) {
-		try {
-			HashMap<Integer,FancyMessage> hash = new HashMap<Integer, FancyMessage>();
-			for (String key:languageConfig.getKeys(true)) {
-				String[] ss = key.split("\\-");
-				if (ss.length == 2 && ss[0].equalsIgnoreCase("show")) {
-					int id = Integer.parseInt(ss[1]);
-					String value = CoreApi.convert(languageConfig.getString(key));
-					hash.put(id, load(value, (MemorySection) languageConfig.get("info-" + id)));
-				}
+	private boolean register(String pn, File dataDir) {
+        try {
+            //langHash
+            HashMap<String, HashMap<Integer,FancyMessage>> langHash = new HashMap<String, HashMap<Integer, FancyMessage>>();
+            //具体
+            if (dataDir.exists() && dataDir.isDirectory()) {
+                File[] files = dataDir.listFiles();
+                if (files != null) {
+                    for (File file:files) {
+                        String fileName = file.getName();
+                        if (fileName.startsWith("lang_") && fileName.endsWith(".yml")) {
+                            //hash
+                            HashMap<Integer,FancyMessage> hash = new HashMap<Integer, FancyMessage>();
+                            //读取语言
+                            YamlConfiguration langConfig = CoreApi.loadConfigByUTF8(file);
+                            for (String key:langConfig.getKeys(true)) {
+                                String[] ss = key.split("\\-");
+                                if (ss.length == 2 && ss[0].equalsIgnoreCase("show")) {
+                                    int id = Integer.parseInt(ss[1]);
+                                    String value = CoreApi.convert(langConfig.getString(key));
+                                    hash.put(id, load(value, (MemorySection) langConfig.get("info-" + id)));
+                                }
+                            }
+                            //添加
+                            String lang = fileName.substring(5, fileName.length()-4);
+                            langHash.put(lang, hash);
+                        }
+                    }
+                }
             }
-			msgHash.put(pn, hash);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
+            //添加
+            msgHash.put(pn, langHash);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
 	}
+
+    private static void loadConfig() {
+        YamlConfiguration config = ConfigApi.getConfig(CorePlugin.pn);
+
+        langDefault = config.getString("lang.default");
+        langError = config.getString("lang.error");
+    }
 }

@@ -330,54 +330,6 @@ public class CoreApi {
     }
 
     /**
-     * <b>检查</b>及<b>生成</b>缺少的必须文件,必须从jar文件到目标路径.
-     * @param sourceJarFile 文件所在的jar文件,不为null
-     * @param destPath 放置文件的目标文件夹路径,null会解压到sourceJarFile文件所在的目录下
-     * @param filter 文件过滤器,确定jar中哪些文件需要解压,可为null,内容形式如"xxx.txt"或"xxx"+File.separator+"yyy.txt'
-     * @return 出现异常返回false
-     */
-    public static boolean generateFiles(File sourceJarFile, String destPath, List<String> filter){
-        JarInputStream jis = null;
-        FileOutputStream fos = null;
-        try {
-            jis = new JarInputStream(new FileInputStream(sourceJarFile));
-            if (destPath == null) destPath = sourceJarFile.getParentFile().getAbsolutePath();
-            new File(destPath).mkdirs();
-            JarEntry entry;
-            byte[] buff = new byte[1024];
-            int read;
-            while ((entry = jis.getNextJarEntry()) != null) {
-                String fileName = entry.getName();
-                for (String s:filter) {
-                    if (s.equalsIgnoreCase(fileName)) {
-                        File file = new File(destPath+File.separator+fileName);
-                        if (!file.exists()) {
-                            file.getParentFile().mkdirs();
-                            file.createNewFile();
-                            fos = new FileOutputStream(file);
-                            while((read = jis.read(buff)) > 0) fos.write(buff, 0, read);
-                            fos.close();
-                        }
-                        break;
-                    }
-                }
-            }
-            return true;
-        } catch (Exception e) {
-            return false;
-        }finally {
-            try {
-                if (jis != null) jis.close();
-            } catch (IOException e) {
-            }
-            try {
-                if (fos != null) fos.close();
-            } catch (IOException e) {
-            }
-        }
-    }
-
-    /**
      * 获取与某个位置最近的玩家
      * @param l 位置
      * @return 不存在返回null
