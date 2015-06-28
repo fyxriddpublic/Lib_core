@@ -49,8 +49,7 @@
                 <directory>src/main/resources</directory>
                 <targetPath>resources</targetPath>
                 <includes>
-                    <include>**/*.yml</include>
-                    <include>**/*.xml</include>
+                    <include>**/*</include>
                 </includes>
                 <filtering>false</filtering>
             </resource>
