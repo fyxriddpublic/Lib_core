@@ -11,7 +11,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.hibernate.SessionFactory;
 
 import java.io.File;
-import java.util.List;
 
 public class CorePlugin extends JavaPlugin{
     public static CorePlugin instance;
@@ -27,24 +26,18 @@ public class CorePlugin extends JavaPlugin{
 
     @Override
     public void onLoad() {
+        CoreApi.serverPath = System.getProperty("user.dir");
+        CoreApi.pluginPath = getFile().getParentFile().getAbsolutePath();
+        CoreApi.serverVer = CoreApi.getMcVersion(Bukkit.getServer());
+
+        instance = this;
+        pn = getName();
+        file = getFile();
+        dataPath = CoreApi.pluginPath + File.separator+pn;
+        ver = CoreApi.getPluginVersion(getFile());
+
         //生成文件
-        List<String> filter = ConfigManager.getDefaultFilter();
-        filter.add("names.yml");
-        filter.add("EcoUser.hbm.xml");
-        filter.add("InfoUser.hbm.xml");
-        filter.add("User.hbm.xml");
-
-        filter.add("per/group/admin.yml");
-        filter.add("per/group/default.yml");
-        filter.add("per/group/formal.yml");
-        filter.add("per/user/default.yml");
-
-        filter.add("show/ConfigManager.yml");
-        filter.add("show/ConfigManager_description.yml");
-        filter.add("show/Description.yml");
-        filter.add("show/xxx_description.yml");
-
-        CoreApi.generateFiles(getFile(), getDataFolder().getAbsolutePath(), filter);
+        ConfigApi.generateFiles(getFile(), pn);
 
         //注册hbm
         registerHbm(new File(getDataFolder(), "EcoUser.hbm.xml"));
@@ -55,16 +48,6 @@ public class CorePlugin extends JavaPlugin{
     //启动插件
     @Override
     public void onEnable() {
-        CoreApi.serverPath = System.getProperty("user.dir");
-        CoreApi.pluginPath = getFile().getParentFile().getAbsolutePath();
-        CoreApi.serverVer = CoreApi.getMcVersion(Bukkit.getServer());
-
-        instance = this;
-        pn = getName();
-        file = getFile();
-        dataPath = CoreApi.pluginPath+ File.separator+pn;
-        ver = CoreApi.getPluginVersion(getFile());
-
         new CoreMain();
 
         //成功启动

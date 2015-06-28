@@ -100,23 +100,7 @@ public class CoreMain implements Listener{
     }
 
     private void initConfig() {
-        List<String> filter = ConfigManager.getDefaultFilter();
-        filter.add("names.yml");
-        filter.add("EcoUser.hbm.xml");
-        filter.add("InfoUser.hbm.xml");
-        filter.add("User.hbm.xml");
-
-        filter.add("per/group/admin.yml");
-        filter.add("per/group/default.yml");
-        filter.add("per/group/formal.yml");
-        filter.add("per/user/default.yml");
-
-        filter.add("show/ConfigManager.yml");
-        filter.add("show/ConfigManager_description.yml");
-        filter.add("show/Description.yml");
-        filter.add("show/xxx_description.yml");
-
-        ConfigManager.register(CorePlugin.file, CorePlugin.dataPath, filter, CorePlugin.pn, null);
+        ConfigManager.register(CorePlugin.file, CorePlugin.dataPath, CorePlugin.pn, null);
 
         configManager = new ConfigManager();
 

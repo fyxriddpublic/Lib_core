@@ -5,21 +5,13 @@ import com.fyxridd.lib.core.api.hashList.HashList;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
-import java.util.List;
 
 public class ConfigApi {
-	/**
-	 * @see ConfigManager#getDefaultFilter()
+    /**
+	 * @see ConfigManager#register(java.io.File, String, String, com.fyxridd.lib.core.api.hashList.HashList)
 	 */
-	public static List<String> getDefaultFilter() {
-		return ConfigManager.getDefaultFilter();
-	}
-
-	/**
-	 * @see ConfigManager#register(java.io.File, String, java.util.List, String, com.fyxridd.lib.core.api.hashList.HashList)
-	 */
-	public static void register(File sourceJarFile,String destPath,List<String> filter,String pluginName, HashList<String> description) {
-		ConfigManager.register(sourceJarFile, destPath, filter, pluginName, description);
+	public static void register(File sourceJarFile,String destPath, String pluginName, HashList<String> description) {
+		ConfigManager.register(sourceJarFile, destPath, pluginName, description);
 	}
 
 	/**
@@ -48,5 +40,15 @@ public class ConfigApi {
      */
     public static void setDescription(String pluginName, HashList<String> description) {
         ConfigManager.setDescription(pluginName, description);
+    }
+
+    /**
+     * 会将jar内的resources目录内的所有文件放到插件对应的数据文件夹下
+     * @param sourceJarFile jar文件,不为null
+     * @param pluginName 插件名
+     * @return 出现异常返回false
+     */
+    public static boolean generateFiles(File sourceJarFile, String pluginName){
+        return ConfigManager.generateFiles(sourceJarFile, pluginName);
     }
 }
