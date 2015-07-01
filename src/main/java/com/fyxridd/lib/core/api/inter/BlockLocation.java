@@ -1,5 +1,6 @@
 package com.fyxridd.lib.core.api.inter;
 
+import org.bukkit.Location;
 import org.bukkit.World;
 
 /**
@@ -46,6 +47,10 @@ public class BlockLocation {
 
     public void setZ(int z) {
         this.z = z;
+    }
+
+    public static BlockLocation load(Location loc) {
+        return new BlockLocation(loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
     }
 
     @Override
