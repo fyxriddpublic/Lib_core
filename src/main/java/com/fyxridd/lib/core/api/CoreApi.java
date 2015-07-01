@@ -32,9 +32,11 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.projectiles.ProjectileSource;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -61,6 +63,35 @@ public class CoreApi {
     private static Pattern pattern = Pattern.compile(PatternStr);
 
     private static ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
+
+    /**
+     * 获取攻击的玩家
+     * @param damager 直接伤害者
+     * @return 如果直接伤害者是玩家直接返回玩家;如果是发射物并且发射物是玩家发出的则返回发射者;其它情况均返回null
+     */
+    public static Player getPlayerDamager(Entity damager) {
+        if (damager == null) return null;
+        else if (damager instanceof Player) return (Player) damager;
+        else if (damager instanceof Projectile) {
+            ProjectileSource ps = ((Projectile) damager).getShooter();
+            if (ps != null && ps instanceof Player) return (Player) ps;
+            else return null;
+        }else return null;
+    }
+
+    /**
+     * 给目标玩家添加生命值并进行提示<br>
+     * 不会超过玩家的生命上限
+     * @param p 玩家,可为null(null时无效果)
+     * @param add 增加的生命,<=0时无效果
+     */
+    public static void addHealth(Player p, double add) {
+        if (p == null || add <= 0) return;
+
+        double origin = p.getHealth();
+        p.setHealth(Math.min(p.getMaxHealth(), p.getHealth()+add));
+        ShowApi.tip(p, get(50, (p.getHealth() - origin)), false);
+    }
 
     /**
      * 其它聊天插件不能自行给玩家发送聊天信息或调用ShowApi.tip方法,而要调用此方法,否则不会有延时显示聊天信息的功能
@@ -1129,5 +1160,9 @@ public class CoreApi {
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
+    }
+
+    private static FancyMessage get(int id, Object... args) {
+        return FormatApi.get(CorePlugin.pn, id, args);
     }
 }
