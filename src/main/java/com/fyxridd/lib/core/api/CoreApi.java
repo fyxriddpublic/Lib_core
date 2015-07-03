@@ -16,10 +16,7 @@ import net.minecraft.server.v1_8_R2.EntityLightning;
 import net.minecraft.server.v1_8_R2.PacketPlayOutNamedSoundEffect;
 import net.minecraft.server.v1_8_R2.PacketPlayOutSpawnEntityWeather;
 import org.apache.commons.lang.Validate;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Server;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
@@ -63,6 +60,29 @@ public class CoreApi {
     private static Pattern pattern = Pattern.compile(PatternStr);
 
     private static ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
+
+    /**
+     * 切换门的开关状态
+     * 版本更新后可能异常
+     * @param b 门两个方块中的一个,可为null(null时无效果)
+     */
+    public static void toggleDoor(Block b) {
+        if (b == null) return;
+
+        //方块检测
+        if (b.getData() >= (byte)8) b = b.getRelative(BlockFace.DOWN);
+        if (b == null || (b.getType() != Material.IRON_DOOR_BLOCK && b.getType() != Material.WOODEN_DOOR)) return;
+
+        if (b.getData() <= (byte)3) b.setData((byte) (b.getData()+4));
+        else b.setData((byte) (b.getData()-4));
+        b.getState().update(true);
+        //声音
+        try {
+            b.getWorld().playEffect(b.getRelative(BlockFace.UP).getLocation(), Effect.DOOR_TOGGLE, 0);
+        } catch (Exception e) {
+            //声音可能不存在
+        }
+    }
 
     /**
      * 获取攻击的玩家
