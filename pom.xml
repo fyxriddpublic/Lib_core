@@ -162,10 +162,15 @@
             <artifactId>mail</artifactId>
             <version>1.4.7</version>
         </dependency>
-        <!--sdf4j-->
+        <!--slf4j-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
+            <version>1.7.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
             <version>1.7.12</version>
         </dependency>
         <!--hibernate-->
