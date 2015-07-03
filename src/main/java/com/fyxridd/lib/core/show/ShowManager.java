@@ -16,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -58,7 +59,7 @@ public class ShowManager implements Listener, FunctionInterface {
 
     private static boolean inCancelChat;
     private static int deadLoopLevel = 5;//循环最大层次,超过则判定为死循环
-    private static boolean cancelInteract, cancelAnimation, cancelAttack, cancelChat;
+    private static boolean cancelInteract, cancelAnimation, cancelAttack, cancelChat, cancelShoot;
     private static int maxBackPage = 10;
     private static int line;
     private static FancyMessage add;
@@ -99,6 +100,11 @@ public class ShowManager implements Listener, FunctionInterface {
     @EventHandler(priority= EventPriority.LOW)
     public void onReloadConfig(ReloadConfigEvent e) {
         if (e.getPlugin().equals(CorePlugin.pn)) loadConfig();
+    }
+
+    @EventHandler(priority= EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onEntityShootBow(EntityShootBowEvent e) {
+        if (cancelShoot && e.getEntity() instanceof Player) exit((Player) e.getEntity(), false);
     }
 
     @EventHandler(priority= EventPriority.HIGHEST, ignoreCancelled = true)
@@ -1021,6 +1027,7 @@ public class ShowManager implements Listener, FunctionInterface {
         cancelAnimation = config.getBoolean("show.cancel.animation");
         cancelAttack = config.getBoolean("show.cancel.attack");
         cancelChat = config.getBoolean("show.cancel.chat");
+        cancelShoot = config.getBoolean("show.cancel.shoot");
         //maxBackPage
         maxBackPage = config.getInt("show.maxBackPage");
         if (maxBackPage < 0) {

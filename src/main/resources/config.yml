@@ -133,6 +133,7 @@ show:
     attack: true                #玩家攻击或受攻击时
     chat: false                 #玩家聊天时
     chatCancel: true            #chat为false时,玩家在显示界面时是否取消其发出的聊天信息
+    shoot: true                  #发射时
   maxBackPage: 10               #最大保存的返回页面数,>=0
   line: 25                      #页面行数,补的空行数=line-有内容的行数,>=1
 #################################
