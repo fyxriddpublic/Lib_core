@@ -761,16 +761,20 @@ public class CoreApi {
 
     /**
      * 获取Material
-     * @param s Material定义字符串,可以是方块或物品类型名或ID
+     * @param s Material定义字符串,可以是方块或物品类型名或ID,可为null(null时返回null)
      * @return 对应的Material,出错返回null
      */
-    @SuppressWarnings("deprecation")
     public static Material getMaterial(String s) {
+        if (s == null) return null;
         try {
-            int id = Integer.parseInt(s);
-            return Material.getMaterial(id);
-        }catch (NumberFormatException e) {
-            return Material.getMaterial(s);
+            try {
+                int id = Integer.parseInt(s);
+                return Material.getMaterial(id);
+            }catch (NumberFormatException e) {
+                return Material.getMaterial(s);
+            }
+        } catch (Exception e) {
+            return null;
         }
     }
 
