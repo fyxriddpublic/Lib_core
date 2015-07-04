@@ -66,13 +66,40 @@ public class ItemApi {
      * @param amount 物品数量
      * @return 是否含有指定数量的物品
      */
-    @SuppressWarnings("deprecation")
     public static boolean hasNormalItem(Inventory inv,int id,int amount) {
         //之所以不调用getNormalAmount是为了提高效率!
         int sum = 0;
         for (ItemStack is:inv.getContents()) {
             if (is != null && is.getTypeId() == id && isItemMetaEmpty(is.getItemMeta())) {
                 sum += is.getAmount();
+                if (sum >= amount) return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 不忽略物品名
+     * @see #hasExactItem(org.bukkit.inventory.Inventory, org.bukkit.inventory.ItemStack, int, boolean)
+     */
+    public static boolean hasExactItem(Inventory inv, ItemStack is, int amount) {
+        return hasExactItem(inv, is, amount, false);
+    }
+
+    /**
+     * 检测容器中是否有指定数量的'精确'物品
+     * @param inv 容器,不为null
+     * @param is 物品
+     * @param amount 物品数量
+     * @param ignoreName 是否忽略物品名
+     * @return 是否含有指定数量的精确物品
+     */
+    public static boolean hasExactItem(Inventory inv, ItemStack is, int amount, boolean ignoreName) {
+        int sum = 0;
+        for (int i=0;i<inv.getSize();i++) {
+            ItemStack check = inv.getItem(i);
+            if (check != null && isSameItem(is, check, ignoreName)) {
+                sum += inv.getItem(i).getAmount();
                 if (sum >= amount) return true;
             }
         }
@@ -136,13 +163,26 @@ public class ItemApi {
      * @return 如果容器中没有指定数量的指定物品,返回false
      */
     public static boolean removeExactItem(Inventory inv, ItemStack is, int amount, boolean force) {
+        return removeExactItem(inv, is, amount, force, false);
+    }
+
+    /**
+     * 从指定容器中移除指定数量的指定物品(精确的)
+     * @param inv 容器,不为null
+     * @param is 物品,不为null
+     * @param amount 要移除的数量
+     * @param force 如果容器中物品数量不足,是否移除已经拥有的
+     * @param ignoreName 是否忽略物品名
+     * @return 如果容器中没有指定数量的指定物品,返回false
+     */
+    public static boolean removeExactItem(Inventory inv, ItemStack is, int amount, boolean force, boolean ignoreName) {
         if (amount <= 0) return true;
-        if (inv.containsAtLeast(is, amount) || force) {
+        if (force || hasExactItem(inv, is, amount, ignoreName)) {
             //需要减少的数量
             int need = amount;
             for (int i=0;i<inv.getSize();i++) {
                 ItemStack is2 = inv.getItem(i);
-                if (is2 != null && isSameItem(is, is2)) {//检测相同成功,减少物品
+                if (is2 != null && isSameItem(is, is2, ignoreName)) {//检测相同成功,减少物品
                     int has = is2.getAmount();
                     if (need <= has) {//结束
                         if (has == need) inv.setItem(i, null);
@@ -180,19 +220,36 @@ public class ItemApi {
     }
 
     /**
+     * 不忽略物品名
+     * @see #getExactItemAmount(org.bukkit.inventory.Inventory, org.bukkit.inventory.ItemStack, boolean)
+     */
+    public static int getExactItemAmount(Inventory inv, ItemStack is) {
+        return getExactItemAmount(inv, is, false);
+    }
+
+    /**
      * 获取指定容器中指定物品的数量<br>
      * 会检测id,durability,ItemMeta,attributes
      * @param inv 容器,不为null
      * @param is 物品,不为null
+     * @param ignoreName 是否忽略物品名
      * @return 数量,>=0
      */
-    public static int getExactItemAmount(Inventory inv, ItemStack is) {
+    public static int getExactItemAmount(Inventory inv, ItemStack is, boolean ignoreName) {
         int sum = 0;
         for (int i=0;i<inv.getSize();i++) {
             ItemStack check = inv.getItem(i);
-            if (check != null && isSameItem(is, check)) sum += inv.getItem(i).getAmount();
+            if (check != null && isSameItem(is, check, ignoreName)) sum += inv.getItem(i).getAmount();
         }
         return sum;
+    }
+
+    /**
+     * 不忽略物品名
+     * @see #isSameItem(org.bukkit.inventory.ItemStack, org.bukkit.inventory.ItemStack, boolean)
+     */
+    public static boolean isSameItem(ItemStack is1, ItemStack is2) {
+        return isSameItem(is1, is2, false);
     }
 
     /**
@@ -201,9 +258,10 @@ public class ItemApi {
      * 检测不包括数量
      * @param is1 物品1,不为null
      * @param is2 物品2,不为null
+     * @param ignoreName 是否忽略物品名
      * @return 是否相同
      */
-    public static boolean isSameItem(ItemStack is1, ItemStack is2) {
+    public static boolean isSameItem(ItemStack is1, ItemStack is2, boolean ignoreName) {
         //id,durability
         if (is1.getType().equals(is2.getType()) && is1.getDurability() == is2.getDurability()) {
             if (is1.getType().equals(Material.AIR)) return true;//空气,特殊情况
@@ -214,7 +272,10 @@ public class ItemApi {
                 if (im2 != null) return false;
             }else {
                 if (im2 == null) return false;
-                else if (!im1.equals(im2)) return false;
+                else {
+                    if (ignoreName) im2.setDisplayName(im1.getDisplayName());//把两个名字强制改成一样的
+                    if (!im1.equals(im2)) return false;
+                }
             }
             //attributes
             if (!hasSameAttributes(is1, is2)) return false;

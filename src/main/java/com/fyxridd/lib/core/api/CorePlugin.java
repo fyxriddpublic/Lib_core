@@ -1,10 +1,7 @@
 package com.fyxridd.lib.core.api;
 
-import com.fyxridd.lib.core.ConfigManager;
+import com.fyxridd.lib.core.*;
 import com.fyxridd.lib.core.eco.EcoManager;
-import com.fyxridd.lib.core.CoreMain;
-import com.fyxridd.lib.core.Dao;
-import com.fyxridd.lib.core.Info;
 import com.fyxridd.lib.core.per.PerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
