@@ -47,6 +47,22 @@ public class ItemApi {
     }
 
     /**
+     * 检测容器中是否有指定数量的空格子
+     * @param inv 容器,不为null
+     * @param amount 数量
+     */
+    public static boolean hasEmptySlots(Inventory inv, int amount) {
+        int sum = 0;
+        for (int i=0;i<inv.getSize();i++) {
+            if (inv.getItem(i) == null || inv.getItem(i).getType().equals(Material.AIR)) {
+                sum++;
+                if (sum >= amount) return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * 检测玩家背包是否为空
      * @param p 检测的玩家
      * @return 背包为空返回true,否则返回false
