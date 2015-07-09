@@ -112,18 +112,20 @@ public class Per implements Listener,PerHandler {
 
     @Override
 	public boolean has(Player p, String per) {
+        if (per == null || per.isEmpty()) return true;
+
         return has(p.getName(), per);
 	}
 
     @Override
 	public boolean has(String name, String per) {
+        if (per == null || per.isEmpty()) return true;
+
         //玩家存在性检测
         name = CoreApi.getRealName(null, name);
         if (name == null) return false;
         //优化策略
         lastHandleHash.put(name, System.currentTimeMillis());
-        //权限为null或空,返回true
-        if (per == null || per.isEmpty()) return true;
         if (!persHash.containsKey(name)) updatePers(name);
         return persHash.get(name).has(per);
 	}

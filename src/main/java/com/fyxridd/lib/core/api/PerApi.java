@@ -8,7 +8,7 @@ public class PerApi {
     /**
      * 检测玩家是否拥有权限,无权限会自动进行提示
      * @param p 玩家,不为null
-     * @param per 权限,可为null
+     * @param per 权限,可为null(null或""时返回true)
      * @return 是否拥有权限
      */
     public static boolean checkPer(Player p, String per) {

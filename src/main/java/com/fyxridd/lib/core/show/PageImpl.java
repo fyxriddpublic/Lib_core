@@ -20,6 +20,9 @@ public class PageImpl implements Page {
      */
     private String page;
 
+    //是否生效
+    private boolean enable;
+
     /**
      * 最大页面,>=0
      */
@@ -34,6 +37,15 @@ public class PageImpl implements Page {
      * 页面跳转是否刷新
      */
     private boolean refresh;
+
+    //显示页面需要的权限
+    private String per;
+
+    //是否显示页面尾部的操作提示(2行)
+    private boolean handleTip;
+
+    //是否记录页面信息(可以返回与刷新)
+    private boolean record;
 
     /**
      * 额外键值获取信息
@@ -54,16 +66,27 @@ public class PageImpl implements Page {
      * @param pageMax  >0
      * @param pageList 不为null
      */
-    public PageImpl(String plugin, String page, int pageMax, int listSize, boolean refresh, HashMap<String, MapInfo> maps,
+    public PageImpl(String plugin, String page, boolean enable, int pageMax, int listSize, boolean refresh, boolean handleTip, boolean record, HashMap<String, MapInfo> maps,
                     List<PageContext> pageList, LinkedHashMap<Integer, LineContext> lines) {
         this.plugin = plugin;
         this.page = page;
+        this.enable = enable;
         this.pageMax = pageMax;
         this.listSize = listSize;
         this.refresh = refresh;
+        this.handleTip = handleTip;
+        this.record = record;
         this.maps = maps;
         this.pageList = pageList;
         this.lines = lines;
+    }
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 
     public int getPageMax() {
@@ -84,6 +107,30 @@ public class PageImpl implements Page {
 
     public void setRefresh(boolean refresh) {
         this.refresh = refresh;
+    }
+
+    public String getPer() {
+        return per;
+    }
+
+    public void setPer(String per) {
+        this.per = per;
+    }
+
+    public boolean isHandleTip() {
+        return handleTip;
+    }
+
+    public void setHandleTip(boolean handleTip) {
+        this.handleTip = handleTip;
+    }
+
+    public boolean isRecord() {
+        return record;
+    }
+
+    public void setRecord(boolean record) {
+        this.record = record;
     }
 
     public String getPlugin() {

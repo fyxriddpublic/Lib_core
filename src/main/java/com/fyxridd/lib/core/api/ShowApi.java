@@ -25,9 +25,23 @@ public class ShowApi {
     }
 
     /**
-     * @see com.fyxridd.lib.core.show.ShowManager#register(String, String)
-     * @param plugin
-     * @param name
+     * 注册插件的所有页面<br>
+     * 会从plugins/plugin/show文件夹里读取所有的页面信息<br>
+     *     会重新注册指定插件的所有页面<br>
+     *      (即使读取的页面为null也会加入注册)
+     * @param plugin 插件名,不为null
+     */
+    public static void register(String plugin) {
+        ShowManager.register(plugin);
+    }
+
+    /**
+     * 注册插件的单个页面<br>
+     * 会从plugins/plugin/show/name.yml里读取页面信息<br>
+     *      可重新注册,会覆盖旧的信息<br>
+     *      (即使读取的页面为null也会加入注册)
+     * @param plugin 插件名,不为null
+     * @param name 页面名,不为null
      */
     public static void register(String plugin, String name) {
         ShowManager.register(plugin, name);
@@ -74,7 +88,19 @@ public class ShowApi {
     }
 
     /**
-     * @see ShowManager#show(ShowInterface, Object, org.bukkit.entity.Player, String, String, ShowList, java.util.HashMap, int, int, java.util.List, java.util.List, java.util.HashMap)
+     * 显示页面
+     * @param callback 回调类,用来页面跳转(刷新),null时页面跳转时不刷新
+     * @param obj 功能自定义的额外保存数据,可为null
+     * @param p 玩家,不为null
+     * @param plugin 插件名,不为null
+     * @param pageName 页面名,不为null
+     * @param list 列表,可为null
+     * @param data 名称-值的映射表,可为null
+     * @param pageNow 当前页,>0
+     * @param listNow 列表当前页,>0
+     * @param front 前面额外附加的行列表,可为null
+     * @param behind 后面额外附加的行列表,可为null
+     * @param itemHash 物品信息替换,可为null
      */
     public static void show(ShowInterface callback, Object obj, Player p, String plugin, String pageName,
                             ShowList<Object> list, HashMap<String, Object> data, int pageNow, int listNow,

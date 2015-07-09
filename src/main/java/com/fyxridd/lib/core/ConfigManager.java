@@ -106,7 +106,7 @@ public class ConfigManager implements FunctionInterface, Listener, ShowInterface
         //注册功能
         FuncManager.register(this);
         //注册界面
-        ShowManager.register(CorePlugin.pn, PAGE_NAME);
+        ShowManager.register(CorePlugin.pn);
     }
 
     /**
@@ -131,7 +131,7 @@ public class ConfigManager implements FunctionInterface, Listener, ShowInterface
         if (e.getPlugin().equals(CorePlugin.pn)) {
             loadConfig();
             //重新注册界面
-            ShowManager.register(CorePlugin.pn, PAGE_NAME);
+            ShowManager.register(CorePlugin.pn);
         }
     }
 

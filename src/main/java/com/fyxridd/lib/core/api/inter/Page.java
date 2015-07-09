@@ -103,6 +103,10 @@ public interface Page {
         }
     }
 
+    public boolean isEnable();
+
+    public void setEnable(boolean enable);
+
     public int getPageMax();
 
     public boolean isRefresh();
@@ -112,6 +116,18 @@ public interface Page {
     public void setPageMax(int pageMax);
 
     public void setRefresh(boolean refresh);
+
+    public String getPer();
+
+    public void setPer(String per);
+
+    public boolean isHandleTip();
+
+    public void setHandleTip(boolean handleTip);
+
+    public boolean isRecord();
+
+    public void setRecord(boolean record);
 
     public String getPlugin();
 

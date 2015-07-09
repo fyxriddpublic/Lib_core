@@ -14,7 +14,7 @@ public interface PerHandler {
     /**
      * 检测玩家是否有权限
      * @param name 检测的玩家名,不为null
-     * @param per 相应的权限,可为null
+     * @param per 相应的权限,可为null(null或""时返回true)
      * @return 如果权限为null或空则必然返回true,如果出异常也返回false
      */
     public boolean has(String name, String per);

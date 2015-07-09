@@ -39,10 +39,14 @@ public class VaultHandler implements PerHandler, Listener {
     }
 
     public boolean has(Player p, String per) {
+        if (per == null || per.isEmpty()) return true;
+
         return permission.has(p, per);
     }
 
     public boolean has(String name, String per) {
+        if (per == null || per.isEmpty()) return true;
+
         return permission.has(vaultDefaultWorld, name, per);
     }
 

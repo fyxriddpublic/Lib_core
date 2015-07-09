@@ -1,5 +1,6 @@
 package com.fyxridd.lib.core.show;
 
+import com.fyxridd.lib.core.CoreMain;
 import com.fyxridd.lib.core.api.*;
 import com.fyxridd.lib.core.api.event.RealDamageEvent;
 import com.fyxridd.lib.core.api.event.ReloadConfigEvent;
@@ -36,7 +37,7 @@ import java.util.List;
 /**
  * 显示管理
  */
-public class ShowManager implements Listener, FunctionInterface {
+public class ShowManager implements Listener, FunctionInterface, ShowInterface {
     private static final String SHORT_DEFAULT = "sw_default";
     private static final String SHORT_TIP = "sw_tip";
 
@@ -163,12 +164,27 @@ public class ShowManager implements Listener, FunctionInterface {
     }
 
     /**
-     * 注册页面<br>
-     * 会从plugins/plugin/show/name.yml里读取页面信息<br>
-     *      可重新注册,会覆盖旧的信息<br>
-     *      (即使读取的页面为null也会加入注册)
-     * @param plugin 插件名,不为null
-     * @param name 页面名,不为null
+     * @see com.fyxridd.lib.core.api.ShowApi#register(String)
+     */
+    public static void register(String plugin) {
+        //重新注册插件的所有页面
+        pageHash.put(plugin, new HashMap<String, Page>());
+        //读取
+        File dir = new File(CoreApi.pluginPath, plugin+File.separator+"show");
+        if (dir.exists() && dir.isDirectory()) {
+            File[] files = dir.listFiles();
+            if (files!= null) {
+                for (File file:files) {
+                    if (file.isFile() && file.getName().endsWith(".yml") && !file.getName().endsWith("_description.yml")) {
+                        register(plugin, file.getName().substring(0, file.getName().length()-4));
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @see com.fyxridd.lib.core.api.ShowApi#register(String, String)
      */
     public static void register(String plugin, String name) {
         //读取页面信息
@@ -178,15 +194,15 @@ public class ShowManager implements Listener, FunctionInterface {
     }
 
     /**
-     * @see #show(com.fyxridd.lib.core.api.inter.ShowInterface, Object, org.bukkit.entity.Player, String, String, com.fyxridd.lib.core.api.inter.ShowList, java.util.HashMap, int, int, java.util.List, java.util.List)
+     * @see com.fyxridd.lib.core.api.ShowApi#show(com.fyxridd.lib.core.api.inter.ShowInterface, Object, org.bukkit.entity.Player, String, String, com.fyxridd.lib.core.api.inter.ShowList, java.util.HashMap, int, int, java.util.List, java.util.List, java.util.HashMap)
      */
     public static void show(ShowInterface callback, Object obj, Player p, String plugin, String pageName,
                             ShowList list, HashMap<String, Object> data, List<FancyMessage> front, List<FancyMessage> behind) {
-        show(callback, obj, p, plugin, pageName, list, data, DEFAULT_PAGE_NOW, DEFAULT_LIST_NOW, front, behind);
+        show(callback, obj, p, plugin, pageName, list, data, DEFAULT_PAGE_NOW, DEFAULT_LIST_NOW, front, behind, null);
     }
 
     /**
-     * @see #show(ShowInterface, Object, org.bukkit.entity.Player, String, String, ShowList, java.util.HashMap, int, int, java.util.List, java.util.List, java.util.HashMap)
+     * @see com.fyxridd.lib.core.api.ShowApi#show(com.fyxridd.lib.core.api.inter.ShowInterface, Object, org.bukkit.entity.Player, String, String, com.fyxridd.lib.core.api.inter.ShowList, java.util.HashMap, int, int, java.util.List, java.util.List, java.util.HashMap)
      */
     public static void show(ShowInterface callback, Object obj, Player p, String plugin, String pageName,
                             ShowList<Object> list, HashMap<String, Object> data, int pageNow, int listNow,
@@ -195,7 +211,7 @@ public class ShowManager implements Listener, FunctionInterface {
     }
 
     /**
-     * @see #show(ShowInterface, Object, org.bukkit.entity.Player, String, String, ShowList, java.util.HashMap, int, int, java.util.List, java.util.List, java.util.HashMap)
+     * @see com.fyxridd.lib.core.api.ShowApi#show(com.fyxridd.lib.core.api.inter.ShowInterface, Object, org.bukkit.entity.Player, String, String, com.fyxridd.lib.core.api.inter.ShowList, java.util.HashMap, int, int, java.util.List, java.util.List, java.util.HashMap)
      */
     public static void show(ShowInterface callback, Object obj, Player p, String plugin, String pageName,
                             ShowList<Object> list, HashMap<String, Object> data,
@@ -204,19 +220,7 @@ public class ShowManager implements Listener, FunctionInterface {
     }
 
     /**
-     * 显示页面
-     * @param callback 回调类,用来页面跳转(刷新),null时页面跳转时不刷新
-     * @param obj 功能自定义的额外保存数据,可为null
-     * @param p 玩家,不为null
-     * @param plugin 插件名,不为null
-     * @param pageName 页面名,不为null
-     * @param list 列表,可为null
-     * @param data 名称-值的映射表,可为null
-     * @param pageNow 当前页,>0
-     * @param listNow 列表当前页,>0
-     * @param front 前面额外附加的行列表,可为null
-     * @param behind 后面额外附加的行列表,可为null
-     * @param itemHash 物品信息替换,可为null
+     * @see com.fyxridd.lib.core.api.ShowApi#show(com.fyxridd.lib.core.api.inter.ShowInterface, Object, org.bukkit.entity.Player, String, String, com.fyxridd.lib.core.api.inter.ShowList, java.util.HashMap, int, int, java.util.List, java.util.List, java.util.HashMap)
      */
     public static void show(ShowInterface callback, Object obj, Player p, String plugin, String pageName,
                             ShowList<Object> list, HashMap<String, Object> data, int pageNow, int listNow,
@@ -249,6 +253,15 @@ public class ShowManager implements Listener, FunctionInterface {
                 }else tip(p, get(645), true);
                 return;
             }
+
+            //页面未生效
+            if (!page.isEnable()) {
+                tip(p, get(740), true);
+                return;
+            }
+
+            //权限检测
+            if (!PerApi.checkPer(p, page.getPer())) return;
 
             //页面控制
             int pageMax = page.getPageMax();//最大页
@@ -375,36 +388,40 @@ public class ShowManager implements Listener, FunctionInterface {
             for (FancyMessage msg:resultPage) msg.checkCondition();
 
             //成功
+
             //更新玩家页面上下文
-            if (pc == null) {
-                pc = new PlayerContext();
-                playerContextHash.put(p, pc);
-            }else if (!pc.plugin.equals(plugin) ||
-                    !pc.pageName.equals(pageName)) {//显示的页面与原来不同,保存返回页面
-                List<PlayerContext> backList = backHash.get(p);
-                if (backList == null) {
-                    backList = new ArrayList<PlayerContext>();
-                    backHash.put(p, backList);
+            if (page.isRecord()) {
+                if (pc == null) {
+                    pc = new PlayerContext();
+                    playerContextHash.put(p, pc);
+                }else if (!pc.plugin.equals(plugin) ||
+                        !pc.pageName.equals(pageName)) {//显示的页面与原来不同,保存返回页面
+                    List<PlayerContext> backList = backHash.get(p);
+                    if (backList == null) {
+                        backList = new ArrayList<PlayerContext>();
+                        backHash.put(p, backList);
+                    }
+                    backList.add(pc.clone());
+                    if (backList.size() > maxBackPage) backList.remove(0);
                 }
-                backList.add(pc.clone());
-                if (backList.size() > maxBackPage) backList.remove(0);
+                //更新玩家页面上下文信息
+                pc.callback = callback;
+                pc.obj = obj;
+                pc.p = p;
+                pc.plugin = plugin;
+                pc.pageName = pageName;
+                pc.listSize = listSize;
+                pc.list = list;
+                pc.data = data;
+                pc.pageNow = pageNow;
+                pc.listNow = listNow;
+                pc.front = front;
+                pc.behind = behind;
+                pc.itemHash = itemHash;
             }
-            //更新玩家页面上下文信息
-            pc.callback = callback;
-            pc.obj = obj;
-            pc.p = p;
-            pc.plugin = plugin;
-            pc.pageName = pageName;
-            pc.listSize = listSize;
-            pc.list = list;
-            pc.data = data;
-            pc.pageNow = pageNow;
-            pc.listNow = listNow;
-            pc.front = front;
-            pc.behind = behind;
-            pc.itemHash = itemHash;
+
             //补空行
-            int empty = line-2-resultPage.size();
+            int empty = line-(page.isHandleTip()?2:0)-resultPage.size()-(front != null?front.size():0)-(behind != null?behind.size():0);
             if (empty > 0) {
                 for (int i=0;i<empty;i++) add.send(p, false);
             }
@@ -417,11 +434,13 @@ public class ShowManager implements Listener, FunctionInterface {
                 for (FancyMessage msg: behind) msg.send(p, false);
             }
             //显示页面尾部操作提示
-            operateTipMenu.send(p, false);
-            List<FancyMessage> tipList = tipHash.get(p);
-            if (tipList != null) {
-                for (FancyMessage tip: tipList) tip.send(p, false);
-            }else operateTipEmpty.send(p, false);
+            if (page.isHandleTip()) {
+                operateTipMenu.send(p, false);
+                List<FancyMessage> tipList = tipHash.get(p);
+                if (tipList != null) {
+                    for (FancyMessage tip: tipList) tip.send(p, false);
+                }else operateTipEmpty.send(p, false);
+            }
         } catch (Exception e) {
             CoreApi.debug(e.getMessage());
             playerContextHash.remove(p);
@@ -647,8 +666,11 @@ public class ShowManager implements Listener, FunctionInterface {
             ConfigApi.log(CorePlugin.pn, get(615).getText());
             return null;
         }
-        YamlConfiguration config = CoreApi.loadConfigByUTF8(file);
-        return load(plugin, page, config);
+        return load(plugin, page, file);
+    }
+
+    public static Page load(String plugin, String page, File file) {
+        return load(plugin, page, CoreApi.loadConfigByUTF8(file));
     }
 
     /**
@@ -659,6 +681,8 @@ public class ShowManager implements Listener, FunctionInterface {
      * @return 页面信息,异常返回null
      */
     public static Page load(String plugin, String page, YamlConfiguration config) {
+        //enable
+        boolean enable = config.getBoolean("enable", true);
         //pageMax
         int pageMax = config.getInt("pageMax", 0);
         if (pageMax < 0) {
@@ -673,6 +697,10 @@ public class ShowManager implements Listener, FunctionInterface {
         }
         //refresh
         boolean refresh = config.getBoolean("refresh", false);
+        //handleTip
+        boolean handleTip = config.getBoolean("handleTip", true);
+        //record
+        boolean record = config.getBoolean("record", true);
         //maps
         HashMap<String, Page.MapInfo> maps = null;
         List<String> mapsList = config.getStringList("maps");
@@ -726,7 +754,7 @@ public class ShowManager implements Listener, FunctionInterface {
                 }
             }
         }
-        return new PageImpl(plugin, page, pageMax, listSize, refresh, maps, pageList, lines);
+        return new PageImpl(plugin, page, enable, pageMax, listSize, refresh, handleTip, record, maps, pageList, lines);
     }
 
     /**
@@ -784,11 +812,18 @@ public class ShowManager implements Listener, FunctionInterface {
      * 'p/l p/n/f/l' 页面/列表 前一页/后一页/第一页/最后页<br>
      * 'p/l tip' 提示 页面/列表 前往指定页<br>
      * 'p/l to 页面' 页面/列表 前往指定页<br>
+     * 's 页面名' 显示自定义页面<br>
      */
     @Override
     public void onOperate(Player p, String... args) {
         if (args.length > 0) {
             try {
+                //显示自定义页面
+                if (args.length == 2 && args[0].equalsIgnoreCase("s")) {
+                    show(CoreMain.showManager, args[1], p, CorePlugin.pn, args[1], null, null, 1, 1, null, null, null);
+                    return;
+                }
+
                 //当前没有查看的页面
                 PlayerContext pc = playerContextHash.get(p);
                 if (pc == null) {
@@ -933,6 +968,12 @@ public class ShowManager implements Listener, FunctionInterface {
 
     public static ShowMap getShowMap() {
         return showMap;
+    }
+
+    @Override
+    public void show(PlayerContext pc) {
+        ShowManager.show(pc.callback, pc.obj, pc.p, pc.plugin, pc.pageName, pc.list, pc.data, pc.pageNow,
+                pc.listNow, pc.front, pc.behind, pc.itemHash);
     }
 
     /**
