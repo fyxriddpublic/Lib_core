@@ -4,6 +4,8 @@ import com.fyxridd.lib.core.api.*;
 import com.fyxridd.lib.core.api.event.ReloadConfigEvent;
 import com.fyxridd.lib.core.api.inter.FancyMessage;
 import com.fyxridd.lib.core.api.event.TimeEvent;
+import com.fyxridd.lib.msg.api.MsgApi;
+import com.fyxridd.lib.msg.api.SideHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -12,13 +14,19 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class Speed implements Listener{
-    //是否有前置插件!Lib_msg(可选)
-    private static boolean hasLibMsg = true;
+    private class SpeedHandler implements SideHandler {
+        @Override
+        public String get(Player p, String data) {
+            Long waitTime = waitHash.get(p);
+            if (waitTime != null) return getWaitShow(waitTime);
+            return "";
+        }
+    }
+
+    private static final String HANDLER_NAME = "speed";
 
     //配置
 
@@ -26,10 +34,12 @@ public class Speed implements Listener{
     private static Integer[] levels;
 
     private static boolean sideEnable;
-    private static int sideLine;
-    private static int sideClear;
+    private static long sideClear;
 
     //缓存
+
+    //可能为null
+    private static Object speedHandler;
 
     //长期
 	//插件 类型 玩家名 时间
@@ -39,21 +49,38 @@ public class Speed implements Listener{
     //玩家 插件 类型
     private static HashMap<Player, HashMap<String, HashMap<String, Long>>> shortHash = new HashMap<Player, HashMap<String, HashMap<String, Long>>>();
 
-    //在1-sideClear间循环
-    private static int count;
-    //1-count 玩家 无用
-    private static HashMap<Integer, HashMap<Player, Boolean>> sideHash = new HashMap<Integer, HashMap<Player, Boolean>>();
+    //玩家 开始时间点(与清除提示有关)
+    private static HashMap<Player, Long> startHash = new HashMap<Player, Long>();
+    //玩家 需要等待的时间(与清除提示无关)
+    private static HashMap<Player, Long> waitHash = new HashMap<Player, Long>();
 
 	public Speed() {
+        if (CoreMain.libMsgHook) {
+            speedHandler = new SpeedHandler();
+            //注册获取器
+            MsgApi.registerSideHandler(HANDLER_NAME, (SideHandler) speedHandler);
+        }
         //读取配置文件
         loadConfig();
         //注册事件
         Bukkit.getPluginManager().registerEvents(this, CorePlugin.instance);
         //计时器
+        //每1tick检测所有玩家,清除过期数据及侧边栏提示
         Bukkit.getScheduler().scheduleSyncRepeatingTask(CorePlugin.instance, new Runnable() {
             @Override
             public void run() {
-                checkSide();
+                if (sideEnable) {
+                    long endTime = System.currentTimeMillis()-sideClear;
+                    Iterator<Map.Entry<Player, Long>> it = startHash.entrySet().iterator();
+                    while (it.hasNext()) {
+                        Map.Entry<Player, Long> entry = it.next();
+                        if (entry.getValue() < endTime) {
+                            it.remove();
+                            waitHash.remove(entry.getKey());
+                            if (CoreMain.libMsgHook) MsgApi.updateSideShow(entry.getKey(), HANDLER_NAME);
+                        }
+                    }
+                }
             }
         }, 1, 1);
     }
@@ -97,6 +124,8 @@ public class Speed implements Listener{
     public void onPlayerQuit(PlayerQuitEvent e) {
         //删除短期
         shortHash.remove(e.getPlayer());
+        startHash.remove(e.getPlayer());
+        waitHash.remove(e.getPlayer());
     }
 
     /**
@@ -160,7 +189,7 @@ public class Speed implements Listener{
     public static boolean checkShort(Player p, String plugin, String type, int level) {
         //检测level
         if (level < 1 || level > levels.length) return false;
-        //数据
+        //数据c
         HashMap<String, HashMap<String, Long>> hash = shortHash.get(p);
         if (hash == null) {
             hash = new HashMap<String, HashMap<String, Long>>();
@@ -176,8 +205,11 @@ public class Speed implements Listener{
         Long pre = hash2.get(type);
         int limit = levels[level-1];
         if (pre != null && now-pre<limit) {//速度过快
-            double wait = CoreApi.getDouble(((double)limit - (now - pre))/1000, 1);
-            tip(p, get(1000, wait).getText());
+            long wait = limit - (now - pre);
+            startHash.put(p, now);
+            waitHash.put(p, wait);
+            if (sideEnable && speedHandler != null) MsgApi.updateSideShow(p, HANDLER_NAME);
+            else ShowApi.tip(p, getWaitShow(wait), false);
             return false;
         }
         //速度正常
@@ -186,52 +218,8 @@ public class Speed implements Listener{
 
     }
 
-    /**
-     * 每1tick检测所有玩家,清除侧边栏速度过快提示
-     */
-    private static void checkSide() {
-        if (sideEnable) {
-            count ++;
-            if (count > sideClear) count = 1;
-
-            HashMap<Player, Boolean> hash = sideHash.get(count);
-            if (hash != null && !hash.isEmpty()) {
-                for (Player p : hash.keySet()) tip(p, null);
-                //清空
-                hash.clear();
-            }
-        }
-    }
-
-    /**
-     * 提示玩家速度过快
-     * @param p 玩家,不为null
-     * @param msg 信息,可为null
-     */
-    private static void tip(Player p, String msg) {
-        try {
-            if (sideEnable && hasLibMsg) {
-                //msg不为null表示非清空提示
-                //检测添加到缓存
-                if (msg != null) {
-                    HashMap<Player, Boolean> hash = sideHash.get(count);
-                    if (hash == null) {
-                        hash = new HashMap<Player, Boolean>();
-                        sideHash.put(count, hash);
-                    }
-                    hash.put(p, true);
-                }
-                //提示
-                //todo
-                //MsgApi.setSideShowItem(p, sideLine, msg);
-                return;
-            }
-        } catch (Exception e) {
-            //异常表示无前置插件
-            hasLibMsg = false;
-        }
-        //聊天栏显示
-        ShowApi.tip(p, msg, false);
+    private static String getWaitShow(long wait) {
+        return Speed.get(1000, CoreApi.getDouble((double)wait/1000, 1)).getText();
     }
 
     private static void loadConfig() {
@@ -258,17 +246,13 @@ public class Speed implements Listener{
 
         //sideEnable
         sideEnable = config.getBoolean("speed.side.enable");
-        sideLine = config.getInt("speed.side.line");
 
         //sideClear
-        sideClear = config.getInt("speed.side.clear");
+        sideClear = config.getLong("speed.side.clear");
         if (sideClear < 1) {
             sideClear = 1;
             ConfigApi.log(CorePlugin.pn, "speed.side.clear < 1");
         }
-
-        //清空重置hash
-        sideHash.clear();
     }
 
     private static FancyMessage get(int id, Object... args) {

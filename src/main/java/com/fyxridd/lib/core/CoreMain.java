@@ -17,10 +17,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import java.util.List;
-
 public class CoreMain implements Listener{
-    public static boolean vaultHook;
+    public static boolean vaultHook, libMsgHook;
 
     //database
     public static Dao dao;
@@ -56,8 +54,15 @@ public class CoreMain implements Listener{
         try {
             Class.forName("net.milkbowl.vault.Vault");
             vaultHook = true;
-        } catch (ClassNotFoundException e) {
+        } catch (Exception e) {
             vaultHook = false;
+        }
+
+        try {
+            Class.forName("com.fyxridd.lib.msg.api.MsgApi");
+            libMsgHook = true;
+        }catch (Exception e) {
+            libMsgHook = false;
         }
 
         ProtocolManager pm = ProtocolLibrary.getProtocolManager();

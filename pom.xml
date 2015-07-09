@@ -6,7 +6,7 @@
 
     <groupId>com.fyxridd</groupId>
     <artifactId>Lib_core</artifactId>
-    <version>1.5.0</version>
+    <version>1.6.0</version>
 
     <build>
         <!--默认插件-->
@@ -260,6 +260,13 @@
             <groupId>com.fyxridd.lib</groupId>
             <artifactId>ProtocolLib</artifactId>
             <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--Lib_msg-->
+        <dependency>
+            <groupId>com.fyxridd</groupId>
+            <artifactId>Lib_msg</artifactId>
+            <version>[1.0.0,)</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

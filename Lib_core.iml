@@ -47,5 +47,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.fyxridd.lib:Vault:1.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.fyxridd.lib:PacketWrapper:1.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.fyxridd.lib:ProtocolLib:1.0" level="project" />
+    <orderEntry type="module" module-name="Lib_msg" scope="PROVIDED" />
   </component>
 </module>
