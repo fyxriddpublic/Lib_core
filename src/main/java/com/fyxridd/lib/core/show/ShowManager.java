@@ -1,5 +1,9 @@
 package com.fyxridd.lib.core.show;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketEvent;
 import com.fyxridd.lib.core.CoreMain;
 import com.fyxridd.lib.core.api.*;
 import com.fyxridd.lib.core.api.event.RealDamageEvent;
@@ -96,6 +100,13 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
         Bukkit.getPluginManager().registerEvents(this, CorePlugin.instance);
         //注册功能
         FuncManager.register(this);
+        //监听限制聊天包
+        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(CorePlugin.instance, PacketType.Play.Server.CHAT) {
+            @Override
+            public void onPacketSending(PacketEvent event) {
+                if (isInPage(event.getPlayer())) event.setCancelled(true);
+            }
+        });
     }
 
     @EventHandler(priority= EventPriority.LOW)
