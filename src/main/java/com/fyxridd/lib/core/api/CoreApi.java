@@ -51,7 +51,7 @@ public class CoreApi {
     //服务端版本
     public static String serverVer;
 
-    private static final Random Random = new Random();
+    public static final Random Random = new Random();
     private static final String VERSION_PATTERN = "\\(MC: [0-9.]{5}\\)";
 
     private static final String PatternStr = "&[0123456789abcdeflmnor]";
