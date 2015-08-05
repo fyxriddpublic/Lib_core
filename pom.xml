@@ -6,7 +6,7 @@
 
     <groupId>com.fyxridd</groupId>
     <artifactId>Lib_core</artifactId>
-    <version>1.7.0</version>
+    <version>1.8.0</version>
 
     <build>
         <!--默认插件-->
@@ -230,7 +230,7 @@
         </dependency>
         <!--SqliteDialect-->
         <dependency>
-            <groupId>com.fyxridd</groupId>
+            <groupId>com.fyxridd.lib</groupId>
             <artifactId>SqliteDialect</artifactId>
             <version>1.0</version>
         </dependency>

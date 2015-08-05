@@ -12,11 +12,10 @@ import com.fyxridd.lib.core.*;
 import com.fyxridd.lib.core.api.inter.FancyMessage;
 import com.fyxridd.lib.core.api.inter.InputHandler;
 import com.fyxridd.lib.core.api.nbt.AttributeStorage;
-import net.minecraft.server.v1_8_R2.EntityLightning;
-import net.minecraft.server.v1_8_R2.PacketPlayOutNamedSoundEffect;
-import net.minecraft.server.v1_8_R2.PacketPlayOutSpawnEntityWeather;
+import net.minecraft.server.v1_8_R2.*;
 import org.apache.commons.lang.Validate;
 import org.bukkit.*;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
@@ -24,12 +23,11 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.libs.jline.internal.InputStreamReader;
 import org.bukkit.craftbukkit.v1_8_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_8_R2.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.*;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
@@ -60,6 +58,44 @@ public class CoreApi {
     private static Pattern pattern = Pattern.compile(PatternStr);
 
     private static ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
+
+    /**
+     * 获取生物上保存的数据
+     * @param le 生物
+     * @param uid uuid
+     * @return 保存的数据,可能为null
+     */
+    public static String getData(LivingEntity le, UUID uid) {
+        EntityLiving el = ((CraftLivingEntity) le).getHandle();
+        AttributeInstance ai = el.getAttributeInstance(GenericAttributes.maxHealth);
+        if (ai == null) return null;
+        AttributeModifier am = ai.a(uid);
+        if (am == null) return null;
+        else return am.b();
+    }
+
+    /**
+     * 在生物上保存数据
+     * @param le 生物
+     * @param uid uuid
+     * @param data 数据
+     * @return 是否成功
+     */
+    public static boolean setData(LivingEntity le, UUID uid, String data) {
+        try {
+            EntityLiving el = ((CraftLivingEntity) le).getHandle();
+            AttributeInstance ai = el.getAttributeInstance(GenericAttributes.maxHealth);
+            if (ai == null) return false;
+            AttributeModifier am = new AttributeModifier(uid, data, 0, 0);
+            //先删旧的(没有也不会出错)
+            ai.c(am);
+            //再添加新的
+            ai.b(am);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
     /**
      * 切换门的开关状态
