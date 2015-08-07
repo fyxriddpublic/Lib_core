@@ -143,6 +143,13 @@ public class ShowApi {
     }
 
     /**
+     * @see #reShow(com.fyxridd.lib.core.api.inter.PlayerContext, boolean)
+     */
+    public static void reShow(PlayerContext pc) {
+        ShowManager.reShow(pc);
+    }
+
+    /**
      * 页面跳转,重新显示<br>
      * 以下情况下需要调用:<br>
      *     - 操作提示改变<br>
@@ -150,9 +157,10 @@ public class ShowApi {
      *     - 列表控制:列表当前页改变<br>
      *     - 其它功能自行设置的刷新操作
      * @param pc 玩家页面上下文,null时不显示
+     * @param noRefresh 是否禁止刷新(一般在重新显示页面方法出错时设为true)
      */
-    public static void reShow(PlayerContext pc) {
-        ShowManager.reShow(pc);
+    public static void reShow(PlayerContext pc, boolean noRefresh) {
+        ShowManager.reShow(pc, noRefresh);
     }
 
     /**

@@ -236,6 +236,7 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
     public static void show(ShowInterface callback, Object obj, Player p, String plugin, String pageName,
                             ShowList<Object> list, HashMap<String, Object> data, int pageNow, int listNow,
                             List<FancyMessage> front, List<FancyMessage> behind, HashMap<String, ItemStack> itemHash) {
+        //注意!此方法内不能调用tip()方法,而应该用setTip()代替,否则会出现死循环
         try {
             //玩家页面上下文
             PlayerContext pc = playerContextHash.get(p);
@@ -261,13 +262,13 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
                     pc.pageNow == pageNow &&
                     pc.listNow == listNow) {//是当前页面上下文在调用
                     playerContextHash.remove(p);
-                }else tip(p, get(645), true);
+                }else setTip(p, get(645));
                 return;
             }
 
             //页面未生效
             if (!page.isEnable()) {
-                tip(p, get(740), true);
+                setTip(p, get(740));
                 return;
             }
 
@@ -347,6 +348,7 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
                                     //添加替换
                                     replace.put(fix, value);
                                 } catch (Exception e) {
+                                    e.printStackTrace();
                                     CoreApi.debug(e.getMessage());
                                 }
                             }
@@ -453,9 +455,10 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
                 }else operateTipEmpty.send(p, false);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             CoreApi.debug(e.getMessage());
             playerContextHash.remove(p);
-            tip(p, get(655), true);
+            setTip(p, get(655));
         }
     }
 
@@ -473,9 +476,16 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
     }
 
     /**
-     * @see com.fyxridd.lib.core.api.ShowApi#reShow(com.fyxridd.lib.core.api.inter.PlayerContext)
+     * @see com.fyxridd.lib.core.api.ShowApi#reShow(com.fyxridd.lib.core.api.inter.PlayerContext, boolean)
      */
     public static void reShow(PlayerContext pc) {
+        reShow(pc, false);
+    }
+
+    /**
+     * @see com.fyxridd.lib.core.api.ShowApi#reShow(com.fyxridd.lib.core.api.inter.PlayerContext, boolean)
+     */
+    public static void reShow(PlayerContext pc, boolean noRefresh) {
         if (pc == null) return;
         Page page = getPage(pc.plugin, pc.pageName);
         if (page == null) return;
@@ -491,7 +501,7 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
             return;
         }
         //显示
-        if (page.isRefresh() && pc.callback != null) {//刷新
+        if (!noRefresh && page.isRefresh() && pc.callback != null) {//刷新
             pc.callback.show(pc);
         }else {//不刷新
             show(pc.callback, pc.obj, pc.p, pc.plugin, pc.pageName, pc.list, pc.data, pc.pageNow,
