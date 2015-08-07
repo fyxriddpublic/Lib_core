@@ -7,6 +7,7 @@ import com.fyxridd.lib.core.api.inter.FancyMessage;
 import net.minecraft.server.v1_8_R2.NBTTagCompound;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_8_R2.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
@@ -162,5 +163,36 @@ public class MessageApi {
      */
     public static boolean save(Page page) {
         return ShowApi.save(page);
+    }
+
+    /**
+     * 保存信息为字符串
+     * @param msg 可为null(null时返回null)
+     * @return 可为null
+     */
+    public static String save(FancyMessage msg) {
+        if (msg == null) return null;
+
+        //保存到config
+        YamlConfiguration config = new YamlConfiguration();
+        FormatApi.save(1, config, msg);
+        return config.saveToString();
+    }
+
+    /**
+     * 从字符串中读取信息
+     * @param data 可为null(null时返回null)
+     * @return 可为null
+     */
+    public static FancyMessage load(String data) {
+        if (data == null) return null;
+
+        YamlConfiguration config = new YamlConfiguration();
+        try {
+            config.loadFromString(data);
+            return FormatApi.load(config.getString("show-1"), (MemorySection) config.get("info-1"));
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

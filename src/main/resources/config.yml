@@ -89,7 +89,7 @@ funcManager:
     - "tm TransactionManager"    #事务管理
     - "pe PageEdit"              #页面编辑
     - "ap AdminPage"             #管理员面板
-    - "mp MainPage"              #主界面
+    - "mp MonPoint"              #怪物点
     - "sa ShowAction"            #显示动作
     - "ie ItemsEdit"             #物品编辑框
     - "re Rewards"               #奖励

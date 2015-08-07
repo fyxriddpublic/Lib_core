@@ -45,12 +45,15 @@ public class Dao {
      */
     public static User getUser(String name) {
         Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        @SuppressWarnings("unchecked")
-        User user = (User) session.createQuery("from User u where u.lowerName=:lowerName")
-                .setParameter("lowerName", name.toLowerCase()).uniqueResult();
-        session.getTransaction().commit();
-        session.close();
+        User user;
+        try {
+            session.beginTransaction();
+            user = (User) session.createQuery("from User u where u.lowerName=:lowerName")
+                    .setParameter("lowerName", name.toLowerCase()).uniqueResult();
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
         return user;
     }
 
@@ -59,10 +62,13 @@ public class Dao {
 	 */
 	public static void addOrUpdateUser(User user) {
 		Session session = sessionFactory.openSession();
-		session.beginTransaction();
-		session.saveOrUpdate(user);
-		session.getTransaction().commit();
-		session.close();
+        try {
+            session.beginTransaction();
+            session.saveOrUpdate(user);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
 	}
 
     /**
@@ -70,11 +76,14 @@ public class Dao {
      */
     public static List<EcoUser> getAllEcoUsers() {
         Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        @SuppressWarnings("unchecked")
-        List<EcoUser> list = session.createQuery("from EcoUser").list();
-        session.getTransaction().commit();
-        session.close();
+        List<EcoUser> list;
+        try {
+            session.beginTransaction();
+            list = session.createQuery("from EcoUser").list();
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
         return list;
     }
 
@@ -83,10 +92,13 @@ public class Dao {
      */
     public static void addOrUpdateEcoUser(EcoUser user) {
         Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        session.saveOrUpdate(user);
-        session.getTransaction().commit();
-        session.close();
+        try {
+            session.beginTransaction();
+            session.saveOrUpdate(user);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
     }
 
     /**
@@ -94,13 +106,16 @@ public class Dao {
      */
     public static void addOrUpdateEcoUsers(HashMap<String, EcoUser> ecoHash, Set<String> set) {
         Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        for (String name:set) {
-            EcoUser eu = ecoHash.get(name);
-            if (eu != null) session.saveOrUpdate(eu);
+        try {
+            session.beginTransaction();
+            for (String name:set) {
+                EcoUser eu = ecoHash.get(name);
+                if (eu != null) session.saveOrUpdate(eu);
+            }
+            session.getTransaction().commit();
+        } finally {
+            session.close();
         }
-        session.getTransaction().commit();
-        session.close();
     }
 
     /**
@@ -108,12 +123,15 @@ public class Dao {
      */
     public static InfoUser getInfo(String name, String flag) {
         Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        @SuppressWarnings("unchecked")
-        InfoUser info = (InfoUser) session.createQuery("from InfoUser info where info.name=:name and info.flag=:flag")
-                .setParameter("name", name).setParameter("flag", flag).uniqueResult();
-        session.getTransaction().commit();
-        session.close();
+        InfoUser info;
+        try {
+            session.beginTransaction();
+            info = (InfoUser) session.createQuery("from InfoUser info where info.name=:name and info.flag=:flag")
+                    .setParameter("name", name).setParameter("flag", flag).uniqueResult();
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
         return info;
     }
 
@@ -122,24 +140,30 @@ public class Dao {
      */
     public static List<InfoUser> getInfos(String name) {
         Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        @SuppressWarnings("unchecked")
-        List<InfoUser> infos = session.createQuery("from InfoUser info where info.name=:name")
-                .setParameter("name", name).list();
-        session.getTransaction().commit();
-        session.close();
+        List<InfoUser> infos;
+        try {
+            session.beginTransaction();
+            infos = session.createQuery("from InfoUser info where info.name=:name")
+                    .setParameter("name", name).list();
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
         if (infos == null) infos = new ArrayList<InfoUser>();
         return infos;
     }
 
     public static void updateInfos(Collection<InfoUser> update) {
         Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        for (InfoUser info:update) {
-            if (info.getData() != null) session.saveOrUpdate(info);
-            else session.delete(info);
+        try {
+            session.beginTransaction();
+            for (InfoUser info:update) {
+                if (info.getData() != null) session.saveOrUpdate(info);
+                else session.delete(info);
+            }
+            session.getTransaction().commit();
+        } finally {
+            session.close();
         }
-        session.getTransaction().commit();
-        session.close();
     }
 }

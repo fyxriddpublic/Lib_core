@@ -129,12 +129,9 @@ public class FormatManager implements Listener {
 		return result.toArray(new String[result.size()]);
 	}
 
-	/**
-	 * 读取FancyMessage
-	 * @param msg 内容,不为null
-	 * @param ms 包含了FancyMessage信息的MemorySection,可为null
-	 * @return 读取的FancyMessage,不为null
-	 */
+    /**
+     * @see com.fyxridd.lib.core.api.FormatApi#load(String, org.bukkit.configuration.MemorySection)
+     */
 	public static FancyMessage load(String msg, MemorySection ms) {
 		String[] ss = split(msg);
 		FancyMessage fm = null;

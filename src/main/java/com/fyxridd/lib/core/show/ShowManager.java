@@ -319,7 +319,7 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
                                                 else method = list.getClassType().getDeclaredMethod(methodName);
                                                 boolean accessible = method.isAccessible();
                                                 method.setAccessible(true);
-                                                value = method.invoke(o).toString();
+                                                value = String.valueOf(method.invoke(o));
                                                 method.setAccessible(accessible);
                                             }else {
                                                 methodName = methodName.substring(0, methodName.length()-6);
@@ -328,7 +328,7 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
                                                 else method = list.getClassType().getDeclaredMethod(methodName, String.class);
                                                 boolean accessible = method.isAccessible();
                                                 method.setAccessible(true);
-                                                value = method.invoke(o, p.getName()).toString();
+                                                value = String.valueOf(method.invoke(o, p.getName()));
                                                 method.setAccessible(accessible);
                                             }
                                         } else value = "";
@@ -340,7 +340,7 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
                                             else field = list.getClassType().getDeclaredField(ss[1]);
                                             boolean accessible = field.isAccessible();
                                             field.setAccessible(true);
-                                            value = field.get(o).toString();
+                                            value = String.valueOf(field.get(o));
                                             field.setAccessible(accessible);
                                         } else value = "";
                                     }
