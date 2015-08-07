@@ -37,7 +37,7 @@ public class TipTransactionImpl extends TipTransaction {
     private HashMap<String, Integer> recommendPosHash;
 
     /**
-     * @see #TipTransactionImpl(boolean, String, long, int, String, java.util.List, java.util.HashMap, java.util.HashMap, String)
+     * @see com.fyxridd.lib.core.api.TransactionApi#newTipTransaction(boolean, String, long, int, String, java.util.List, java.util.HashMap, java.util.HashMap, String)
      */
     public TipTransactionImpl(boolean instant, String name, long last, int tipInterval, String cmd,
                               List<FancyMessage> tip, HashMap<String, Object> map, String key) {
@@ -45,16 +45,7 @@ public class TipTransactionImpl extends TipTransaction {
     }
 
     /**
-     * 会更新值到tip显示里,但不会进行显示,需要调用updateShow()方法
-     * @param instant 是否输入后自动确认提交
-     * @param name 玩家名
-     * @param last 持续时间
-     * @param tipInterval 提示间隔
-     * @param cmd 命令
-     * @param tip 提示列表
-     * @param map 名-值映射表,可为null,值可以为null或空,但名必须全
-     * @param recommend 名-推荐值列表,可为null或空,名可以不全
-     * @param key 正在修改的名,可为null
+     * @see com.fyxridd.lib.core.api.TransactionApi#newTipTransaction(boolean, String, long, int, String, java.util.List, java.util.HashMap, java.util.HashMap, String)
      */
     public TipTransactionImpl(boolean instant, String name, long last, int tipInterval, String cmd,
                               List<FancyMessage> tip, HashMap<String, Object> map, HashMap<String, List<Object>> recommend, String key) {
@@ -110,7 +101,7 @@ public class TipTransactionImpl extends TipTransaction {
                     //删除输入注册
                     InputManager.del(p, false);
                     //将map值更新到命令
-                    if (map != null) {
+                    if (cmd != null && map != null) {
                         for (String key : map.keySet()) {
                             Object value = map.get(key);
                             String show;
@@ -123,7 +114,7 @@ public class TipTransactionImpl extends TipTransaction {
                     TransactionUser tu = TransactionApi.getTransactionUser(getName());
                     if (tu != null) tu.delTransaction(getId());
                     //发出命令
-                    p.chat(cmd);
+                    if (cmd != null) p.chat(cmd);
                 } else if (args[0].equalsIgnoreCase("c")) {//取消
                     //删除输入注册
                     InputManager.del(p, false);

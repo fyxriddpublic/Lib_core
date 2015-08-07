@@ -39,7 +39,7 @@ public class TransactionApi {
      * @param name 玩家名
      * @param last 持续时间
      * @param tipInterval 提示间隔
-     * @param cmd 命令
+     * @param cmd 命令,可为null
      * @param tip 提示列表
      * @param map 名-值映射表,可为null,值可以为null或空,但名必须全
      * @param recommend 名-推荐值列表,可为null或空,名可以不全

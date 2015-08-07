@@ -47,22 +47,16 @@ public class ShowApi {
         ShowManager.register(plugin, name);
     }
 
-    /**
-     * @see ShowManager#getPageControl()
-     */
     public static FancyMessage getPageControl() {
         return ShowManager.getPageControl();
     }
 
-    /**
-     * @see ShowManager#getListControl()
-     */
     public static FancyMessage getListControl() {
         return ShowManager.getListControl();
     }
 
     /**
-     * @see ShowManager#show(com.fyxridd.lib.core.api.inter.ShowInterface, Object, org.bukkit.entity.Player, String, String, com.fyxridd.lib.core.api.inter.ShowList, java.util.HashMap, java.util.List, java.util.List)
+     * @see #show(com.fyxridd.lib.core.api.inter.ShowInterface, Object, org.bukkit.entity.Player, String, String, com.fyxridd.lib.core.api.inter.ShowList, java.util.HashMap, int, int, java.util.List, java.util.List, java.util.HashMap)
      */
     public static void show(ShowInterface callback, Object obj, Player p, String plugin, String pageName,
                             ShowList list, HashMap<String, Object> data, List<FancyMessage> front, List<FancyMessage> behind) {
@@ -70,7 +64,7 @@ public class ShowApi {
     }
 
     /**
-     * @see ShowManager#show(ShowInterface, Object, org.bukkit.entity.Player, String, String, ShowList, java.util.HashMap, int, int, java.util.List, java.util.List)
+     * @see #show(com.fyxridd.lib.core.api.inter.ShowInterface, Object, org.bukkit.entity.Player, String, String, com.fyxridd.lib.core.api.inter.ShowList, java.util.HashMap, int, int, java.util.List, java.util.List, java.util.HashMap)
      */
     public static void show(ShowInterface callback, Object obj, Player p, String plugin, String pageName,
                             ShowList<Object> list, HashMap<String, Object> data, int pageNow, int listNow,
@@ -79,7 +73,7 @@ public class ShowApi {
     }
 
     /**
-     * @see ShowManager#show(ShowInterface, Object, org.bukkit.entity.Player, String, String, ShowList, java.util.HashMap, java.util.List, java.util.List, java.util.HashMap)
+     * @see #show(com.fyxridd.lib.core.api.inter.ShowInterface, Object, org.bukkit.entity.Player, String, String, com.fyxridd.lib.core.api.inter.ShowList, java.util.HashMap, int, int, java.util.List, java.util.List, java.util.HashMap)
      */
     public static void show(ShowInterface callback, Object obj, Player p, String plugin, String pageName,
                             ShowList<Object> list, HashMap<String, Object> data,
@@ -109,7 +103,7 @@ public class ShowApi {
     }
 
     /**
-     * @see ShowManager#tip(org.bukkit.entity.Player, java.util.List, boolean)
+     * @see #tip(org.bukkit.entity.Player, java.util.List, boolean)
      */
     public static void tip(Player p, String msg, boolean force) {
         if (msg == null) return;
@@ -117,7 +111,7 @@ public class ShowApi {
     }
 
     /**
-     * @see ShowManager#tip(org.bukkit.entity.Player, java.util.List, boolean)
+     * @see #tip(org.bukkit.entity.Player, java.util.List, boolean)
      */
     public static void tip(Player p, FancyMessage msg, boolean force) {
         List<FancyMessage> tipList = new ArrayList<FancyMessage>();
@@ -126,127 +120,168 @@ public class ShowApi {
     }
 
     /**
-     * @see ShowManager#tip(org.bukkit.entity.Player, java.util.List, boolean)
+     * 各种操作对玩家进行提示的时候适合调用此方法<br>
+     * 会自动根据玩家是否正在查看页面而改变显示方式<br>
+     * 可以防止因玩家查看页面而显示不了,也可以让提示玩家的时候不用考虑玩家的显示状态<br>
+     * 适合必须让玩家看到提示时调用
+     * @param p 玩家,不为null
+     * @param msgList 提示信息列表s,可为null
+     * @param force false表示玩家在显示界面时不提示,true表示不管玩家有没显示界面都提示
      */
     public static void tip(Player p, List<FancyMessage> msgList, boolean force) {
         ShowManager.tip(p, msgList, force);
     }
 
     /**
-     * @see ShowManager#getMsg(java.util.LinkedHashMap, int)
+     * 由行号获取行
+     * @param lines 行列表
+     * @param line 行号,-1表示页面控制行,-2表示列表控制行
+     * @return 异常返回null
      */
     public static FancyMessage getMsg(LinkedHashMap<Integer, Page.LineContext> lines, int line) {
         return ShowManager.getMsg(lines, line);
     }
 
     /**
-     * @see ShowManager#reShow(com.fyxridd.lib.core.api.inter.PlayerContext)
+     * 页面跳转,重新显示<br>
+     * 以下情况下需要调用:<br>
+     *     - 操作提示改变<br>
+     *     - 分页控制:当前页改变<br>
+     *     - 列表控制:列表当前页改变<br>
+     *     - 其它功能自行设置的刷新操作
+     * @param pc 玩家页面上下文,null时不显示
      */
     public static void reShow(PlayerContext pc) {
         ShowManager.reShow(pc);
     }
 
-
     /**
-     * @see ShowManager#setTip(org.bukkit.entity.Player, FancyMessage)
+     * @see #setTip(org.bukkit.entity.Player, java.util.List)
      */
     public static void setTip(Player p, FancyMessage tip) {
         ShowManager.setTip(p, tip);
     }
 
     /**
-     * @see ShowManager#setTip(org.bukkit.entity.Player, java.util.List)
+     * 设置提示信息
+     * @param p 玩家,不为null
+     * @param tip 提示列表,可为null
      */
     public static void setTip(Player p, List<FancyMessage> tip) {
         ShowManager.setTip(p, tip);
     }
 
-    /**
-     * @see ShowManager#getPageHash()
-     */
     public static HashMap<String, HashMap<String, Page>> getPageHash() {
         return ShowManager.getPageHash();
     }
 
     /**
-     * @see ShowManager#hasRegistered(String, String)
+     * 检测指定插件的页面是否有注册
+     * @param plugin 插件名,可为null
+     * @param page 页面名,可为null
+     * @return 是否有注册
      */
     public static boolean hasRegistered(String plugin, String page) {
         return ShowManager.hasRegistered(plugin, page);
     }
 
     /**
-     * @see ShowManager#getPage(String, String)
+     * 获取插件注册的页面<br>
+     * 注意: 如果指定插件的指定页面被注册,这个页面可能仍未生成或读取异常,因此会返回null<br>
+     * 也就是说返回null不代表指定插件的页面没有注册<br>
+     * 当然,没有注册的情况下也是返回null
+     * @param plugin 插件名,可为null
+     * @param page 页面名,可为null
+     * @return 页面,异常返回null
      */
     public static Page getPage(String plugin, String page) {
         return ShowManager.getPage(plugin, page);
     }
 
     /**
-     * @see ShowManager#back(org.bukkit.entity.Player)
+     * 玩家请求返回上一页
+     * @param p 玩家,不为null
      */
     public static void back(Player p) {
         ShowManager.back(p);
     }
 
     /**
-     * @see ShowManager#exit(org.bukkit.entity.Player, boolean)
+     * @see #exit(org.bukkit.entity.Player, boolean, boolean)
      */
     public static void exit(Player p, boolean tip) {
         ShowManager.exit(p, tip);
     }
 
     /**
-     * @see ShowManager#exit(org.bukkit.entity.Player, boolean, boolean)
+     * 玩家请求退出页面
+     * @param p 玩家,不为null
+     * @param tip 当前没有查看的页面时是否提示
+     * @param successTip 退出页面成功时是否提示
      */
     public static void exit(Player p, boolean tip, boolean successTip) {
         ShowManager.exit(p, tip, successTip);
     }
 
     /**
-     * @see ShowManager#isInPage(org.bukkit.entity.Player)
+     * 获取玩家是否正在查看界面
+     * @param p 玩家,不为null
+     * @return 是否正在查看界面
      */
     public static boolean isInPage(Player p) {
         return ShowManager.isInPage(p);
     }
 
     /**
-     * @see ShowManager#clearTip(org.bukkit.entity.Player, boolean, boolean)
+     * 清除玩家的提示
+     * @param p 玩家,不为null
+     * @param show 是否重新显示
+     * @param cancelInput 是否取消输入
      */
     public static void clearTip(Player p, boolean show, boolean cancelInput) {
         ShowManager.clearTip(p, show, cancelInput);
     }
 
     /**
-     * @see com.fyxridd.lib.core.show.ShowListImpl#ShowListImpl(int, Object)
+     * @param type 传入的列表类型,0指List类型,1指Object[]类型,2指Collection类型,3指HashList类型
+     * @param list 列表,可为null
      */
     public static ShowList getShowList(int type, Object list) {
         return new ShowListImpl(type, list);
     }
 
     /**
-     * @see com.fyxridd.lib.core.show.ShowListImpl#ShowListImpl(int, Object, Class)
+     * @see #getShowList(int, Object)
      */
     public static ShowList getShowList(int type, Object list, Class classType) {
         return new ShowListImpl(type, list, classType);
     }
 
     /**
-     * @see com.fyxridd.lib.core.show.ShowManager#load(String, String)
+     * 从plugins/plugin/show/page.yml里读取页面信息
+     * @param plugin 插件名,不为null
+     * @param page 页面名,不为null
+     * @return 页面,异常返回null
      */
     public static Page load(String plugin, String page) {
        return ShowManager.load(plugin, page);
     }
 
     /**
-     * @see com.fyxridd.lib.core.show.ShowManager#load(String, String, org.bukkit.configuration.file.YamlConfiguration)
+     * 读取页面信息
+     * @param plugin 插件名
+     * @param page 页面名
+     * @param config 页面信息保存的yml文件,不为null
+     * @return 页面信息,异常返回null
      */
     public static Page load(String plugin, String page, YamlConfiguration config) {
         return ShowManager.load(plugin, page, config);
     }
 
     /**
-     * @see com.fyxridd.lib.core.show.ShowManager#save(com.fyxridd.lib.core.api.inter.Page)
+     * 保存页面到文件
+     * @param page 页面,不为null
+     * @return 是否成功
      */
     public static boolean save(Page page) {
         return ShowManager.save(page);
