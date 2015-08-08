@@ -162,6 +162,10 @@ public class HashListImpl<T extends Object> implements HashList<T>{
 		}
 	}
 
+    public List<T> getList() {
+        return list;
+    }
+
 	@Override
 	public HashList<T> clone() {
 		HashListImpl<T> hash = new HashListImpl<T>();

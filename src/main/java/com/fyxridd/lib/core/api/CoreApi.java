@@ -799,6 +799,25 @@ public class CoreApi {
     }
 
     /**
+     * 方向随机偏移
+     * @param originYaw 方向的yaw
+     * @param originPitch 方向的pitch
+     * @param accuracy 散度,>=0(如1.2)
+     * @return 新的偏移后的方向
+     */
+    public static org.bukkit.util.Vector getRandomVector(double originYaw, double originPitch, double accuracy) {
+        double yaw = Math.toRadians(-originYaw - 90.0F);
+        double pitch = Math.toRadians(-originPitch);
+        double[] spread = { 1.0D, 1.0D, 1.0D };
+        for (int t = 0; t < 3; t++) spread[t] = ((CoreApi.Random.nextDouble() - CoreApi.Random.nextDouble()) * accuracy * 0.1D);
+        double x = Math.cos(pitch) * Math.cos(yaw) + spread[0];
+        double y = Math.sin(pitch) + spread[1];
+        double z = -Math.sin(yaw) * Math.cos(pitch) + spread[2];
+        org.bukkit.util.Vector dirVel = new org.bukkit.util.Vector(x, y, z);
+        return dirVel.normalize();
+    }
+
+    /**
      * 检测字符串是否合法,合法表示只包含英文,数字,下划线
      * @param s 字符串
      * @return 是否合法

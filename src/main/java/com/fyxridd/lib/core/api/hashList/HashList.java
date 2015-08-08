@@ -71,7 +71,6 @@ public interface HashList<T extends Object> extends Iterable<T>,Cloneable,Serial
 
 	/**
 	 * 是否为空
-	 * @return
 	 */
 	public boolean isEmpty();
 	
@@ -103,8 +102,14 @@ public interface HashList<T extends Object> extends Iterable<T>,Cloneable,Serial
 	 * @param clear true表示导入前将原来的内容清空
 	 */
 	public void convert(HashList<T> hashList, boolean clear);
-	
-	/**
+
+    /**
+     * 获取列表
+     * @return 不为null可为空列表
+     */
+    public List<T> getList();
+
+    /**
 	 * 复制
 	 * @return 相同内容的对象
 	 */
