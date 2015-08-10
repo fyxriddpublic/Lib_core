@@ -38,7 +38,7 @@ public class InputManager implements Listener, CommandExecutor {
 
     //在此缓存中说明玩家在输入状态中
     //玩家 输入处理器
-    private static HashMap<Player, InputHandler> inputHash = new HashMap<Player, InputHandler>();
+    private static HashMap<Player, InputHandler> inputHash = new HashMap<>();
 
 	public InputManager() {
 		//读取配置文件

@@ -25,7 +25,7 @@ public class RealName implements Listener{
 
     //不完整,动态读取
 	//玩家名(小写) 玩家真名
-	private static HashMap<String, User> realNameHash = new HashMap<String, User>();
+	private static HashMap<String, User> realNameHash = new HashMap<>();
 
 	public RealName() {
         //读取配置文件
@@ -64,7 +64,7 @@ public class RealName implements Listener{
             //缓存
             realNameHash.put(e.getPlayer().getName().toLowerCase(), user);
             //db
-            Dao.addOrUpdateUser(user);
+            CoreMain.dao.saveOrUpdate(user);
         }
 	}
 

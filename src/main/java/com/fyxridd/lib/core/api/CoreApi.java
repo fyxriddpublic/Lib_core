@@ -213,14 +213,14 @@ public class CoreApi {
      * @see Info#getInfo(String, String)
      */
     public static String getInfo(String name, String flag) {
-        return Info.getInfo(name, flag);
+        return CoreMain.info.getInfo(name, flag);
     }
 
     /**
      * @see Info#setInfo(String, String, String)
      */
     public static void setInfo(String name, String flag, String data) {
-        Info.setInfo(name, flag, data);
+        CoreMain.info.setInfo(name, flag, data);
     }
 
     /**

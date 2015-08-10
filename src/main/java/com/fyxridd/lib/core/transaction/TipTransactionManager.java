@@ -26,7 +26,7 @@ public class TipTransactionManager implements Listener {
 
     //玩家 提示事务
     //每个玩家最多只能同时有一个提示事务
-    private static HashMap<Player, TipTransaction> playerTipTransactionHashMap = new HashMap<Player, TipTransaction>();
+    private static HashMap<Player, TipTransaction> playerTipTransactionHashMap = new HashMap<>();
 
 	public TipTransactionManager() {
 		//读取配置文件

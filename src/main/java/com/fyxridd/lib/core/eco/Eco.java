@@ -103,7 +103,7 @@ public class Eco implements EcoHandler, Listener {
         EcoUser eu = ecoHash.get(name);
         if (eu == null) return false;
         if (amount < 0) amount = 0;
-        else if (amount > EcoManager.max) amount = EcoManager.max;
+        else if (amount > CoreMain.ecoManager.max) amount = CoreMain.ecoManager.max;
         eu.setMoney(amount);
         //添加更新
         needUpdateList.add(eu);
@@ -139,7 +139,7 @@ public class Eco implements EcoHandler, Listener {
         EcoUser eu = ecoHash.get(name);
         if (eu == null) return false;
         double result = eu.getMoney() + amount;
-        if (result < 0 || result > EcoManager.max) result = EcoManager.max;
+        if (result < 0 || result > CoreMain.ecoManager.max) result = CoreMain.ecoManager.max;
         return set(name, result);
     }
 
@@ -172,7 +172,7 @@ public class Eco implements EcoHandler, Listener {
         EcoUser eu = ecoHash.get(name);
         if (eu == null) return false;
         double result = eu.getMoney() - amount;
-        if (result < 0 || result > EcoManager.max) result = 0;
+        if (result < 0 || result > CoreMain.ecoManager.max) result = 0;
         return set(name, result);
     }
 

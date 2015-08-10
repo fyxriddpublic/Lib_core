@@ -19,7 +19,7 @@ public class TransactionManager implements Listener,FunctionInterface {
     private static final String FUNC_NAME = "TransactionManager";
 
 	//玩家名 玩家事务信息
-	private static HashMap<String, TransactionUser> transHash = new HashMap<String, TransactionUser>();
+	private static HashMap<String, TransactionUser> transHash = new HashMap<>();
 	
 	public TransactionManager() {
         //注册事件

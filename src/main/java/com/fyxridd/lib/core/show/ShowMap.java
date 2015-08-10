@@ -9,7 +9,7 @@ import java.util.HashMap;
  */
 public class ShowMap {
     //插件名 键名 键值获取器
-    private static HashMap<String, HashMap<String, MapHandler>> handleHash = new HashMap<String, HashMap<String, MapHandler>>();
+    private static HashMap<String, HashMap<String, MapHandler>> handleHash = new HashMap<>();
 
     public static void register(String plugin, String key, MapHandler mapHandler) {
         if (!handleHash.containsKey(plugin)) handleHash.put(plugin, new HashMap<String, MapHandler>());

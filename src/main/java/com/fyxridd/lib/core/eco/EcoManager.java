@@ -15,25 +15,25 @@ import java.util.Map;
 
 public class EcoManager implements Listener {
     //自带实现(完整)
-    private static Eco eco;
+    private Eco eco;
     //Vault实现(不完整)
-    private static VaultHandler vaultHandler;
+    private VaultHandler vaultHandler;
 
     //配置
 
     //钱上限
-    public static int max = 10000000;
+    public int max = 10000000;
     //优先级
-    private static HashMap<String, Integer> priorityHash;
+    private HashMap<String, Integer> priorityHash;
 
     //缓存
 
     //处理器名 权限处理器
-    private static HashMap<String, EcoHandler> handlerHash = new HashMap<String, EcoHandler>();
+    private HashMap<String, EcoHandler> handlerHash = new HashMap<>();
 
     //当前使用的权限处理器
-    private static int nowPriority;
-    public static EcoHandler ecoHandler;
+    private int nowPriority;
+    public EcoHandler ecoHandler;
 
     public EcoManager() {
         eco = new Eco();
@@ -58,14 +58,14 @@ public class EcoManager implements Listener {
         eco.onDisable();
     }
 
-    public static void register(String name, EcoHandler ecoHandler) {
+    public void register(String name, EcoHandler ecoHandler) {
         handlerHash.put(name, ecoHandler);
     }
 
     /**
      * (根据优先级)更新经济处理器
      */
-    private static void update() {
+    private void update() {
         for (Map.Entry<String, EcoHandler> entry:handlerHash.entrySet()) {
             Integer priority = priorityHash.get(entry.getKey());
             if (priority == null) priority = 0;
@@ -76,7 +76,7 @@ public class EcoManager implements Listener {
         }
     }
 
-    private static void loadConfig() {
+    private void loadConfig() {
         YamlConfiguration config = ConfigApi.getConfig(CorePlugin.pn);
 
         //钱上限

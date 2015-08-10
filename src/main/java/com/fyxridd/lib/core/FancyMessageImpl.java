@@ -33,7 +33,7 @@ public class FancyMessageImpl implements FancyMessage {
 	}
 	
 	public FancyMessageImpl(final String firstPartText) {
-		messageParts = new ArrayList< MessagePart>();
+		messageParts = new ArrayList<>();
 		messageParts.add(new MessagePart(firstPartText));
 	}
 
@@ -222,7 +222,7 @@ public class FancyMessageImpl implements FancyMessage {
                 }
             }
             //listFix
-            HashList<String> listFix = new HashListImpl<String>();
+            HashList<String> listFix = new HashListImpl<>();
             if (mp.con != null) {
                 for (Condition condition: mp.con) checkAdd(listFix, condition.toString());
             }
@@ -279,7 +279,7 @@ public class FancyMessageImpl implements FancyMessage {
 
 	@Override
 	public FancyMessageImpl clone() {
-		List<MessagePart> messageParts = new ArrayList<MessagePart>();
+		List<MessagePart> messageParts = new ArrayList<>();
 		for (MessagePart mp:this.messageParts) {
 			messageParts.add(mp.clone());
 		}

@@ -4,9 +4,8 @@
 <hibernate-mapping package="com.fyxridd.lib.core.api.model">
 
 <class name="EcoUser" table="EcoUser">
-    <id name="name" length="16">
-    </id>
-    <property generated="never" lazy="false" name="money"/>
+    <id name="name" length="15"/>
+    <property name="money"/>
 </class>
 
 </hibernate-mapping>

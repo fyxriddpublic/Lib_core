@@ -1,5 +1,6 @@
 package com.fyxridd.lib.core.eco;
 
+import com.fyxridd.lib.core.CoreMain;
 import com.fyxridd.lib.core.api.CoreApi;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -56,7 +57,7 @@ public class VaultHandler implements EcoHandler {
         if (name == null) return false;
         //数量
         if (amount < 0) amount = 0;
-        else if (amount > EcoManager.max) amount = EcoManager.max;
+        else if (amount > CoreMain.ecoManager.max) amount = CoreMain.ecoManager.max;
         //
         double current = get(name);
         if (amount == current) return true;
@@ -90,7 +91,7 @@ public class VaultHandler implements EcoHandler {
         //
         if (amount <= 0) return true;
         double result = get(name)+amount;
-        if (result < 0 || result > EcoManager.max) result = EcoManager.max;
+        if (result < 0 || result > CoreMain.ecoManager.max) result = CoreMain.ecoManager.max;
         //
         return set(name, result);
     }
@@ -122,7 +123,7 @@ public class VaultHandler implements EcoHandler {
         if (amount <= 0) return true;
         double current = get(name);
         double result = current - amount;
-        if (result < 0 || result > EcoManager.max) return economy.withdrawPlayer(name, current).transactionSuccess();
+        if (result < 0 || result > CoreMain.ecoManager.max) return economy.withdrawPlayer(name, current).transactionSuccess();
         return economy.withdrawPlayer(name, amount).transactionSuccess();
     }
 }

@@ -75,24 +75,24 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
     /**
      * 插件名 页面名 页面
      */
-    private static HashMap<String, HashMap<String, Page>> pageHash = new HashMap<String, HashMap<String, Page>>();
+    private static HashMap<String, HashMap<String, Page>> pageHash = new HashMap<>();
 
     /**
      * 玩家 玩家页面上下文
      */
-    private static HashMap<Player, PlayerContext> playerContextHash = new HashMap<Player, PlayerContext>();
+    private static HashMap<Player, PlayerContext> playerContextHash = new HashMap<>();
     /**
      * 玩家 返回页面保存列表
      */
-    private static HashMap<Player, List<PlayerContext>> backHash = new HashMap<Player, List<PlayerContext>>();
+    private static HashMap<Player, List<PlayerContext>> backHash = new HashMap<>();
     /**
      * 玩家 提示
      */
-    private static HashMap<Player, List<FancyMessage>> tipHash = new HashMap<Player, List<FancyMessage>>();
+    private static HashMap<Player, List<FancyMessage>> tipHash = new HashMap<>();
     /**
      * 正在重新显示的中的玩家列表(用来防止显示死循环),玩家 调用层数
      */
-    private static HashMap<Player, Integer> reShowHash = new HashMap<Player, Integer>();
+    private static HashMap<Player, Integer> reShowHash = new HashMap<>();
 
     public ShowManager() {
         showMap = new ShowMap();
@@ -284,7 +284,7 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
                 setTip(p, get(650));
             }
             List<Integer> showPage = page.getPageList().get(pageNow-1).getContent();//显示的页面
-            List<FancyMessage> resultPage = new ArrayList<FancyMessage>();//结果页面,复制版
+            List<FancyMessage> resultPage = new ArrayList<>();//结果页面,复制版
             for (int line: showPage) {
                 FancyMessage msg = getMsg(page.getLines(), line);
                 if (msg == null) continue;

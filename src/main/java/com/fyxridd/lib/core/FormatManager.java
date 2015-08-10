@@ -32,7 +32,7 @@ public class FormatManager implements Listener {
 
 	//language
 	//插件名 文本id 内容
-	private static HashMap<String, HashMap<String, HashMap<Integer, FancyMessage>>> msgHash = new HashMap<String, HashMap<String, HashMap<Integer, FancyMessage>>>();
+	private static HashMap<String, HashMap<String, HashMap<Integer, FancyMessage>>> msgHash = new HashMap<>();
 
 	public FormatManager() {
 		//注册事件

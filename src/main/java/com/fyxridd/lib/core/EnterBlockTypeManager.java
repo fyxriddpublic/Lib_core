@@ -32,7 +32,7 @@ public class EnterBlockTypeManager implements Listener {
     private long interval;
 
     //缓存
-    private HashMap<Player, Material> inTypeHash = new HashMap<Player, Material>();
+    private HashMap<Player, Material> inTypeHash = new HashMap<>();
 
     private Check check = new Check();
 
@@ -53,6 +53,7 @@ public class EnterBlockTypeManager implements Listener {
     @EventHandler(priority= EventPriority.LOW)
     public void onPlayerQuit(PlayerQuitEvent e) {
         check(e.getPlayer(), true);
+        inTypeHash.remove(e.getPlayer());
     }
 
     /**

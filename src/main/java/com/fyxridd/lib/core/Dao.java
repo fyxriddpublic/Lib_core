@@ -12,7 +12,7 @@ import java.io.File;
 import java.util.*;
 
 public class Dao {
-    private static final List<File> hbms = new ArrayList<File>();
+    private static final List<File> hbms = new ArrayList<>();
 
 	private static SessionFactory sessionFactory;
 	
@@ -39,14 +39,14 @@ public class Dao {
 	}
 
     /**
-     * @return 不存在返回null
+     * @return 可为null
      */
     public static User getUser(String name) {
         Session session = sessionFactory.openSession();
         User user;
         try {
             session.beginTransaction();
-            user = (User) session.createQuery("from User u where u.lowerName=:lowerName")
+            user = (User) session.createQuery("from User where lowerName=:lowerName")
                     .setParameter("lowerName", name.toLowerCase()).uniqueResult();
             session.getTransaction().commit();
         } finally {
@@ -54,20 +54,6 @@ public class Dao {
         }
         return user;
     }
-
-	/**
-	 * 添加User
-	 */
-	public static void addOrUpdateUser(User user) {
-		Session session = sessionFactory.openSession();
-        try {
-            session.beginTransaction();
-            session.saveOrUpdate(user);
-            session.getTransaction().commit();
-        } finally {
-            session.close();
-        }
-	}
 
     public void saveOrUpdate(Object obj) {
         Session session = sessionFactory.openSession();
@@ -91,6 +77,17 @@ public class Dao {
         }
     }
 
+    public void deletes(Collection c) {
+        Session session = sessionFactory.openSession();
+        try {
+            session.beginTransaction();
+            for (Object o:c) session.delete(o);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
+    }
+
     /**
      * 获取所有的EcoUser
      */
@@ -99,43 +96,12 @@ public class Dao {
         List<EcoUser> list;
         try {
             session.beginTransaction();
-            list = session.createQuery("from EcoUser").list();
+            list = session.createQuery("from EcoUser where name!=''").list();
             session.getTransaction().commit();
         } finally {
             session.close();
         }
         return list;
-    }
-
-    /**
-     * 添加或更新EcoUser
-     */
-    public static void addOrUpdateEcoUser(EcoUser user) {
-        Session session = sessionFactory.openSession();
-        try {
-            session.beginTransaction();
-            session.saveOrUpdate(user);
-            session.getTransaction().commit();
-        } finally {
-            session.close();
-        }
-    }
-
-    /**
-     * 一次性保存多个玩家
-     */
-    public static void addOrUpdateEcoUsers(HashMap<String, EcoUser> ecoHash, Set<String> set) {
-        Session session = sessionFactory.openSession();
-        try {
-            session.beginTransaction();
-            for (String name:set) {
-                EcoUser eu = ecoHash.get(name);
-                if (eu != null) session.saveOrUpdate(eu);
-            }
-            session.getTransaction().commit();
-        } finally {
-            session.close();
-        }
     }
 
     /**
@@ -153,38 +119,6 @@ public class Dao {
             session.close();
         }
         return info;
-    }
-
-    /**
-     * @return 可为空列表不为null
-     */
-    public static List<InfoUser> getInfos(String name) {
-        Session session = sessionFactory.openSession();
-        List<InfoUser> infos;
-        try {
-            session.beginTransaction();
-            infos = session.createQuery("from InfoUser info where info.name=:name")
-                    .setParameter("name", name).list();
-            session.getTransaction().commit();
-        } finally {
-            session.close();
-        }
-        if (infos == null) infos = new ArrayList<InfoUser>();
-        return infos;
-    }
-
-    public static void updateInfos(Collection<InfoUser> update) {
-        Session session = sessionFactory.openSession();
-        try {
-            session.beginTransaction();
-            for (InfoUser info:update) {
-                if (info.getData() != null) session.saveOrUpdate(info);
-                else session.delete(info);
-            }
-            session.getTransaction().commit();
-        } finally {
-            session.close();
-        }
     }
 
     public List<PerGroup> getPerGroups() {

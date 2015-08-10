@@ -38,7 +38,7 @@ public class FuncManager implements Listener, CommandExecutor {
     //缓存
 
     //功能名 功能
-    private static HashMap<String, FunctionInterface> funcHash = new HashMap<String, FunctionInterface>();
+    private static HashMap<String, FunctionInterface> funcHash = new HashMap<>();
 
 	public FuncManager() {
 		//注册事件

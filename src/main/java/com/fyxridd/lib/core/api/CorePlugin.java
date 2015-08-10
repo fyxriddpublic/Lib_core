@@ -55,7 +55,7 @@ public class CorePlugin extends JavaPlugin{
     @Override
     public void onDisable() {
         //Info
-        Info.onDisable();
+        CoreMain.info.onDisable();
         //Eco
         CoreMain.ecoManager.onDisable();
         //Per

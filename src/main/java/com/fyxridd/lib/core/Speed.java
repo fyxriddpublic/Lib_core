@@ -43,16 +43,16 @@ public class Speed implements Listener{
 
     //长期
 	//插件 类型 玩家名 时间
-	private static HashMap<String, HashMap<String, HashMap<String, Long>>> speedHash = new HashMap<String, HashMap<String, HashMap<String, Long>>>();
+	private static HashMap<String, HashMap<String, HashMap<String, Long>>> speedHash = new HashMap<>();
 
     //短期
     //玩家 插件 类型
-    private static HashMap<Player, HashMap<String, HashMap<String, Long>>> shortHash = new HashMap<Player, HashMap<String, HashMap<String, Long>>>();
+    private static HashMap<Player, HashMap<String, HashMap<String, Long>>> shortHash = new HashMap<>();
 
     //玩家 开始时间点(与清除提示有关)
-    private static HashMap<Player, Long> startHash = new HashMap<Player, Long>();
+    private static HashMap<Player, Long> startHash = new HashMap<>();
     //玩家 需要等待的时间(与清除提示无关)
-    private static HashMap<Player, Long> waitHash = new HashMap<Player, Long>();
+    private static HashMap<Player, Long> waitHash = new HashMap<>();
 
 	public Speed() {
         if (CoreMain.libMsgHook) {

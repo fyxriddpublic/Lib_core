@@ -52,7 +52,7 @@ public class ChatManager implements Listener {
 
     //缓存
 
-    private static List<PlayerChatEvent> chatEvents = new ArrayList<PlayerChatEvent>();
+    private static List<PlayerChatEvent> chatEvents = new ArrayList<>();
 
     private HashMap<Player, Queue<FancyMessage>> delayChats;
 
@@ -73,7 +73,7 @@ public class ChatManager implements Listener {
                             Bukkit.getPluginManager().callEvent(event);
                             if (!event.isCancelled()) {
                                 FancyMessage msg = get(35, event.getP().getName(), event.getMsg());
-                                for (Player tar: Bukkit.getOnlinePlayers()) addChat(tar, msg, false);
+                                for (Player tar: Bukkit.getOnlinePlayers()) addChat(tar, msg.clone(), false);
                             }
                         }
 
@@ -87,27 +87,6 @@ public class ChatManager implements Listener {
         }, 1, 1);
         //延时聊天
         Bukkit.getScheduler().scheduleSyncDelayedTask(CorePlugin.instance, showTask, delayShowInterval);
-    }
-
-    /**
-     * @see com.fyxridd.lib.core.api.CoreApi#addChat(org.bukkit.entity.Player, com.fyxridd.lib.core.api.inter.FancyMessage, boolean)
-     */
-    public void addChat(Player p, FancyMessage msg, boolean force) {
-        if (p == null || msg == null) return;
-
-        if (force || !ShowApi.isInPage(p)) ShowApi.tip(p, msg, true);
-        else {
-            //延时信息添加前缀
-            if (delayShowPrefix != null) msg.combine(delayShowPrefix, true);
-            //添加到延时显示队列
-            Queue<FancyMessage> queue = delayChats.get(p);
-            if (queue == null) {
-                queue = new ArrayBlockingQueue<FancyMessage>(maxSaves, false);
-                delayChats.put(p, queue);
-            }
-            while (queue.size() >= maxSaves) queue.poll();
-            queue.offer(msg);
-        }
     }
 
     @EventHandler(priority= EventPriority.LOW)
@@ -136,11 +115,32 @@ public class ChatManager implements Listener {
         delayChats.remove(e.getPlayer());
     }
 
+    /**
+     * @see com.fyxridd.lib.core.api.CoreApi#addChat(org.bukkit.entity.Player, com.fyxridd.lib.core.api.inter.FancyMessage, boolean)
+     */
+    public void addChat(Player p, FancyMessage msg, boolean force) {
+        if (p == null || msg == null) return;
+
+        if (force || !ShowApi.isInPage(p)) ShowApi.tip(p, msg, true);
+        else {
+            //延时信息添加前缀
+            if (delayShowPrefix != null) msg.combine(delayShowPrefix, true);
+            //添加到延时显示队列
+            Queue<FancyMessage> queue = delayChats.get(p);
+            if (queue == null) {
+                queue = new ArrayBlockingQueue<>(maxSaves, false);
+                delayChats.put(p, queue);
+            }
+            while (queue.size() >= maxSaves) queue.poll();
+            queue.offer(msg);
+        }
+    }
+
     private void loadConfig() {
         YamlConfiguration config = ConfigApi.getConfig(CorePlugin.pn);
 
-        //因为重新读取maxsaves,因此需要重置chats
-        delayChats = new HashMap<Player, Queue<FancyMessage>>();
+        //因为重新读取maxsaves,因此需要重置delayChats
+        delayChats = new HashMap<>();
 
         //maxSaves
         maxSaves = config.getInt("chat.maxSaves");

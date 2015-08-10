@@ -64,10 +64,10 @@ public class ConfigManager implements FunctionInterface, Listener, ShowInterface
     private static Pattern filter = Pattern.compile("resources/[\\S]+");
 
 	//插件名 配置上下文
-	private static HashMap<String, ConfigContext> contextHash = new HashMap<String, ConfigContext>();
+	private static HashMap<String, ConfigContext> contextHash = new HashMap<>();
 
     //插件名 读取并保存在内存中的配置
-	private static HashMap<String, YamlConfiguration> configHash = new HashMap<String, YamlConfiguration>();
+	private static HashMap<String, YamlConfiguration> configHash = new HashMap<>();
 
     //功能管理权限
     private static String adminPer;
