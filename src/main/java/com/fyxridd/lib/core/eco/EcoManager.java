@@ -54,7 +54,7 @@ public class EcoManager implements Listener {
         if (e.getPlugin().equals(CorePlugin.pn)) loadConfig();
     }
 
-    public static void onDisable() {
+    public void onDisable() {
         eco.onDisable();
     }
 

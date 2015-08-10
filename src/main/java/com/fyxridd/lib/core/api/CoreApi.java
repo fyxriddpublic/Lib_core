@@ -51,6 +51,10 @@ public class CoreApi {
     //服务端版本
     public static String serverVer;
 
+    public static final long SECONDS = 1000;
+    public static final long MINUTE = SECONDS*60;
+    public static final long HOUR = MINUTE*60;
+    public static final long DAY = HOUR*24;
     public static final Random Random = new Random();
     private static final String VERSION_PATTERN = "\\(MC: [0-9.]{5}\\)";
 

@@ -20,26 +20,37 @@ public class VaultHandler implements EcoHandler {
     }
 
     public double get(Player p) {
+        if (p == null) return -1;
+
         return get(p.getName());
     }
 
     public double get(String name) {
+        if (name == null) return -1;
+
         return economy.getBalance(name);
     }
 
     public boolean set(Player p, int amount) {
+        if (p == null) return false;
+
         return set(p.getName(), (double)amount);
     }
 
     public boolean set(String name, int amount) {
+        if (name == null) return false;
+
         return set(name, (double)amount);
     }
 
     public boolean set(Player p, double amount) {
+        if (p == null) return false;
+
         return set(p.getName(), amount);
     }
 
     public boolean set(String name, double amount) {
+        if (name == null) return false;
         //玩家存在性检测
         name = CoreApi.getRealName(null, name);
         if (name == null) return false;
@@ -54,18 +65,25 @@ public class VaultHandler implements EcoHandler {
     }
 
     public boolean add(Player p, int amount) {
+        if (p == null) return false;
+
         return add(p.getName(), (double)amount);
     }
 
     public boolean add(String name, int amount) {
+        if (name == null) return false;
+
         return add(name, (double)amount);
     }
 
     public boolean add(Player p, double amount) {
+        if (p == null) return false;
+
         return add(p.getName(), amount);
     }
 
     public boolean add(String name, double amount) {
+        if (name == null) return false;
         //玩家存在性检测
         name = CoreApi.getRealName(null, name);
         if (name == null) return false;
@@ -78,18 +96,25 @@ public class VaultHandler implements EcoHandler {
     }
 
     public boolean del(Player p, int amount) {
+        if (p == null) return false;
+
         return del(p.getName(), (double)amount);
     }
 
     public boolean del(String name, int amount) {
+        if (name == null) return false;
+
         return del(name, (double)amount);
     }
 
     public boolean del(Player p, double amount) {
+        if (p == null) return false;
+
         return del(p.getName(), amount);
     }
 
     public boolean del(String name, double amount) {
+        if (name == null) return false;
         //玩家存在性检测
         name = CoreApi.getRealName(null, name);
         if (name == null) return false;

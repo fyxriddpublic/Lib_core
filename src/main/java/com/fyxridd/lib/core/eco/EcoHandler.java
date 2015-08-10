@@ -14,7 +14,7 @@ public interface EcoHandler {
     /**
      * 获取玩家的金币
      *
-     * @param name 精确的玩家名,不为null
+     * @param name 精确的玩家名(null时返回-1)
      * @return 没有金币返回0, 账户不存在返回-1
      */
     public double get(String name);
@@ -36,7 +36,7 @@ public interface EcoHandler {
 
     /**
      * 注意: 返回值并不能准确地代表结果,玩家钱超过上下限时会自动调整
-     * @param name 玩家名,不为null
+     * @param name 玩家名(null时返回false)
      * @param amount 数量,小于0时会自动设置为0,大于max时会自动设置为max
      * @return 是否设置成功, 账户不存在或异常返回false
      */
@@ -59,7 +59,7 @@ public interface EcoHandler {
 
     /**
      * 注意: 返回值并不能准确地代表结果,玩家钱超过上下限时会自动调整
-     * @param name 精确的玩家名,不为null
+     * @param name 精确的玩家名(null时返回false)
      * @param amount 增加的数量,小于0时自动设置为0
      * @return 是否增加成功, 账户不存在或异常返回false
      */
@@ -82,7 +82,7 @@ public interface EcoHandler {
 
     /**
      * 注意: 返回值并不能准确地代表结果,玩家钱超过上下限时会自动调整
-     * @param name   精确的玩家名,不为null
+     * @param name   精确的玩家名(null时返回false)
      * @param amount 减少的数量,小于0时自动设置为0
      * @return 是否减少成功,账户不存在或异常返回false
      */

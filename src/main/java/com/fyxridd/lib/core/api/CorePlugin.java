@@ -1,8 +1,6 @@
 package com.fyxridd.lib.core.api;
 
 import com.fyxridd.lib.core.*;
-import com.fyxridd.lib.core.eco.EcoManager;
-import com.fyxridd.lib.core.per.PerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.hibernate.SessionFactory;
@@ -40,6 +38,8 @@ public class CorePlugin extends JavaPlugin{
         registerHbm(new File(getDataFolder(), "EcoUser.hbm.xml"));
         registerHbm(new File(getDataFolder(), "InfoUser.hbm.xml"));
         registerHbm(new File(getDataFolder(), "User.hbm.xml"));
+        registerHbm(new File(getDataFolder(), "PerGroup.hbm.xml"));
+        registerHbm(new File(getDataFolder(), "PerUser.hbm.xml"));
     }
 
     //启动插件
@@ -57,9 +57,9 @@ public class CorePlugin extends JavaPlugin{
         //Info
         Info.onDisable();
         //Eco
-        EcoManager.onDisable();
+        CoreMain.ecoManager.onDisable();
         //Per
-        PerManager.onDisable();
+        CoreMain.perManager.onDisable();
         //ConfigManager
         ConfigManager.onDisable();
         //计时器

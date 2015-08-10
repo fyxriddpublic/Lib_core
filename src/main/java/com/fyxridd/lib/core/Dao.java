@@ -1,9 +1,7 @@
 package com.fyxridd.lib.core;
 
 import com.fyxridd.lib.core.api.CorePlugin;
-import com.fyxridd.lib.core.api.model.EcoUser;
-import com.fyxridd.lib.core.api.model.InfoUser;
-import com.fyxridd.lib.core.api.model.User;
+import com.fyxridd.lib.core.api.model.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -70,6 +68,28 @@ public class Dao {
             session.close();
         }
 	}
+
+    public void saveOrUpdate(Object obj) {
+        Session session = sessionFactory.openSession();
+        try {
+            session.beginTransaction();
+            session.saveOrUpdate(obj);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
+    }
+
+    public void saveOrUpdates(Collection c) {
+        Session session = sessionFactory.openSession();
+        try {
+            session.beginTransaction();
+            for (Object o:c) session.saveOrUpdate(o);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
+    }
 
     /**
      * 获取所有的EcoUser
@@ -165,5 +185,31 @@ public class Dao {
         } finally {
             session.close();
         }
+    }
+
+    public List<PerGroup> getPerGroups() {
+        Session session = sessionFactory.openSession();
+        List<PerGroup> result;
+        try {
+            session.beginTransaction();
+            result = session.createQuery("from PerGroup where name != ''").list();
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
+        return result;
+    }
+
+    public PerUser getPerUser(String name) {
+        Session session = sessionFactory.openSession();
+        PerUser result;
+        try {
+            session.beginTransaction();
+            result = (PerUser) session.createQuery("from PerUser where name=:name").setParameter("name", name).uniqueResult();
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
+        return result;
     }
 }

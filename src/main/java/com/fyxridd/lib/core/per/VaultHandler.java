@@ -39,30 +39,40 @@ public class VaultHandler implements PerHandler, Listener {
     }
 
     public boolean has(Player p, String per) {
+        if (p == null) return false;
         if (per == null || per.isEmpty()) return true;
 
         return permission.has(p, per);
     }
 
     public boolean has(String name, String per) {
+        if (name == null) return false;
         if (per == null || per.isEmpty()) return true;
 
         return permission.has(vaultDefaultWorld, name, per);
     }
 
     public boolean add(Player p, String per) {
+        if (p == null || per == null || per.isEmpty()) return false;
+
         return permission.playerAdd(p, per);
     }
 
     public boolean add(String name, String per) {
+        if (name == null || per == null || per.isEmpty()) return false;
+
         return permission.playerAdd(vaultDefaultWorld, name, per);
     }
 
     public boolean del(Player p, String per) {
+        if (p == null || per == null) return false;
+
         return permission.playerRemove(p, per);
     }
 
     public boolean del(String name, String per) {
+        if (name == null || per == null) return false;
+
         return permission.playerRemove(vaultDefaultWorld, name, per);
     }
 
@@ -70,6 +80,8 @@ public class VaultHandler implements PerHandler, Listener {
      * @see #hasGroup(String, String, boolean)
      */
     public boolean hasGroup(Player p, String groupName, boolean loop) {
+        if (p == null || groupName == null) return false;
+
         return permission.playerInGroup(p, groupName);
     }
 
@@ -77,22 +89,32 @@ public class VaultHandler implements PerHandler, Listener {
      * @param loop 无效变量
      */
     public boolean hasGroup(String name, String groupName, boolean loop) {
+        if (name == null || groupName == null) return false;
+
         return permission.playerInGroup(vaultDefaultWorld, name, groupName);
     }
 
     public boolean addGroup(Player p, String groupName) {
+        if (p == null || groupName == null) return false;
+
         return permission.playerAddGroup(p, groupName);
     }
 
     public boolean addGroup(String name, String groupName) {
+        if (name == null || groupName == null) return false;
+
         return permission.playerAddGroup(vaultDefaultWorld, name, groupName);
     }
 
     public boolean delGroup(Player p, String groupName) {
+        if (p == null || groupName == null) return false;
+
         return permission.playerRemoveGroup(p, groupName);
     }
 
     public boolean delGroup(String name, String groupName) {
+        if (name == null || groupName == null) return false;
+
         return permission.playerRemoveGroup(vaultDefaultWorld, name, groupName);
     }
 

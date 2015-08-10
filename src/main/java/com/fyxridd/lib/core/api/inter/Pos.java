@@ -31,11 +31,11 @@ public class Pos implements Serializable,Cloneable{
 	
 	/**
 	 * Pos转换为Location,x与z取中间位置
-	 * @param pos 
-	 * @return
+	 * @return 可能为null(如对应的世界未加载时)
 	 */
 	public static Location toLoc(Pos pos) {
 		World w = Bukkit.getWorld(pos.getWorld());
+        if (w == null) return null;
 		return new Location(w, pos.getX()+0.5, pos.getY(), pos.getZ()+0.5);
 	}
 	

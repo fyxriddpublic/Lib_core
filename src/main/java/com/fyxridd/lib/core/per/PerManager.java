@@ -15,22 +15,22 @@ import java.util.Map;
 
 public class PerManager implements Listener {
     //自带实现(完整)
-    private static Per per;
+    private Per per;
     //Vault实现(不完整)
-    private static VaultHandler vaultHandler;
+    private VaultHandler vaultHandler;
 
     //配置
 
-    private static HashMap<String, Integer> priorityHash;
+    private HashMap<String, Integer> priorityHash;
 
     //缓存
 
     //处理器名 权限处理器
-    private static HashMap<String, PerHandler> handlerHash = new HashMap<String, PerHandler>();
+    private HashMap<String, PerHandler> handlerHash = new HashMap<>();
 
     //当前使用的权限处理器
-    private static int nowPriority;
-    public static PerHandler perHandler;
+    private int nowPriority;
+    public PerHandler perHandler;
 
     public PerManager() {
         per = new Per();
@@ -51,18 +51,18 @@ public class PerManager implements Listener {
         if (e.getPlugin().equals(CorePlugin.pn)) loadConfig();
     }
 
-    public static void onDisable() {
+    public void onDisable() {
         per.onDisable();
     }
 
-    public static void register(String name, PerHandler perHandler) {
+    public void register(String name, PerHandler perHandler) {
         handlerHash.put(name, perHandler);
     }
 
     /**
      * (根据优先级)更新权限处理器
      */
-    private static void update() {
+    private void update() {
         for (Map.Entry<String, PerHandler> entry:handlerHash.entrySet()) {
             Integer priority = priorityHash.get(entry.getKey());
             if (priority == null) priority = 0;
@@ -73,11 +73,11 @@ public class PerManager implements Listener {
         }
     }
 
-    private static void loadConfig() {
+    private void loadConfig() {
         YamlConfiguration config = ConfigApi.getConfig(CorePlugin.pn);
 
         //读取优先级
-        priorityHash = new HashMap<String, Integer>();
+        priorityHash = new HashMap<>();
         for (String s:config.getStringList("per.priority")) {
             String[] ss = s.split(" ");
             String name = ss[0];

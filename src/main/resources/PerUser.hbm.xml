@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.fyxridd.lib.core.api.model">
+
+<class name="PerUser" table="PerUser">
+    <id name="name" length="15"/>
+    <property name="groups" type="serializable" not-null="true" length="65520"></property>
+    <property name="pers" type="serializable" not-null="true" length="65520"></property>
+</class>
+
+</hibernate-mapping>
