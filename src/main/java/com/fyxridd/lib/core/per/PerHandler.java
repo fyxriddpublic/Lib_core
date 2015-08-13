@@ -97,4 +97,34 @@ public interface PerHandler {
      * @return 是否包含,如果权限组不存在则返回false
      */
     public boolean checkHasGroup(String tar, String groupName);
+
+    /**
+     * @see com.fyxridd.lib.core.api.PerApi#createGroup(String)
+     */
+    public boolean createGroup(String group);
+
+    /**
+     * @see com.fyxridd.lib.core.api.PerApi#delGroup(String)
+     */
+    public boolean delGroup(String group);
+
+    /**
+     * @see com.fyxridd.lib.core.api.PerApi#groupAddPer(String, String)
+     */
+    public boolean groupAddPer(String group, String per);
+
+    /**
+     * @see com.fyxridd.lib.core.api.PerApi#groupRemovePer(String, String)
+     */
+    public boolean groupRemovePer(String group, String per);
+
+    /**
+     * @see com.fyxridd.lib.core.api.PerApi#groupAddInherit(String, String)
+     */
+    public boolean groupAddInherit(String group, String inherit);
+
+    /**
+     * @see com.fyxridd.lib.core.api.PerApi#groupRemoveInherit(String, String)
+     */
+    public boolean groupRemoveInherit(String group, String inherit);
 }

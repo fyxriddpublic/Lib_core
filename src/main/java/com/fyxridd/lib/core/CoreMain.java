@@ -7,6 +7,7 @@ import com.fyxridd.lib.core.api.CorePlugin;
 import com.fyxridd.lib.core.api.event.ReloadConfigEvent;
 import com.fyxridd.lib.core.api.hashList.HashList;
 import com.fyxridd.lib.core.eco.EcoManager;
+import com.fyxridd.lib.core.per.CmdManager;
 import com.fyxridd.lib.core.show.ShowManager;
 import com.fyxridd.lib.core.transaction.TransactionManager;
 import com.fyxridd.lib.core.per.PerManager;
@@ -29,6 +30,7 @@ public class CoreMain implements Listener{
     public static ShowManager showManager;
     public static ConfigManager configManager;
     public static PerManager perManager;
+    public static CmdManager cmdManager;
     public static EcoManager ecoManager;
     public static TransactionManager transactionManager;
     public static TipTransactionManager tipTransactionManager;
@@ -77,6 +79,7 @@ public class CoreMain implements Listener{
         dao = new Dao();
         //other
         perManager = new PerManager();
+        cmdManager = new CmdManager();
         ecoManager = new EcoManager();
         transactionManager = new TransactionManager();
         tipTransactionManager = new TipTransactionManager();

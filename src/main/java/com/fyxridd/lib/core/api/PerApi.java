@@ -108,4 +108,62 @@ public class PerApi {
     public static boolean checkHasGroup(String tar, String groupName) {
         return CoreMain.perManager.perHandler.checkHasGroup(tar, groupName);
     }
+
+    /**
+     * 新建组
+     * @param group 组名(null时返回false)
+     * @return 是否成功
+     */
+    public static boolean createGroup(String group) {
+        return CoreMain.perManager.perHandler.createGroup(group);
+    }
+
+    /**
+     * 删除组
+     * @param group 组名(null时返回false)
+     * @return 是否成功
+     */
+    public static boolean delGroup(String group) {
+        return CoreMain.perManager.perHandler.delGroup(group);
+    }
+
+    /**
+     * 权限组添加权限
+     * @param group 权限组(null时返回false)
+     * @param per 权限(null时返回false)
+     * @return 是否添加成功
+     */
+    public static boolean groupAddPer(String group, String per) {
+        return CoreMain.perManager.perHandler.groupAddPer(group, per);
+    }
+
+    /**
+     * 权限组删除权限
+     * @param group 权限组(null时返回false)
+     * @param per 权限(null时返回false)
+     * @return 是否删除成功
+     */
+    public static boolean groupRemovePer(String group, String per) {
+        return CoreMain.perManager.perHandler.groupRemovePer(group, per);
+    }
+
+    /**
+     * 权限组添加继承
+     * @param group 权限组(null时返回false)
+     * @param inherit 继承(null时返回false)
+     * @return 是否添加成功
+     */
+    public static boolean groupAddInherit(String group, String inherit) {
+        return CoreMain.perManager.perHandler.groupAddInherit(group, inherit);
+    }
+
+    /**
+     * 权限组删除继承
+     * @param group 权限组(null时返回false)
+     * @param inherit 继承(null时返回false)
+     * @return 是否删除成功
+     */
+    public static boolean groupRemoveInherit(String group, String inherit) {
+        return CoreMain.perManager.perHandler.groupRemoveInherit(group, inherit);
+    }
 }

@@ -232,6 +232,106 @@ public class Per implements Listener,PerHandler {
         return false;
     }
 
+    @Override
+    public boolean createGroup(String group) {
+        //group不能为null,不能与默认组名相同
+        if (group == null || group.equalsIgnoreCase(DEFAULT_GROUP)) return false;
+
+        //组已经存在
+        PerGroup perGroup = groupHash.get(group);
+        if (perGroup != null) return false;
+
+        //新建成功,保存数据
+        perGroup = new PerGroup(group, new HashSet<String>(), new HashSet<String>());
+        groupHash.put(group, perGroup);
+        CoreMain.dao.saveOrUpdate(perGroup);
+        //清空用户缓存
+        clearUsers();
+        return true;
+    }
+
+    @Override
+    public boolean delGroup(String group) {
+        //group不能为null,不能与默认组名相同
+        if (group == null || group.equalsIgnoreCase(DEFAULT_GROUP)) return false;
+
+        //组不存在
+        PerGroup perGroup = groupHash.get(group);
+        if (perGroup == null) return false;
+
+        //删除成功,保存数据
+        groupHash.remove(group);
+        CoreMain.dao.delete(perGroup);
+        //清空用户缓存
+        clearUsers();
+        return true;
+    }
+
+    @Override
+    public boolean groupAddPer(String group, String per) {
+        if (group == null || per == null) return false;
+
+        //权限组不存在
+        PerGroup perGroup = groupHash.get(group);
+        if (perGroup == null) return false;
+        //已经包含此权限
+        if (!perGroup.getPers().add(per)) return false;
+        //添加成功,保存数据库
+        CoreMain.dao.saveOrUpdate(perGroup);
+        //清空用户缓存
+        clearUsers();
+        return true;
+    }
+
+    @Override
+    public boolean groupRemovePer(String group, String per) {
+        if (group == null || per == null) return false;
+
+        //权限组不存在
+        PerGroup perGroup = groupHash.get(group);
+        if (perGroup == null) return false;
+        //不包含此权限
+        if (!perGroup.getPers().remove(per)) return false;
+        //删除成功,保存数据库
+        CoreMain.dao.saveOrUpdate(perGroup);
+        //清空用户缓存
+        clearUsers();
+        return true;
+    }
+
+    @Override
+    public boolean groupAddInherit(String group, String inherit) {
+        if (group == null || inherit == null) return false;
+
+        //权限组不存在
+        PerGroup perGroup = groupHash.get(group);
+        if (perGroup == null) return false;
+        if (!groupHash.containsKey(inherit)) return false;
+        //已经包含此继承
+        if (!perGroup.getInherits().add(inherit)) return false;
+        //添加成功,保存数据库
+        CoreMain.dao.saveOrUpdate(perGroup);
+        //清空用户缓存
+        clearUsers();
+        return true;
+    }
+
+    @Override
+    public boolean groupRemoveInherit(String group, String inherit) {
+        if (group == null || inherit == null) return false;
+
+        //权限组不存在
+        PerGroup perGroup = groupHash.get(group);
+        if (perGroup == null) return false;
+        //不包含此继承
+        if (!perGroup.getInherits().remove(inherit)) return false;
+        //删除成功,保存数据库
+        CoreMain.dao.saveOrUpdate(perGroup);
+        //清空用户缓存
+        clearUsers();
+        return true;
+    }
+
     /**
      * 优化策略<br>
      * (根据默认权限组与PerUser)更新玩家的权限信息<br>
@@ -308,13 +408,20 @@ public class Per implements Listener,PerHandler {
     }
 
     /**
+     * 清空用户缓存
+     */
+    private void clearUsers() {
+        saveAll();
+        userHash.clear();
+        persHash.clear();
+    }
+
+    /**
      * (重新)读取数据
      */
     private void loadData() {
         //清空缓存
-        saveAll();
-        userHash.clear();
-        persHash.clear();
+        clearUsers();
 
         //读取所有权限组
         groupHash = new HashMap<>();

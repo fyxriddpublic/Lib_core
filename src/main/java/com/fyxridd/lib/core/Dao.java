@@ -77,6 +77,17 @@ public class Dao {
         }
     }
 
+    public void delete(Object obj) {
+        Session session = sessionFactory.openSession();
+        try {
+            session.beginTransaction();
+            session.delete(obj);
+            session.getTransaction().commit();
+        } finally {
+            session.close();
+        }
+    }
+
     public void deletes(Collection c) {
         Session session = sessionFactory.openSession();
         try {

@@ -125,6 +125,52 @@ public class VaultHandler implements PerHandler, Listener {
         return false;
     }
 
+    /**
+     * 无效方法,永远返回false
+     */
+    @Override
+    public boolean createGroup(String group) {
+        return false;
+    }
+
+    /**
+     * 无效方法,永远返回false
+     */
+    @Override
+    public boolean delGroup(String group) {
+        return false;
+    }
+
+    @Override
+    public boolean groupAddPer(String group, String per) {
+        if (group == null || per == null) return false;
+
+        return permission.groupAdd(vaultDefaultWorld, group, per);
+    }
+
+    @Override
+    public boolean groupRemovePer(String group, String per) {
+        if (group == null || per == null) return false;
+
+        return permission.groupRemove(vaultDefaultWorld, group, per);
+    }
+
+    /**
+     * 无效方法,永远返回false
+     */
+    @Override
+    public boolean groupAddInherit(String group, String inherit) {
+        return false;
+    }
+
+    /**
+     * 无效方法,永远返回false
+     */
+    @Override
+    public boolean groupRemoveInherit(String group, String inherit) {
+        return false;
+    }
+
     private static void loadConfig() {
         YamlConfiguration config = ConfigApi.getConfig(CorePlugin.pn);
 

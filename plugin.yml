@@ -11,3 +11,9 @@ commands:
   s:
     description: InputManager
     usage: /<command> ?
+  per:
+    description: CmdManager
+    usage: /<command> ?
+  group:
+    description: CmdManager
+    usage: /<command> ?
