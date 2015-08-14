@@ -271,8 +271,8 @@ public class Per implements Listener,PerHandler {
     public boolean groupAddPer(String group, String per) {
         if (group == null || per == null) return false;
 
-        //权限组不存在
-        PerGroup perGroup = groupHash.get(group);
+        //权限组不存在(允许使用默认权限组)
+        PerGroup perGroup = group.equalsIgnoreCase(DEFAULT_GROUP)?defaultGroup:groupHash.get(group);
         if (perGroup == null) return false;
         //已经包含此权限
         if (!perGroup.getPers().add(per)) return false;
@@ -287,8 +287,8 @@ public class Per implements Listener,PerHandler {
     public boolean groupRemovePer(String group, String per) {
         if (group == null || per == null) return false;
 
-        //权限组不存在
-        PerGroup perGroup = groupHash.get(group);
+        //权限组不存在(允许使用默认权限组)
+        PerGroup perGroup = group.equalsIgnoreCase(DEFAULT_GROUP)?defaultGroup:groupHash.get(group);
         if (perGroup == null) return false;
         //不包含此权限
         if (!perGroup.getPers().remove(per)) return false;
@@ -434,6 +434,12 @@ public class Per implements Listener,PerHandler {
                     CoreMain.dao.saveOrUpdate(defaultGroup);
                 }
             }else groupHash.put(group.getName(), group);
+        }
+
+        //未生成默认权限组
+        if (defaultGroup == null) {
+            defaultGroup = new PerGroup(DEFAULT_GROUP, new HashSet<String>(), new HashSet<String>());
+            CoreMain.dao.saveOrUpdate(defaultGroup);
         }
     }
 }

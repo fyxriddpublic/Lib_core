@@ -129,7 +129,7 @@ public class PerApi {
 
     /**
      * 权限组添加权限
-     * @param group 权限组(null时返回false)
+     * @param group 权限组,可为默认权限组(null时返回false)
      * @param per 权限(null时返回false)
      * @return 是否添加成功
      */
@@ -139,7 +139,7 @@ public class PerApi {
 
     /**
      * 权限组删除权限
-     * @param group 权限组(null时返回false)
+     * @param group 权限组,可为默认权限组(null时返回false)
      * @param per 权限(null时返回false)
      * @return 是否删除成功
      */
