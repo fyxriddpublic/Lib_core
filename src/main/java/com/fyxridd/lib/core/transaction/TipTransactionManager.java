@@ -15,10 +15,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class TipTransactionManager implements Listener, FunctionInterface {
     private static final String FUNC_NAME = "TipTransaction";
@@ -109,9 +106,26 @@ public class TipTransactionManager implements Listener, FunctionInterface {
                 //短期检测
                 if (!SpeedApi.checkShort(p, CorePlugin.pn, SHORT_TIP, 2)) return;
                 //tipTransaction
+                HashMap<String, Object> mapCopy;
+                if (info.map == null) mapCopy = null;
+                else {
+                    mapCopy = new HashMap<>();
+                    for (Map.Entry<String, Object> entry:info.map.entrySet()) {
+                        mapCopy.put(entry.getKey(), entry.getValue());
+                    }
+                }
+                HashMap<String, List<Object>> recommendCopy;
+                if (info.recommend == null) recommendCopy = null;
+                else {
+                    recommendCopy = new HashMap<>();
+                    for (Map.Entry<String, List<Object>> entry:info.recommend.entrySet()) {
+                        List<Object> listCopy = new ArrayList<>(entry.getValue());
+                        recommendCopy.put(entry.getKey(), listCopy);
+                    }
+                }
                 List<FancyMessage> tip = new ArrayList<>();
                 for (String s:info.tipList) tip.add(FormatApi.get(s.split(" ")[0], Integer.parseInt(s.split(" ")[1]), p.getName()));
-                TipTransaction tipTransaction = TransactionApi.newTipTransaction(info.instant, p.getName(), -1, -1, info.cmd, tip, info.map, info.recommend, info.key);
+                TipTransaction tipTransaction = TransactionApi.newTipTransaction(info.instant, p.getName(), -1, -1, info.cmd, tip, mapCopy, recommendCopy, info.key);
                 TransactionUser tu = TransactionManager.getTransactionUser(p.getName());
                 tu.addTransaction(tipTransaction);
                 tu.setRunning(tipTransaction.getId());
