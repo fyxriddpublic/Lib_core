@@ -87,6 +87,7 @@ funcManager:
     - "cm ConfigManager"         #配置管理
     - "sm ShowManager"           #显示管理
     - "tm TransactionManager"    #事务管理
+    - "tp TipTransaction"        #提示事务
     - "pe PageEdit"              #页面编辑
     - "ap AdminPage"             #管理员面板
     - "mp MonPoint"              #怪物点
@@ -204,6 +205,30 @@ speed:
 #################################
 #####       提示事务        #####
 #################################
+#/f tp <配置名>
+tips:
+  itemEdit:
+    per: ""                    #权限,可为空
+    instant: false
+    map:                       #列表项格式'name[ value]'
+      - "reset false"
+    recommend:                #列表项格式'name value1,value2...'
+      - "reset false,true"
+    key: "reset"
+    tip:                       #列表项格式'plugin id',会传入变量玩家名作为{0}
+      - "Lib_items 100"
+    cmd: "/f ie a {reset}"
+  itemEdit_save:
+    instant: false
+    map:
+      - "name"
+      - "force false"
+    recommend:
+      - "force false,true"
+    key: "name"
+    tip:
+      - "Lib_items 110"
+    cmd: "/f ie b {name} {force}"
 #################################
 #####     进入方块类型      #####
 #################################

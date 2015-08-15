@@ -1,10 +1,7 @@
 package com.fyxridd.lib.core.transaction;
 
 import com.fyxridd.lib.core.api.*;
-import com.fyxridd.lib.core.api.inter.FunctionInterface;
-import com.fyxridd.lib.core.api.inter.FancyMessage;
-import com.fyxridd.lib.core.api.inter.Transaction;
-import com.fyxridd.lib.core.api.inter.TransactionUser;
+import com.fyxridd.lib.core.api.inter.*;
 import com.fyxridd.lib.core.api.event.TimeEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -12,8 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
 
 public class TransactionManager implements Listener,FunctionInterface {
     private static final String FUNC_NAME = "TransactionManager";

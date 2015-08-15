@@ -368,7 +368,7 @@ public interface FancyMessage extends Cloneable{
          */
         public static void convert(FancyMessage msg, Object... replace) {
             if (replace.length == 0) return;
-            HashMap<String, Object> hash = new HashMap<String, Object>();
+            HashMap<String, Object> hash = new HashMap<>();
             for (int i=0;i<replace.length;i++) {
                 hash.put(""+i, replace[i]);
             }

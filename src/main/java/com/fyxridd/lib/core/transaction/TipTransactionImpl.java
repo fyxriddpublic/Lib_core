@@ -1,8 +1,6 @@
 package com.fyxridd.lib.core.transaction;
 
-import com.fyxridd.lib.core.api.MessageApi;
-import com.fyxridd.lib.core.api.ShowApi;
-import com.fyxridd.lib.core.api.TransactionApi;
+import com.fyxridd.lib.core.api.*;
 import com.fyxridd.lib.core.api.inter.FancyMessage;
 import com.fyxridd.lib.core.api.inter.InputHandler;
 import com.fyxridd.lib.core.api.inter.TipTransaction;
@@ -20,6 +18,7 @@ import java.util.List;
  * 本身并非实际的功能,而是作为玩家与功能的一个接口
  */
 public class TipTransactionImpl extends TipTransaction {
+    private static final String SHORT_CHANGE = "st_ttc";
     //是否输入后自动确认提交
     private boolean instant;
     //命令文本,包含{名称}这样的替换符
@@ -57,7 +56,7 @@ public class TipTransactionImpl extends TipTransaction {
         this.map = map;
         this.recommend = recommend;
         if (recommend != null && !recommend.isEmpty()) {
-            this.recommendPosHash = new HashMap<String, Integer>();
+            this.recommendPosHash = new HashMap<>();
             for (String s:recommend.keySet()) this.recommendPosHash.put(s, 0);
         }
         //
@@ -131,6 +130,8 @@ public class TipTransactionImpl extends TipTransaction {
                 break;
             case 2:
                 if (args[0].equalsIgnoreCase("b")) {//指定正在修改的key
+                    //短期检测
+                    if (!SpeedApi.checkShort(p, CorePlugin.pn, SHORT_CHANGE, 1)) return;
                     //设置
                     setKey(args[1], true);
                     //重新显示
