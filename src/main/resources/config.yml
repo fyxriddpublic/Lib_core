@@ -229,6 +229,42 @@ tips:
     tip:
       - "Lib_items 110"
     cmd: "/f ie b {name} {force}"
+  eco_add:
+    instant: false
+    map:
+      - "tar"
+      - "amount"
+    key: "tar"
+    tip:
+      - "Basic 2520"
+    cmd: "/f fc s {tar} {amount}"
+  eco_del:
+    instant: false
+    map:
+      - "tar"
+      - "amount"
+    key: "tar"
+    tip:
+      - "Basic 2530"
+    cmd: "/f fc t {tar} {amount}"
+  eco_set:
+    instant: false
+    map:
+      - "tar"
+      - "amount"
+    key: "tar"
+    tip:
+      - "Basic 2540"
+    cmd: "/f fc u {tar} {amount}"
+  eco_pay:
+    instant: false
+    map:
+      - "tar"
+      - "amount"
+    key: "tar"
+    tip:
+      - "Basic 2550"
+    cmd: "/f fc v {tar} {amount}"
 #################################
 #####     进入方块类型      #####
 #################################
