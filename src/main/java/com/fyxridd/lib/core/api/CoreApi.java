@@ -639,19 +639,16 @@ public class CoreApi {
      * @return 出错返回空字符串
      */
     public static String getSimpleDateTime() {
-        return getSimpleDateTime(new Date().getTime(), 0, 0, 0);
+        return getSimpleDateTime(new Date().getTime());
     }
 
     /**
      * 获取简单格式的日期时间显示(格式'yyyy-MM-dd HH:mm')
      * @param time 开始计算的时间,单位毫秒
-     * @param addDay 增加的天数
-     * @param addHour 增加的小时数
-     * @param addMinute 增加的分钟数
      * @return 出错返回空字符串
      */
-    public static String getSimpleDateTime(long time, int addDay, int addHour, int addMinute) {
-        return getDateTime("yyyy-MM-dd HH:mm", time, addDay, addHour, addMinute);
+    public static String getSimpleDateTime(long time) {
+        return getDateTime("yyyy-MM-dd HH:mm", time);
     }
 
     /**
@@ -659,38 +656,27 @@ public class CoreApi {
      * @return 出错返回空字符串
      */
     public static String getLogDateTime() {
-        return getLogDateTime(new Date().getTime(), 0, 0, 0);
+        return getLogDateTime(new Date().getTime());
     }
 
     /**
      * 获取适合日志记录文件名格式的日期时间显示(格式'yyyy-MM-dd HH-mm-ss')
      * @param time 开始计算的时间,单位毫秒
-     * @param addDay 增加的天数
-     * @param addHour 增加的小时数
-     * @param addMinute 增加的分钟数
      * @return 出错返回空字符串
      */
-    public static String getLogDateTime(long time, int addDay, int addHour, int addMinute) {
-        return getDateTime("yyyy-MM-dd HH-mm-ss", time, addDay, addHour, addMinute);
+    public static String getLogDateTime(long time) {
+        return getDateTime("yyyy-MM-dd HH-mm-ss", time);
     }
 
     /**
      * 获取日期时间显示
      * @param format 格式
      * @param time 开始计算的时间,单位毫秒
-     * @param addDay 增加的天数
-     * @param addHour 增加的小时数
-     * @param addMinute 增加的分钟数
      * @return 出错返回空字符串
      */
-    public static String getDateTime(String format, long time, int addDay, int addHour, int addMinute) {
+    public static String getDateTime(String format, long time) {
         try {
-            Calendar calendar= Calendar.getInstance();
-            calendar.setTimeInMillis(time);
-            calendar.add(Calendar.DAY_OF_MONTH, addDay);
-            calendar.add(Calendar.HOUR_OF_DAY, addHour);
-            calendar.add(Calendar.MINUTE, addMinute);
-            return new SimpleDateFormat(format).format(calendar.getTime());
+            return new SimpleDateFormat(format).format(new Date(time));
         } catch (Exception e) {
             return "";
         }
