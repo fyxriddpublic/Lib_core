@@ -1,0 +1,60 @@
+#提示事务
+#/f tp <配置名>
+itemEdit:
+  per: ""                    #权限,可为空
+  instant: false
+  map:                       #列表项格式'name[ value]'
+    - "reset false"
+  recommend:                #列表项格式'name value1,value2...'
+    - "reset false,true"
+  key: "reset"
+  tip:                       #列表项格式'plugin id',会传入变量玩家名作为{0}
+    - "Lib_items 100"
+  cmd: "/f ie a {reset}"
+itemEdit_save:
+  instant: false
+  map:
+    - "name"
+    - "force false"
+  recommend:
+    - "force false,true"
+  key: "name"
+  tip:
+    - "Lib_items 110"
+  cmd: "/f ie b {name} {force}"
+eco_add:
+  instant: false
+  map:
+    - "tar"
+    - "amount"
+  key: "tar"
+  tip:
+    - "Basic 2520"
+  cmd: "/f fc s {tar} {amount}"
+eco_del:
+  instant: false
+  map:
+    - "tar"
+    - "amount"
+  key: "tar"
+  tip:
+    - "Basic 2530"
+  cmd: "/f fc t {tar} {amount}"
+eco_set:
+  instant: false
+  map:
+    - "tar"
+    - "amount"
+  key: "tar"
+  tip:
+    - "Basic 2540"
+  cmd: "/f fc u {tar} {amount}"
+eco_pay:
+  instant: false
+  map:
+    - "tar"
+    - "amount"
+  key: "tar"
+  tip:
+    - "Basic 2550"
+  cmd: "/f fc v {tar} {amount}"

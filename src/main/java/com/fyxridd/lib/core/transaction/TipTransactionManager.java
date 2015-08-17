@@ -7,7 +7,6 @@ import com.fyxridd.lib.core.api.inter.TransactionUser;
 import com.fyxridd.lib.core.api.inter.FancyMessage;
 import com.fyxridd.lib.core.api.inter.TipTransaction;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,6 +14,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.io.File;
 import java.util.*;
 
 public class TipTransactionManager implements Listener, FunctionInterface {
@@ -145,33 +145,31 @@ public class TipTransactionManager implements Listener, FunctionInterface {
     }
 
 	private void loadConfig() {
-        YamlConfiguration config = ConfigApi.getConfig(CorePlugin.pn);
-
         //prefix
         prefix = get(1200);
         //tips
         tips = new HashMap<>();
-        MemorySection ms = (MemorySection) config.get("tips");
-        for (String name:ms.getValues(false).keySet()) {
-            String per = ms.getString(name+".per");
-            boolean instant = ms.getBoolean(name+".instant");
+        YamlConfiguration tipsConfig = CoreApi.loadConfigByUTF8(new File(CorePlugin.dataPath, "tips.yml"));
+        for (String name:tipsConfig.getValues(false).keySet()) {
+            String per = tipsConfig.getString(name+".per");
+            boolean instant = tipsConfig.getBoolean(name+".instant");
             HashMap<String, Object> map = new HashMap<>();
-            for (String s:ms.getStringList(name+".map")) {
+            for (String s:tipsConfig.getStringList(name+".map")) {
                 if (s.split(" ").length == 1) map.put(s, "");
                 else map.put(s.split(" ")[0], s.split(" ")[1]);
             }
             if (map.isEmpty()) map = null;
             HashMap<String, List<Object>> recommend = new HashMap<>();
-            for (String s:ms.getStringList(name+".recommend")) {
+            for (String s:tipsConfig.getStringList(name+".recommend")) {
                 List<Object> list = new ArrayList<>();
                 Collections.addAll(list, s.split(" ")[1].split(","));
                 recommend.put(s.split(" ")[0], list);
             }
             if (recommend.isEmpty()) recommend = null;
-            String key = ms.getString(name+".key");
+            String key = tipsConfig.getString(name+".key");
             if (key.isEmpty()) key = null;
-            List<String> tipList = ms.getStringList(name+".tip");
-            String cmd = ms.getString(name+".cmd");
+            List<String> tipList = tipsConfig.getStringList(name+".tip");
+            String cmd = tipsConfig.getString(name+".cmd");
             tips.put(name, new TipInfo(per, instant, map, recommend, key, tipList, cmd));
         }
     }
