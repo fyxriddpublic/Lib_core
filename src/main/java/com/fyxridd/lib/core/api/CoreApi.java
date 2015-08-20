@@ -64,6 +64,22 @@ public class CoreApi {
     private static ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 
     /**
+     * 从字符串中读取匹配信息
+     * 模式:
+     *   1. 普通匹配,格式'1 y/n 匹配串',y/n表示大小写敏感/不敏感
+     *   2. 正则匹配,格式'2 正则串'
+     * @param data 字符串
+     * @return 匹配信息,异常返回null
+     */
+    public static com.fyxridd.lib.core.api.inter.Matcher loadMatcher(String data) {
+        try {
+            return new MatcherImpl(data);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
      * 获取生物上保存的数据
      * @param le 生物
      * @param uid uuid
