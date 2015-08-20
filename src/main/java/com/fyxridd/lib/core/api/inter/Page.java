@@ -77,6 +77,23 @@ public interface Page {
         }
     }
 
+    public static class ListInfo {
+        private String plugin, key;
+
+        public ListInfo(String plugin, String key) {
+            this.plugin = plugin;
+            this.key = key;
+        }
+
+        public String getPlugin() {
+            return plugin;
+        }
+
+        public String getKey() {
+            return key;
+        }
+    }
+
     /**
      * 额外键值获取信息
      */
@@ -140,6 +157,8 @@ public interface Page {
     public LinkedHashMap<Integer, LineContext> getLines();
 
     public void setLines(LinkedHashMap<Integer, LineContext> lines);
+
+    public ListInfo getListInfo();
 
     public HashMap<String, MapInfo> getMaps();
 }

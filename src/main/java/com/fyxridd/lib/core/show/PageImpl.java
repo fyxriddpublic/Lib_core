@@ -48,6 +48,11 @@ public class PageImpl implements Page {
     private boolean record;
 
     /**
+     * 列表信息
+     */
+    private ListInfo listInfo;
+
+    /**
      * 额外键值获取信息
      */
     private HashMap<String, MapInfo> maps;
@@ -66,7 +71,7 @@ public class PageImpl implements Page {
      * @param pageMax  >0
      * @param pageList 不为null
      */
-    public PageImpl(String plugin, String page, boolean enable, int pageMax, int listSize, boolean refresh, boolean handleTip, boolean record, HashMap<String, MapInfo> maps,
+    public PageImpl(String plugin, String page, boolean enable, int pageMax, int listSize, boolean refresh, boolean handleTip, boolean record, ListInfo listInfo, HashMap<String, MapInfo> maps,
                     List<PageContext> pageList, LinkedHashMap<Integer, LineContext> lines) {
         this.plugin = plugin;
         this.page = page;
@@ -76,6 +81,7 @@ public class PageImpl implements Page {
         this.refresh = refresh;
         this.handleTip = handleTip;
         this.record = record;
+        this.listInfo = listInfo;
         this.maps = maps;
         this.pageList = pageList;
         this.lines = lines;
@@ -155,6 +161,10 @@ public class PageImpl implements Page {
 
     public void setLines(LinkedHashMap<Integer, LineContext> lines) {
         this.lines = lines;
+    }
+
+    public ListInfo getListInfo() {
+        return listInfo;
     }
 
     public HashMap<String, MapInfo> getMaps() {

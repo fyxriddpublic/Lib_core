@@ -7,7 +7,7 @@ import java.util.HashMap;
 /**
  * 键值获取器
  */
-public class ShowMap {
+public class ShowMapManager {
     //插件名 键名 键值获取器
     private static HashMap<String, HashMap<String, MapHandler>> handleHash = new HashMap<>();
 

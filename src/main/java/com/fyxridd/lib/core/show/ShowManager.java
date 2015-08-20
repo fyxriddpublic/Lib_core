@@ -60,7 +60,8 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
      */
     private static final String FUNC_NAME = "ShowManager";
 
-    private static ShowMap showMap;
+    public static ShowListManager showListManager;
+    public static ShowMapManager showMapManager;
 
     private static boolean inCancelChat;
     private static int deadLoopLevel = 5;//循环最大层次,超过则判定为死循环
@@ -95,7 +96,8 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
     private static HashMap<Player, Integer> reShowHash = new HashMap<>();
 
     public ShowManager() {
-        showMap = new ShowMap();
+        showListManager = new ShowListManager();
+        showMapManager = new ShowMapManager();
         //注册事件
         Bukkit.getPluginManager().registerEvents(this, CorePlugin.instance);
         //注册功能
@@ -295,6 +297,7 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
             int listSize = page.getListSize();
             int listMax = 0;
             int getSize = 0;
+            if (list == null && page.getListInfo() != null) list = ShowListManager.getShowList(p.getName(), page.getListInfo().getPlugin(), page.getListInfo().getKey());
             if (list != null) {
                 listMax = list.getMaxPage(listSize);//列表最大页
                 List showList = list.getPage(listSize, listNow);
@@ -377,7 +380,7 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
             if (page.getMaps() != null) {
                 replace = new HashMap<String, Object>();
                 for (Page.MapInfo mi: page.getMaps().values())
-                    replace.put(mi.getKeyName(), ShowMap.getObject(p.getName(), mi.getPlugin(), mi.getKey()));
+                    replace.put(mi.getKeyName(), ShowMapManager.getObject(p.getName(), mi.getPlugin(), mi.getKey()));
                 for (FancyMessage msg:resultPage) MessageApi.convert(msg, replace);
             }
 
@@ -680,11 +683,14 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
         boolean handleTip = config.getBoolean("handleTip", true);
         //record
         boolean record = config.getBoolean("record", true);
+        //list
+        String listStr = config.getString("list");
+        Page.ListInfo listInfo = listStr == null || listStr.isEmpty()?null:new Page.ListInfo(listStr.split(" ")[0], listStr.split(" ")[1]);
         //maps
         HashMap<String, Page.MapInfo> maps = null;
         List<String> mapsList = config.getStringList("maps");
         if (mapsList != null && !mapsList.isEmpty()) {
-            maps = new HashMap<String, Page.MapInfo>();
+            maps = new HashMap<>();
             for (String s:mapsList) {
                 String keyName = s.split(" ")[0];
                 String keyValue = s.split(" ")[1];
@@ -733,7 +739,7 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
                 }
             }
         }
-        return new PageImpl(plugin, page, enable, pageMax, listSize, refresh, handleTip, record, maps, pageList, lines);
+        return new PageImpl(plugin, page, enable, pageMax, listSize, refresh, handleTip, record, listInfo, maps, pageList, lines);
     }
 
     /**
@@ -939,10 +945,6 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
      */
     public static boolean isInPage(Player p) {
         return playerContextHash.containsKey(p);
-    }
-
-    public static ShowMap getShowMap() {
-        return showMap;
     }
 
     @Override

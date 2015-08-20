@@ -2,8 +2,9 @@ package com.fyxridd.lib.core.api;
 
 import com.fyxridd.lib.core.api.inter.*;
 import com.fyxridd.lib.core.show.ShowListImpl;
+import com.fyxridd.lib.core.show.ShowListManager;
 import com.fyxridd.lib.core.show.ShowManager;
-import com.fyxridd.lib.core.show.ShowMap;
+import com.fyxridd.lib.core.show.ShowMapManager;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -21,7 +22,17 @@ public class ShowApi {
      * @param mapHandler 键值获取器
      */
     public static void register(String plugin, String key, MapHandler mapHandler) {
-        ShowMap.register(plugin, key, mapHandler);
+        ShowMapManager.register(plugin, key, mapHandler);
+    }
+
+    /**
+     * 注册显示列表
+     * @param plugin 插件
+     * @param key 列表名
+     * @param showListHandler 列表获取器
+     */
+    public static void register(String plugin, String key, ShowListHandler showListHandler) {
+        ShowListManager.register(plugin, key, showListHandler);
     }
 
     /**
@@ -251,7 +262,8 @@ public class ShowApi {
     }
 
     /**
-     * @param type 传入的列表类型,0指List类型,1指Object[]类型,2指Collection类型,3指HashList类型
+     * 如果列表可能包含1w个以上的元素,请尽量不要使用Collection类型
+     * @param type 传入的列表类型,0指List类型,1指Object[]类型,2指Collection类型(效率最低),3指HashList类型
      * @param list 列表,可为null
      */
     public static ShowList getShowList(int type, Object list) {
