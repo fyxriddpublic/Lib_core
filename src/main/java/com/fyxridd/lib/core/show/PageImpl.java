@@ -71,7 +71,7 @@ public class PageImpl implements Page {
      * @param pageMax  >0
      * @param pageList 不为null
      */
-    public PageImpl(String plugin, String page, boolean enable, int pageMax, int listSize, boolean refresh, boolean handleTip, boolean record, ListInfo listInfo, HashMap<String, MapInfo> maps,
+    public PageImpl(String plugin, String page, boolean enable, int pageMax, int listSize, boolean refresh, String per, boolean handleTip, boolean record, ListInfo listInfo, HashMap<String, MapInfo> maps,
                     List<PageContext> pageList, LinkedHashMap<Integer, LineContext> lines) {
         this.plugin = plugin;
         this.page = page;
@@ -79,6 +79,7 @@ public class PageImpl implements Page {
         this.pageMax = pageMax;
         this.listSize = listSize;
         this.refresh = refresh;
+        this.per = per;
         this.handleTip = handleTip;
         this.record = record;
         this.listInfo = listInfo;

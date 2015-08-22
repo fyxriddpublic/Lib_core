@@ -679,6 +679,8 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
         }
         //refresh
         boolean refresh = config.getBoolean("refresh", false);
+        //per
+        String per = config.getString("per");
         //handleTip
         boolean handleTip = config.getBoolean("handleTip", true);
         //record
@@ -700,7 +702,7 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
             }
         }
         //lines
-        LinkedHashMap<Integer, Page.LineContext> lines = new LinkedHashMap<Integer, Page.LineContext>();
+        LinkedHashMap<Integer, Page.LineContext> lines = new LinkedHashMap<>();
         for (String key: config.getValues(false).keySet()) {//遍历所有的show-xxx
             if (key.startsWith("show-")) {
                 int num = Integer.parseInt(key.substring(5));
@@ -720,7 +722,7 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
             }
         }
         //pageList
-        List<Page.PageContext> pageList = new ArrayList<Page.PageContext>();
+        List<Page.PageContext> pageList = new ArrayList<>();
         for (int index = 1;index<=pageMax;index++) {
             String s = config.getString("page-"+index);
             if (s == null) s = "";
@@ -739,7 +741,7 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
                 }
             }
         }
-        return new PageImpl(plugin, page, enable, pageMax, listSize, refresh, handleTip, record, listInfo, maps, pageList, lines);
+        return new PageImpl(plugin, page, enable, pageMax, listSize, refresh, per, handleTip, record, listInfo, maps, pageList, lines);
     }
 
     /**
