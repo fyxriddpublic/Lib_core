@@ -167,7 +167,7 @@ public class TipTransactionManager implements Listener, FunctionInterface {
             }
             if (recommend.isEmpty()) recommend = null;
             String key = tipsConfig.getString(name+".key");
-            if (key.isEmpty()) key = null;
+            if (key != null && key.isEmpty()) key = null;
             List<String> tipList = tipsConfig.getStringList(name+".tip");
             String cmd = tipsConfig.getString(name+".cmd");
             tips.put(name, new TipInfo(per, instant, map, recommend, key, tipList, cmd));

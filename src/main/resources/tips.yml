@@ -7,7 +7,7 @@ itemEdit:
     - "reset false"
   recommend:                #列表项格式'name value1,value2...'
     - "reset false,true"
-  key: "reset"
+  key: "reset"              #(可选)
   tip:                       #列表项格式'plugin id',会传入变量玩家名作为{0}
     - "Lib_items 100"
   cmd: "/f ie a {reset}"
