@@ -11,6 +11,7 @@ import com.comphenix.protocol.wrappers.WrappedBlockData;
 import com.fyxridd.lib.core.*;
 import com.fyxridd.lib.core.api.inter.FancyMessage;
 import com.fyxridd.lib.core.api.inter.InputHandler;
+import com.fyxridd.lib.core.api.inter.LastType;
 import com.fyxridd.lib.core.api.nbt.AttributeStorage;
 import net.minecraft.server.v1_8_R2.*;
 import org.apache.commons.lang.Validate;
@@ -62,6 +63,45 @@ public class CoreApi {
     private static Pattern pattern = Pattern.compile(PatternStr);
 
     private static ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
+
+    /**
+     * 获取持续时间的显示
+     * @param type 显示类型(null时返回"")
+     * @param last 持续时间,单位毫秒(<0时返回"")
+     * @return 持续时间的显示,异常返回""
+     */
+    public static String getLastTime(LastType type, long last) {
+        if (type == null || last < 0) return "";
+
+        if (type.equals(LastType.Milli)) {
+            long day = last/DAY;
+            last -= day*DAY;
+            long hour = last/HOUR;
+            last -= hour*HOUR;
+            long minute = last/MINUTE;
+            last -= minute*MINUTE;
+            long seconds = last/SECONDS;
+            last -= seconds*SECONDS;
+            long milli = last;
+            return get(55, day, hour, minute, seconds, milli).getText();
+        }else if (type.equals(LastType.Milli)) {
+            long day = last/DAY;
+            last -= day*DAY;
+            long hour = last/HOUR;
+            last -= hour*HOUR;
+            long minute = last/MINUTE;
+            last -= minute*MINUTE;
+            long seconds = last/SECONDS;
+            return get(60, day, hour, minute, seconds).getText();
+        }else if (type.equals(LastType.Milli)) {
+            long day = last/DAY;
+            last -= day*DAY;
+            long hour = last/HOUR;
+            last -= hour*HOUR;
+            long minute = last/MINUTE;
+            return get(65, day, hour, minute).getText();
+        }else return "";
+    }
 
     /**
      * 从字符串中读取匹配信息
