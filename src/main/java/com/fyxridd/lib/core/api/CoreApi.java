@@ -84,7 +84,7 @@ public class CoreApi {
             last -= seconds*SECONDS;
             long milli = last;
             return get(55, day, hour, minute, seconds, milli).getText();
-        }else if (type.equals(LastType.Milli)) {
+        }else if (type.equals(LastType.Seconds)) {
             long day = last/DAY;
             last -= day*DAY;
             long hour = last/HOUR;
@@ -93,7 +93,7 @@ public class CoreApi {
             last -= minute*MINUTE;
             long seconds = last/SECONDS;
             return get(60, day, hour, minute, seconds).getText();
-        }else if (type.equals(LastType.Milli)) {
+        }else if (type.equals(LastType.Minute)) {
             long day = last/DAY;
             last -= day*DAY;
             long hour = last/HOUR;
