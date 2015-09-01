@@ -437,9 +437,11 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
             }
 
             //补空行
-            int empty = line-(page.isHandleTip()?2:0)-resultPage.size()-(front != null?front.size():0)-(behind != null?behind.size():0);
-            if (empty > 0) {
-                for (int i=0;i<empty;i++) add.send(p, false);
+            if (page.isFillEmpty()) {
+                int empty = line-(page.isHandleTip()?2:0)-resultPage.size()-(front != null?front.size():0)-(behind != null?behind.size():0);
+                if (empty > 0) {
+                    for (int i=0;i<empty;i++) add.send(p, false);
+                }
             }
             //显示页面
             if (front != null) {
@@ -681,6 +683,8 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
         boolean refresh = config.getBoolean("refresh", false);
         //per
         String per = config.getString("per");
+        //fillEmpty
+        boolean fillEmpty = config.getBoolean("fillEmpty", true);
         //handleTip
         boolean handleTip = config.getBoolean("handleTip", true);
         //record
@@ -741,7 +745,7 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
                 }
             }
         }
-        return new PageImpl(plugin, page, enable, pageMax, listSize, refresh, per, handleTip, record, listInfo, maps, pageList, lines);
+        return new PageImpl(plugin, page, enable, pageMax, listSize, refresh, per, fillEmpty, handleTip, record, listInfo, maps, pageList, lines);
     }
 
     /**

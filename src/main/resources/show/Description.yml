@@ -89,6 +89,10 @@ refresh: false
 per: ""
 
 #默认true
+#是否补空行
+fillEmpty: true
+
+#默认true
 #是否显示页面尾部的操作提示(2行)
 handleTip: true
 

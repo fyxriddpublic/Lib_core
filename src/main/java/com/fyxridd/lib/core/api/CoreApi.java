@@ -787,7 +787,7 @@ public class CoreApi {
         String result = "";
         for (int i=0;i<args.length;i++) {
             if (i < start) continue;
-            if (i > end) break;
+            if (i >= end) break;
             if (i > start) result += separator;
             result += args[i];
         }

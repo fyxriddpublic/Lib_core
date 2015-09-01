@@ -41,6 +41,9 @@ public class PageImpl implements Page {
     //显示页面需要的权限
     private String per;
 
+    //是否补空行
+    private boolean fillEmpty;
+
     //是否显示页面尾部的操作提示(2行)
     private boolean handleTip;
 
@@ -71,7 +74,7 @@ public class PageImpl implements Page {
      * @param pageMax  >0
      * @param pageList 不为null
      */
-    public PageImpl(String plugin, String page, boolean enable, int pageMax, int listSize, boolean refresh, String per, boolean handleTip, boolean record, ListInfo listInfo, HashMap<String, MapInfo> maps,
+    public PageImpl(String plugin, String page, boolean enable, int pageMax, int listSize, boolean refresh, String per, boolean fillEmpty, boolean handleTip, boolean record, ListInfo listInfo, HashMap<String, MapInfo> maps,
                     List<PageContext> pageList, LinkedHashMap<Integer, LineContext> lines) {
         this.plugin = plugin;
         this.page = page;
@@ -80,6 +83,7 @@ public class PageImpl implements Page {
         this.listSize = listSize;
         this.refresh = refresh;
         this.per = per;
+        this.fillEmpty = fillEmpty;
         this.handleTip = handleTip;
         this.record = record;
         this.listInfo = listInfo;
@@ -122,6 +126,14 @@ public class PageImpl implements Page {
 
     public void setPer(String per) {
         this.per = per;
+    }
+
+    public boolean isFillEmpty() {
+        return fillEmpty;
+    }
+
+    public void setFillEmpty(boolean fillEmpty) {
+        this.fillEmpty = fillEmpty;
     }
 
     public boolean isHandleTip() {

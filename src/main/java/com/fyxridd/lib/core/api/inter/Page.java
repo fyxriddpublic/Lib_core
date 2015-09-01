@@ -138,6 +138,10 @@ public interface Page {
 
     public void setPer(String per);
 
+    public boolean isFillEmpty();
+
+    public void setFillEmpty(boolean fillEmpty);
+
     public boolean isHandleTip();
 
     public void setHandleTip(boolean handleTip);
