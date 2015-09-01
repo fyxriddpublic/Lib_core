@@ -44,6 +44,7 @@ public class CoreMain implements Listener{
     public static Info info;
     public static EnterBlockTypeManager enterBlockTypeManager;
     public static ChatManager chatManager;
+    public static Title title;
 
     //配置文件内容
     public static HashList<String> description;
@@ -93,6 +94,7 @@ public class CoreMain implements Listener{
         info = new Info();
         enterBlockTypeManager = new EnterBlockTypeManager();
         chatManager = new ChatManager();
+        title = new Title();
         //读取配置文件
         loadConfig();
         //注册事件

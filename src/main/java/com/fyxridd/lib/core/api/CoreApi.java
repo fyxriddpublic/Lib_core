@@ -65,6 +65,43 @@ public class CoreApi {
     private static ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 
     /**
+     * @see #sendTitleAll(String, String, boolean, int)
+     */
+    public static void sendTitleAll(String title, String subTitle, boolean instant) {
+        CoreMain.title.sendTitleAll(title, subTitle, instant);
+    }
+
+    /**
+     * 给所有玩家发送标题
+     * @param title 标题,可为null
+     * @param subTitle 子标题,可为null
+     * @param instant 是否立即显示
+     * @param time 显示多长时间,单位tick
+     */
+    public static void sendTitleAll(String title, String subTitle, boolean instant, int time) {
+        CoreMain.title.sendTitleAll(title, subTitle, instant, time);
+    }
+
+    /**
+     * @see #sendTitle(org.bukkit.entity.Player, String, String, boolean, int)
+     */
+    public static void sendTitle(Player p, String title, String subTitle, boolean instant) {
+        CoreMain.title.sendTitle(p, title, subTitle, instant);
+    }
+
+    /**
+     * 给玩家发送标题
+     * @param p 玩家
+     * @param title 标题,可为null
+     * @param subTitle 子标题,可为null
+     * @param instant 是否立即显示
+     * @param time 显示多长时间,单位tick
+     */
+    public static void sendTitle(Player p, String title, String subTitle, boolean instant, int time) {
+        CoreMain.title.sendTitle(p, title, subTitle, instant, time);
+    }
+
+    /**
      * 获取持续时间的显示
      * @param type 显示类型(null时返回"")
      * @param last 持续时间,单位毫秒(<0时返回"")
