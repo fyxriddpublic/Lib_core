@@ -118,6 +118,9 @@ public class Title implements Listener {
      * 强制玩家立即显示信息
      */
     private void show(Player p, int time, String title, String subTitle) {
+        if (title == null) title = "";
+        if (subTitle == null) subTitle = "";
+
         waits.put(p, time+interval+fadeIn+fadeOut);
 
         WrapperPlayServerTitle packet;
