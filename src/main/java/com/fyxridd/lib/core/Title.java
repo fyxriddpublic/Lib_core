@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.*;
 
@@ -74,6 +75,12 @@ public class Title implements Listener {
     @EventHandler(priority= EventPriority.LOW)
     public void onReloadConfig(ReloadConfigEvent e) {
         if (e.getPlugin().equals(CorePlugin.pn)) loadConfig();
+    }
+
+    @EventHandler(priority= EventPriority.LOW)
+    public void onPlayerQuit(PlayerQuitEvent e) {
+        infos.remove(e.getPlayer());
+        waits.remove(e.getPlayer());
     }
 
     /**
