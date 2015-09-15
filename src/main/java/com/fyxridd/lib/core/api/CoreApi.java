@@ -65,6 +65,51 @@ public class CoreApi {
     private static ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 
     /**
+     * 将时间格式串转化为时间
+     * @param s 格式'xxDxxHxxMxxSxxI',忽略大小写,表示'xx天xx时xx分xx秒xx毫秒',所有选项都是可选的
+     * @return 异常返回0
+     */
+    public static long getTime(String s) {
+        try {
+            s = s.toLowerCase();
+            long day,hour,minute,second,millisecond;
+            int index;
+
+            index = s.indexOf("d");
+            if (index != -1) day = Long.parseLong(s.substring(0, index));
+            else day = 0;
+            if (s.length()-1 > index) s = s.substring(index+1);
+            else s = "";
+
+            index = s.indexOf("h");
+            if (index != -1) hour = Long.parseLong(s.substring(0, index));
+            else hour = 0;
+            if (s.length()-1 > index) s = s.substring(index+1);
+            else s = "";
+
+            index = s.indexOf("m");
+            if (index != -1) minute = Long.parseLong(s.substring(0, index));
+            else minute = 0;
+            if (s.length()-1 > index) s = s.substring(index+1);
+            else s = "";
+
+            index = s.indexOf("s");
+            if (index != -1) second = Long.parseLong(s.substring(0, index));
+            else second = 0;
+            if (s.length()-1 > index) s = s.substring(index+1);
+            else s = "";
+
+            index = s.indexOf("i");
+            if (index != -1) millisecond = Long.parseLong(s.substring(0, index));
+            else millisecond = 0;
+
+            return day*DAY+hour*HOUR+minute*MINUTE+second*SECONDS+millisecond;
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    /**
      * @see #sendTitleAll(String, String, boolean, int)
      */
     public static void sendTitleAll(String title, String subTitle, boolean instant) {
