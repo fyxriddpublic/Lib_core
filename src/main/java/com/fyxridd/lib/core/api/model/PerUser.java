@@ -44,4 +44,14 @@ public class PerUser {
     public void setPers(HashSet<String> pers) {
         this.pers = pers;
     }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return ((PerUser)obj).name.equals(name);
+    }
 }
