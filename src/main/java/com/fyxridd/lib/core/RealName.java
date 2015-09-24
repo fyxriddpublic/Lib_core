@@ -39,7 +39,7 @@ public class RealName implements Listener{
         if (e.getPlugin().equals(CorePlugin.pn)) loadConfig();
     }
 
-	@EventHandler(priority=EventPriority.LOWEST,ignoreCancelled=true)
+	@EventHandler(priority=EventPriority.LOW,ignoreCancelled=true)
 	public void onPlayerLogin(PlayerLoginEvent e) {
         if (enable) {
             //检测真名,禁止非法进入
