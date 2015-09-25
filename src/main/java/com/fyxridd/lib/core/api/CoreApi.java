@@ -13,7 +13,7 @@ import com.fyxridd.lib.core.api.inter.FancyMessage;
 import com.fyxridd.lib.core.api.inter.InputHandler;
 import com.fyxridd.lib.core.api.inter.LastType;
 import com.fyxridd.lib.core.api.nbt.AttributeStorage;
-import net.minecraft.server.v1_8_R2.*;
+import net.minecraft.server.v1_8_R3.*;
 import org.apache.commons.lang.Validate;
 import org.bukkit.*;
 import org.bukkit.Material;
@@ -23,9 +23,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.libs.jline.internal.InputStreamReader;
-import org.bukkit.craftbukkit.v1_8_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_8_R2.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.entity.Entity;
@@ -1006,7 +1006,7 @@ public class CoreApi {
      */
     public static void strikeLightning(Location loc, int range) {
         CraftWorld cw = (CraftWorld)loc.getWorld();
-        net.minecraft.server.v1_8_R2.World w = cw.getHandle();
+        net.minecraft.server.v1_8_R3.World w = cw.getHandle();
         EntityLightning lightning = new EntityLightning(w, loc.getX(), loc.getY(), loc.getZ());
         PacketPlayOutSpawnEntityWeather pc = new PacketPlayOutSpawnEntityWeather(lightning);
         PacketPlayOutNamedSoundEffect pc1 = new PacketPlayOutNamedSoundEffect("random.explode", loc.getX(), loc.getY(), loc.getZ(), 2f, 0f);
@@ -1027,7 +1027,7 @@ public class CoreApi {
      */
     public static void strikeLightningEffect(Location loc, int range) {
         CraftWorld cw = (CraftWorld)loc.getWorld();
-        net.minecraft.server.v1_8_R2.World w = cw.getHandle();
+        net.minecraft.server.v1_8_R3.World w = cw.getHandle();
         EntityLightning lightning = new EntityLightning(w, loc.getX(), loc.getY(), loc.getZ());
         PacketPlayOutSpawnEntityWeather pc = new PacketPlayOutSpawnEntityWeather(lightning);
         for (Player p:loc.getWorld().getPlayers()) {

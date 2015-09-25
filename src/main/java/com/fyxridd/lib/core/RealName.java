@@ -39,8 +39,11 @@ public class RealName implements Listener{
         if (e.getPlugin().equals(CorePlugin.pn)) loadConfig();
     }
 
-	@EventHandler(priority=EventPriority.LOW,ignoreCancelled=true)
+	@EventHandler(priority=EventPriority.NORMAL)
 	public void onPlayerLogin(PlayerLoginEvent e) {
+        //已经禁止了
+        if (!e.getResult().equals(PlayerLoginEvent.Result.ALLOWED)) return;
+
         if (enable) {
             //检测真名,禁止非法进入
             String realName = getRealName(null, e.getPlayer().getName());

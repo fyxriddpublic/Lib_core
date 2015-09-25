@@ -34,10 +34,10 @@
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:5.1.35" level="project" />
     <orderEntry type="library" name="Maven: org.xerial:sqlite-jdbc:3.8.10.1" level="project" />
     <orderEntry type="library" name="Maven: com.fyxridd.lib:SqliteDialect:1.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.fyxridd.lib:spigot:1.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.fyxridd.lib:Vault:1.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.fyxridd.lib:PacketWrapper:1.0" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: com.fyxridd.lib:ProtocolLib:1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.fyxridd.lib:spigot:1.8.8" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.fyxridd.lib:Vault:1.8.8" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.fyxridd.lib:PacketWrapper:1.8.8" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.fyxridd.lib:ProtocolLib:1.8.8" level="project" />
     <orderEntry type="module" module-name="Lib_msg" scope="PROVIDED" />
   </component>
 </module>
