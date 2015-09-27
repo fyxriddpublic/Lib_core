@@ -73,7 +73,7 @@ public class ChatManager implements Listener {
                             Bukkit.getPluginManager().callEvent(event);
                             if (!event.isCancelled()) {
                                 FancyMessage msg = get(35, event.getP().getName(), event.getMsg());
-                                for (Player tar: Bukkit.getOnlinePlayers()) addChat(tar, msg.clone(), false);
+                                for (Player tar: Bukkit.getOnlinePlayers()) addChat(tar, msg, false);
                             }
                         }
 
@@ -120,11 +120,12 @@ public class ChatManager implements Listener {
      */
     public void addChat(Player p, FancyMessage msg, boolean force) {
         if (p == null || msg == null) return;
+        FancyMessage msgCopy = msg.clone();
 
-        if (force || !ShowApi.isInPage(p)) ShowApi.tip(p, msg, true);
+        if (force || !ShowApi.isInPage(p)) ShowApi.tip(p, msgCopy, true);
         else {
             //延时信息添加前缀
-            if (delayShowPrefix != null) msg.combine(delayShowPrefix, true);
+            if (delayShowPrefix != null) msgCopy.combine(delayShowPrefix, true);
             //添加到延时显示队列
             Queue<FancyMessage> queue = delayChats.get(p);
             if (queue == null) {
@@ -132,7 +133,7 @@ public class ChatManager implements Listener {
                 delayChats.put(p, queue);
             }
             while (queue.size() >= maxSaves) queue.poll();
-            queue.offer(msg);
+            queue.offer(msgCopy);
         }
     }
 

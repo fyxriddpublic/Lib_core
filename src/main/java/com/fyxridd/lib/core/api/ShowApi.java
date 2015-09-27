@@ -125,7 +125,7 @@ public class ShowApi {
      * @see #tip(org.bukkit.entity.Player, java.util.List, boolean)
      */
     public static void tip(Player p, FancyMessage msg, boolean force) {
-        List<FancyMessage> tipList = new ArrayList<FancyMessage>();
+        List<FancyMessage> tipList = new ArrayList<>();
         tipList.add(msg);
         ShowManager.tip(p, tipList, force);
     }
