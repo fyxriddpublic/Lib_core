@@ -390,6 +390,18 @@ public interface FancyMessage extends Cloneable{
         }
 
         /**
+         * (单个)格式转换
+         * @param msg 要转换的FancyMessageImpl,不为null
+         * @param from 名
+         * @param to 值
+         */
+        public static void convert(FancyMessage msg, String from, Object to) {
+            HashMap<String, Object> hash = new HashMap<>();
+            hash.put(from, to);
+            convert(msg, hash);
+        }
+
+        /**
          * 格式转换<br>
          * 把{名称}这样的替换符转换成相应的变量<br>
          * 为了效率,变量数量应当尽量少

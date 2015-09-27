@@ -109,6 +109,13 @@ public class MessageApi {
     }
 
     /**
+     * @see FancyMessage.MessagePart#convert(FancyMessage, String, Object)
+     */
+    public static void convert(FancyMessage msg, String from, Object to) {
+        FancyMessage.MessagePart.convert(msg, from, to);
+    }
+
+    /**
      * @see FancyMessage.MessagePart#convert(FancyMessage.MessagePart, java.util.HashMap)
      */
     public static void convert(FancyMessage.MessagePart mp, HashMap<String, Object> replace) {
