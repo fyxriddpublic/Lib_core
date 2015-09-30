@@ -9,8 +9,13 @@ public class HashListImpl<T extends Object> implements HashList<T>{
 	
 	public HashListImpl() {
 		hash = new HashMap<>();
-		list = new ArrayList<T>();
+		list = new ArrayList<>();
 	}
+
+    public HashListImpl(HashMap<T, Integer> hash, List<T> list) {
+        this.hash = hash;
+        this.list = list;
+    }
 
 	/**
 	 * 在最后面增加元素
@@ -171,14 +176,11 @@ public class HashListImpl<T extends Object> implements HashList<T>{
      */
 	@Override
 	public HashList<T> clone() {
-		HashListImpl<T> hash = new HashListImpl<T>();
         HashMap<T, Integer> newHash = new HashMap<>();
         for (Map.Entry<T, Integer> entry:this.hash.entrySet()) newHash.put(entry.getKey(), entry.getValue());
         List<T> newList = new ArrayList<>();
         for (T t:this.list) newList.add(t);
-        hash.hash = newHash;
-        hash.list = newList;
-		return hash;
+		return new HashListImpl<>(newHash, newList);
 	}
 
 	@Override
