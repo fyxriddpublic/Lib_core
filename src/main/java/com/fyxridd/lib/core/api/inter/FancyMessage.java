@@ -165,7 +165,7 @@ public interface FancyMessage extends Cloneable{
             //con
             List<Condition> con;
             if (this.con != null) {
-                con = new ArrayList<Condition>();
+                con = new ArrayList<>();
                 for (Condition c:this.con) con.add(c.clone());
             }else con = null;
             //color

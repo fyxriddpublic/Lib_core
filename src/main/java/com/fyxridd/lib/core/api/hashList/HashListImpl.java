@@ -8,7 +8,7 @@ public class HashListImpl<T extends Object> implements HashList<T>{
 	protected List<T> list;
 	
 	public HashListImpl() {
-		hash = new HashMap<T, Integer>();
+		hash = new HashMap<>();
 		list = new ArrayList<T>();
 	}
 
@@ -123,7 +123,7 @@ public class HashListImpl<T extends Object> implements HashList<T>{
 	 * @return 指定页面内的元素列表
 	 */
 	public List<T> getPage(int page,int pageSize) {
-		List<T> result = new ArrayList<T>();
+		List<T> result = new ArrayList<>();
 		int maxPage = getMaxPage(pageSize);
 		if (page >= 1 && page <= maxPage) {
 			int begin = (page-1)*pageSize;
@@ -166,11 +166,18 @@ public class HashListImpl<T extends Object> implements HashList<T>{
         return list;
     }
 
+    /**
+     * 深复制
+     */
 	@Override
 	public HashList<T> clone() {
 		HashListImpl<T> hash = new HashListImpl<T>();
-		hash.hash = this.hash;
-		hash.list = list;
+        HashMap<T, Integer> newHash = new HashMap<>();
+        for (Map.Entry<T, Integer> entry:this.hash.entrySet()) newHash.put(entry.getKey(), entry.getValue());
+        List<T> newList = new ArrayList<>();
+        for (T t:this.list) newList.add(t);
+        hash.hash = newHash;
+        hash.list = newList;
 		return hash;
 	}
 
