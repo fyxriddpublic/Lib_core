@@ -62,6 +62,7 @@ names:
     - "5 水下呼吸"               #OXYGEN
     - "6 水下挖掘"               #WATER_WORKER
     - "7 荆棘"                  #THORNS
+    - "8 深海探索者"           #DEPTH_STRIDER
     - "16 锋利"                 #DAMAGE_ALL
     - "17 亡灵杀手"              #DAMAGE_UNDEAD
     - "18 节肢杀手"              #DAMAGE_ARTHROPODS
