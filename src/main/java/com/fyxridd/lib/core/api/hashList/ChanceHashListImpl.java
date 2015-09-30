@@ -134,7 +134,7 @@ public class ChanceHashListImpl<T extends Object> extends HashListImpl<T> implem
 	@Override
 	public void convert(HashList<T> hashList, boolean clear) {
 		if (clear) clear();
-		if (hashList instanceof ChanceHashListImpl) {
+		if (hashList instanceof ChanceHashList) {
 			ChanceHashList<T> chanceHashList = (ChanceHashList<T>) hashList;
 			for (T t:chanceHashList) {
 				addChance(t, chanceHashList.getChance(t));

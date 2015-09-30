@@ -76,17 +76,29 @@ public class ItemApi {
     }
 
     /**
+     * 不检测小id
+     * @see #hasNormalItem(org.bukkit.inventory.Inventory, int, int, int)
+     */
+    public static boolean hasNormalItem(Inventory inv,int id,int amount) {
+        return hasNormalItem(inv, id, -1, amount);
+    }
+
+    /**
      * 检测容器中是否有指定数量的'普通'物品(ItemMeta为空)
      * @param inv 容器,不为null
      * @param id 物品id
+     * @param smallId 物品小id,-1表示不检测小id
      * @param amount 物品数量
      * @return 是否含有指定数量的物品
      */
-    public static boolean hasNormalItem(Inventory inv,int id,int amount) {
+    public static boolean hasNormalItem(Inventory inv, int id, int smallId, int amount) {
         //之所以不调用getNormalAmount是为了提高效率!
         int sum = 0;
         for (ItemStack is:inv.getContents()) {
-            if (is != null && is.getTypeId() == id && isItemMetaEmpty(is.getItemMeta())) {
+            if (is != null &&
+                    is.getTypeId() == id &&
+                    (smallId == -1 || is.getDurability() == smallId) &&
+                    isItemMetaEmpty(is.getItemMeta())) {
                 sum += is.getAmount();
                 if (sum >= amount) return true;
             }
@@ -123,21 +135,29 @@ public class ItemApi {
     }
 
     /**
+     * 不检测小id
+     * @see #removeNormalItem(org.bukkit.inventory.Inventory, int, int, int, boolean)
+     */
+    public static boolean removeNormalItem(Inventory inv, int id, int amount, boolean force) {
+        return removeNormalItem(inv, id, -1, amount, force);
+    }
+
+    /**
      * 从指定容器中移除指定数量的'普通'物品(ItemMeta为空)
      * @param inv 容器,不为null
      * @param id 物品id
+     * @param smallId 物品小id,-1表示不检测小id
      * @param amount 要移除的数量
      * @param force 如果容器中物品数量不足,是否移除已经拥有的
      * @return 如果容器中没有指定数量的指定物品,返回false
      */
-    @SuppressWarnings("deprecation")
-    public static boolean removeNormalItem(Inventory inv, int id, int amount, boolean force) {
+    public static boolean removeNormalItem(Inventory inv, int id, int smallId, int amount, boolean force) {
         if (amount <= 0) return true;
-        if (hasNormalItem(inv, id, amount)) {
+        if (hasNormalItem(inv, id, smallId, amount)) {
             for (int i=0;i<inv.getSize();i++) {
                 if (inv.getItem(i) != null){
                     ItemStack is = inv.getItem(i);
-                    if (is.getTypeId() == id && isItemMetaEmpty(is.getItemMeta())) {
+                    if (is.getTypeId() == id && (smallId == -1 || is.getDurability() == smallId) && isItemMetaEmpty(is.getItemMeta())) {
                         if (amount >= is.getAmount()) {
                             amount -= is.getAmount();
                             inv.setItem(i, null);
@@ -154,7 +174,7 @@ public class ItemApi {
             for (int i=0;i<inv.getSize();i++) {
                 if (inv.getItem(i) != null){
                     ItemStack is = inv.getItem(i);
-                    if (is.getTypeId() == id && isItemMetaEmpty(is.getItemMeta())) {
+                    if (is.getTypeId() == id && (smallId == -1 || is.getDurability() == smallId) && isItemMetaEmpty(is.getItemMeta())) {
                         if (amount >= is.getAmount()) {
                             amount -= is.getAmount();
                             inv.setItem(i, null);
@@ -217,19 +237,28 @@ public class ItemApi {
     }
 
     /**
-     * 获取指定容器中指定id的'普通'物品的数量(ItemMeta为空)
+     * 不检测小id
+     * @see #getNormalItemAmount(org.bukkit.inventory.Inventory, int, int)
+     */
+    public static int getNormalItemAmount(Inventory inv,int id) {
+        return getNormalItemAmount(inv, id, -1);
+    }
+
+    /**
+     * 获取指定容器中指定id与小id的'普通'物品的数量(ItemMeta为空)
      * @param inv 容器,不为null
      * @param id 物品id
      * @return 数量,>=0
      */
-    @SuppressWarnings("deprecation")
-    public static int getNormalItemAmount(Inventory inv,int id) {
+    public static int getNormalItemAmount(Inventory inv,int id, int smallId) {
         int sum = 0;
         for (int i=0;i<inv.getSize();i++) {
-            if (inv.getItem(i) != null &&
-                    inv.getItem(i).getTypeId() == id &&
-                    isItemMetaEmpty(inv.getItem(i).getItemMeta())) {
-                sum += inv.getItem(i).getAmount();
+            ItemStack is = inv.getItem(i);
+            if (is != null &&
+                    is.getTypeId() == id &&
+                    (smallId == -1 || is.getDurability() == smallId) &&
+                    isItemMetaEmpty(is.getItemMeta())) {
+                sum += is.getAmount();
             }
         }
         return sum;
