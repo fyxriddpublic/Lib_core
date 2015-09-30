@@ -1,5 +1,7 @@
 package com.fyxridd.lib.core.api.hashList;
 
+import com.fyxridd.lib.core.api.CoreApi;
+
 import java.util.*;
 
 public class HashListImpl<T extends Object> implements HashList<T>{

@@ -1,13 +1,20 @@
 package com.fyxridd.lib.core.api.hashList;
 
-import java.util.Random;
+import com.fyxridd.lib.core.api.CoreApi;
+
+import java.util.*;
 
 public class ChanceHashListImpl<T extends Object> extends HashListImpl<T> implements ChanceHashList<T>{
 	private static final long serialVersionUID = 1L;
-	private static final Random RANDOM = new Random();
 	private int totalChance;
-	
-	@Override
+
+    public ChanceHashListImpl(HashMap<T, Integer> hash, List<T> list, int totalChance) {
+        this.hash = hash;
+        this.list = list;
+        this.totalChance = totalChance;
+    }
+
+    @Override
 	public boolean remove(T o) {
 		if (o == null) throw new NullPointerException();
 		if (!hash.containsKey(o)) return false;
@@ -34,11 +41,11 @@ public class ChanceHashListImpl<T extends Object> extends HashListImpl<T> implem
 
 	@Override
 	public ChanceHashList<T> clone() {
-		ChanceHashListImpl<T> hash = new ChanceHashListImpl<T>();
-		hash.hash = this.hash;
-		hash.list = this.list;
-		hash.totalChance = totalChance;
-		return hash;
+        HashMap<T, Integer> newHash = new HashMap<>();
+        for (Map.Entry<T, Integer> entry:this.hash.entrySet()) newHash.put(entry.getKey(), entry.getValue());
+        List<T> newList = new ArrayList<>();
+        for (T t:this.list) newList.add(t);
+        return new ChanceHashListImpl<>(newHash, newList, totalChance);
 	}
 
 	@Override
@@ -123,7 +130,7 @@ public class ChanceHashListImpl<T extends Object> extends HashListImpl<T> implem
 	@Override
 	public T getRandom() {
         if (totalChance <= 0) return null;
-		int select = RANDOM.nextInt(totalChance);
+		int select = CoreApi.Random.nextInt(totalChance);
 		for (int i=0;i<list.size();i++) {
 			select -= hash.get(list.get(i));
 			if (select < 0) return list.get(i);
