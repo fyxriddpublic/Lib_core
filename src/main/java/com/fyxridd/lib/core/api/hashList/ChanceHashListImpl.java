@@ -8,6 +8,10 @@ public class ChanceHashListImpl<T extends Object> extends HashListImpl<T> implem
 	private static final long serialVersionUID = 1L;
 	private int totalChance;
 
+    public ChanceHashListImpl(){
+        super();
+    }
+
     public ChanceHashListImpl(HashMap<T, Integer> hash, List<T> list, int totalChance) {
         this.hash = hash;
         this.list = list;
