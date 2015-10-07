@@ -65,6 +65,36 @@ public class CoreApi {
     private static ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 
     /**
+     * 延时(0tick)更新背包
+     */
+    public static void updateInventoryDelay(final Player p) {
+        Bukkit.getScheduler().scheduleSyncDelayedTask(CorePlugin.instance, new Runnable() {
+            @Override
+            public void run() {
+                if (p.isOnline() && !p.isDead()) p.updateInventory();
+            }
+        });
+    }
+
+    /**
+     * 在指定的位置播放一下声音(升级时的音效)
+     * 比如玩家获得称号,技能等
+     */
+    public static void tipSound(Location loc) {
+        loc.getWorld().playSound(loc, Sound.LEVEL_UP, 3f, 1.2f);
+    }
+
+    /**
+     * 在指定的位置显示一下效果(村庄快乐时的效果)
+     * 比如玩家获得称号,技能等
+     * @param e 取这个实体附近32格内的玩家进行显示
+     * @param loc 显示效果的位置
+     */
+    public static void tipEffect(Entity e, Location loc) {
+        showSpec(null, e, 32, loc, "VILLAGER_HAPPY", 22, 0.9f, true);
+    }
+
+    /**
      * 将时间格式串转化为时间
      * @param s 格式'xxDxxHxxMxxSxxI',忽略大小写,表示'xx天xx时xx分xx秒xx毫秒',所有选项都是可选的
      * @return 异常返回0
