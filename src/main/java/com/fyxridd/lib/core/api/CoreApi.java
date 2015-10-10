@@ -65,6 +65,22 @@ public class CoreApi {
     private static ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 
     /**
+     * 获取随机元素
+     * @param c 集合(null时返回null)
+     * @return 异常返回null
+     */
+    public static Object getRandom(Collection c) {
+        if (c == null || c.isEmpty()) return null;
+
+        int index = 0;
+        int sel = Random.nextInt(c.size());
+        for (Object o : c) {
+            if (index++ == sel) return o;
+        }
+        return null;
+    }
+
+    /**
      * 延时(0tick)更新背包
      */
     public static void updateInventoryDelay(final Player p) {

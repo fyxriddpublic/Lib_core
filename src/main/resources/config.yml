@@ -99,7 +99,7 @@ funcManager:
     - "sa ShowAction"            #显示动作
     - "ie ItemsEdit"             #物品编辑框
     - "re Rewards"               #奖励
-    - "fr Friend"                #好友
+    - "fd Friend"                #好友
     - "bl BlackList"             #黑名单
     - "ch Channel"               #聊天频道
     - "cc ChatColor"             #聊天颜色格式
