@@ -4,6 +4,7 @@ import com.fyxridd.lib.core.api.ConfigApi;
 import com.fyxridd.lib.core.api.CorePlugin;
 import com.fyxridd.lib.core.api.FormatApi;
 import com.fyxridd.lib.core.api.ShowApi;
+import com.fyxridd.lib.core.api.event.FirstJoinEvent;
 import com.fyxridd.lib.core.api.event.ReloadConfigEvent;
 import com.fyxridd.lib.core.api.inter.FancyMessage;
 import com.fyxridd.lib.core.api.model.User;
@@ -68,6 +69,9 @@ public class RealName implements Listener{
             realNameHash.put(e.getPlayer().getName().toLowerCase(), user);
             //db
             CoreMain.dao.saveOrUpdate(user);
+            //发出事件
+            FirstJoinEvent firstJoinEvent = new FirstJoinEvent(e.getPlayer());
+            Bukkit.getPluginManager().callEvent(firstJoinEvent);
         }
 	}
 
