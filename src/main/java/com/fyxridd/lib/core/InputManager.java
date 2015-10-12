@@ -1,9 +1,6 @@
 package com.fyxridd.lib.core;
 
-import com.fyxridd.lib.core.api.ConfigApi;
-import com.fyxridd.lib.core.api.CoreApi;
-import com.fyxridd.lib.core.api.CorePlugin;
-import com.fyxridd.lib.core.api.FormatApi;
+import com.fyxridd.lib.core.api.*;
 import com.fyxridd.lib.core.api.event.PlayerChatEvent;
 import com.fyxridd.lib.core.api.event.ReloadConfigEvent;
 import com.fyxridd.lib.core.api.inter.FancyMessage;
@@ -30,7 +27,6 @@ public class InputManager implements Listener, CommandExecutor {
 
     //配置
 
-	private static int interval;
     private static boolean cancelInteract, cancelAnimation;
     private static boolean allowChat, allowCmd;
 
@@ -45,8 +41,6 @@ public class InputManager implements Listener, CommandExecutor {
 		loadConfig();
 		//注册事件
 		Bukkit.getPluginManager().registerEvents(this, CorePlugin.instance);
-		//注册速度
-		Speed.register(CorePlugin.pn, INPUT);
 	}
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
@@ -121,7 +115,7 @@ public class InputManager implements Listener, CommandExecutor {
      */
     public static boolean register(Player p, InputHandler inputHandler, boolean tip) {
         //速度检测
-        if (!Speed.check(p, CorePlugin.pn, INPUT, interval)) return false;
+        if (!SpeedApi.checkShort(p, CorePlugin.pn, INPUT, 2)) return false;
         //取消先前的
         if (inputHash.remove(p) != null) {
             if (tip) ShowManager.tip(p, get(800), false);
@@ -154,11 +148,6 @@ public class InputManager implements Listener, CommandExecutor {
 		YamlConfiguration config = ConfigApi.getConfig(CorePlugin.pn);
 
         try {
-            interval = config.getInt("input.interval");
-            if (interval < 0) {
-                interval = 0;
-                ConfigApi.log(CorePlugin.pn, "input.interval < 0");
-            }
             cancelInteract = config.getBoolean("input.cancel.interact");
             cancelAnimation = config.getBoolean("input.cancel.animation");
 

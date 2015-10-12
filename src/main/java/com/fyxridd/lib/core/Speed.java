@@ -129,17 +129,6 @@ public class Speed implements Listener{
     }
 
     /**
-	 * 注册插件的类型<br>
-     * 会覆盖旧的
-	 * @param plugin 插件,不为null
-	 * @param type 类型,不为null
-	 */
-	public static void register(String plugin, String type) {
-		if (!speedHash.containsKey(plugin)) speedHash.put(plugin, new HashMap<String, HashMap<String,Long>>());
-		speedHash.get(plugin).put(type, new HashMap<String, Long>());
-	}
-
-    /**
      * @see #check(org.bukkit.entity.Player, String, String, int, boolean)
      */
 	public static boolean check(Player p, String plugin, String type, int limit) {
@@ -157,23 +146,28 @@ public class Speed implements Listener{
      * @return true表示速度在允许范围内,false表示速度过快
      */
     public static boolean check(Player p, String plugin, String type, int limit, boolean tip) {
-        try {
-            String name = p.getName();
-            long now = System.currentTimeMillis();
-            Long pre = speedHash.get(plugin).get(type).get(name);
-            if (pre != null && now-pre<limit) {
-                if (tip) {
-                    double wait = CoreApi.getDouble(((double) limit - (now - pre)) / 1000, 1);
-                    ShowApi.tip(p, get(1000, wait), true);
-                }
-                return false;
-            }
-            speedHash.get(plugin).get(type).put(name, now);
-            return true;
-        } catch (Exception e) {
-            CoreApi.debug(e.getMessage());
+        String name = p.getName();
+        long now = System.currentTimeMillis();
+        HashMap<String, HashMap<String, Long>> pluginHash = speedHash.get(plugin);
+        if (pluginHash == null) {
+            pluginHash = new HashMap<>();
+            speedHash.put(plugin, pluginHash);
         }
-        return false;
+        HashMap<String, Long> typeHash = pluginHash.get(type);
+        if (typeHash == null) {
+            typeHash = new HashMap<>();
+            pluginHash.put(type, typeHash);
+        }
+        Long pre = typeHash.get(name);
+        if (pre != null && now-pre<limit) {
+            if (tip) {
+                double wait = CoreApi.getDouble(((double) limit - (now - pre)) / 1000, 1);
+                ShowApi.tip(p, get(1000, wait), true);
+            }
+            return false;
+        }
+        typeHash.put(name, now);
+        return true;
     }
 
     /**
@@ -192,12 +186,12 @@ public class Speed implements Listener{
         //数据c
         HashMap<String, HashMap<String, Long>> hash = shortHash.get(p);
         if (hash == null) {
-            hash = new HashMap<String, HashMap<String, Long>>();
+            hash = new HashMap<>();
             shortHash.put(p, hash);
         }
         HashMap<String, Long> hash2 = hash.get(plugin);
         if (hash2 == null) {
-            hash2 = new HashMap<String, Long>();
+            hash2 = new HashMap<>();
             hash.put(plugin, hash2);
         }
         //检测

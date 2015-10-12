@@ -42,9 +42,6 @@ import java.util.List;
  * 显示管理
  */
 public class ShowManager implements Listener, FunctionInterface, ShowInterface {
-    private static final String SHORT_DEFAULT = "sw_default";
-    private static final String SHORT_TIP = "sw_tip";
-
     /**
      * 默认pageNow的值
      */
@@ -862,8 +859,6 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
                                 toPage(p, page.getPageMax(), false);
                                 return;
                             } else if (args[1].equalsIgnoreCase("tip")) {//提示页面前往指定页
-                                //短期间隔
-                                if (!SpeedApi.checkShort(p, CorePlugin.pn, SHORT_TIP, 2)) return;
                                 //cmd
                                 String cmd = "/f sm p to {page}";
                                 //tip
@@ -882,13 +877,9 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
                                 tipTransaction.updateShow();
                                 return;
                             } else if (args[1].equalsIgnoreCase("b")) {//返回上一页
-                                //短期间隔
-                                if (!SpeedApi.checkShort(p, CorePlugin.pn, SHORT_DEFAULT, 2)) return;
                                 back(p);
                                 return;
                             } else if (args[1].equalsIgnoreCase("e")) {//退出页面
-                                //短期间隔
-                                if (!SpeedApi.checkShort(p, CorePlugin.pn, SHORT_DEFAULT, 2)) return;
                                 exit(p, true);
                                 return;
                             }
@@ -911,8 +902,6 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
                                 toListPage(p, listMax, false);
                                 return;
                             } else if (args[1].equalsIgnoreCase("tip")) {//提示列表前往指定页
-                                //短期间隔
-                                if (!SpeedApi.checkShort(p, CorePlugin.pn, SHORT_TIP, 2)) return;
                                 //cmd
                                 String cmd = "/f sm l to {page}";
                                 //tip
@@ -966,8 +955,6 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
      * @param tip 成功时是否提示(失败时必然提示)
      */
     private void toPage(Player p, int page, boolean tip) {
-        //短期间隔
-        if (!SpeedApi.checkShort(p, CorePlugin.pn, SHORT_DEFAULT, 2)) return;
         PlayerContext pc = playerContextHash.get(p);
         //当前没有查看的页面
         if (pc == null) {
@@ -1001,9 +988,6 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
      * @param tip 成功时是否提示(失败时必然提示)
      */
     private void toListPage(Player p, int page, boolean tip) {
-        //短期间隔
-        if (!SpeedApi.checkShort(p, CorePlugin.pn, SHORT_DEFAULT, 2)) return;
-
         PlayerContext pc = playerContextHash.get(p);
         //当前没有查看的页面
         if (pc == null) {

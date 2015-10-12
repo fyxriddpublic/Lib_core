@@ -5,13 +5,6 @@ import org.bukkit.entity.Player;
 
 public class SpeedApi {
     /**
-     * @see com.fyxridd.lib.core.Speed#register(String, String)
-     */
-    public static void register(String plugin, String type) {
-        Speed.register(plugin, type);
-    }
-
-    /**
      * @see Speed#check(Player, String, String, int)
      */
     public static boolean check(Player p, String plugin, String type, int limit) {

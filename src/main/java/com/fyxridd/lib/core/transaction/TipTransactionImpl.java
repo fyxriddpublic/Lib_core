@@ -130,8 +130,6 @@ public class TipTransactionImpl extends TipTransaction {
                 break;
             case 2:
                 if (args[0].equalsIgnoreCase("b")) {//指定正在修改的key
-                    //短期检测
-                    if (!SpeedApi.checkShort(p, CorePlugin.pn, SHORT_CHANGE, 1)) return;
                     //设置
                     setKey(args[1], true);
                     //重新显示

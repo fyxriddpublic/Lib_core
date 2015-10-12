@@ -19,7 +19,6 @@ import java.util.*;
 
 public class TipTransactionManager implements Listener, FunctionInterface {
     private static final String FUNC_NAME = "TipTransaction";
-    private static final String SHORT_TIP = "st_ttip";
 
     private class TipInfo {
         String per;
@@ -103,8 +102,6 @@ public class TipTransactionManager implements Listener, FunctionInterface {
                 }
                 //权限检测
                 if (!PerApi.checkPer(p, info.per)) return;
-                //短期检测
-                if (!SpeedApi.checkShort(p, CorePlugin.pn, SHORT_TIP, 2)) return;
                 //tipTransaction
                 HashMap<String, Object> mapCopy;
                 if (info.map == null) mapCopy = null;
