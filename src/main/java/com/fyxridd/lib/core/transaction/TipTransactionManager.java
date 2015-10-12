@@ -136,6 +136,17 @@ public class TipTransactionManager implements Listener, FunctionInterface {
         ShowApi.tip(p, get(5), true);
     }
 
+    /**
+     * @see com.fyxridd.lib.core.api.TransactionApi#tip(boolean, String, String, java.util.List, java.util.HashMap, java.util.HashMap, String)
+     */
+    public void tip(boolean instant, String name, String cmd, List<FancyMessage> tips, HashMap<String, Object> map, HashMap<String, List<Object>> recommend, String key) {
+        TipTransaction tipTransaction = TransactionApi.newTipTransaction(instant, name, -1, -1, cmd, tips, map, recommend, key);
+        TransactionUser tu = TransactionManager.getTransactionUser(name);
+        tu.addTransaction(tipTransaction);
+        tu.setRunning(tipTransaction.getId());
+        tipTransaction.updateShow();
+    }
+
     public static FancyMessage getPrefix() {
         return prefix;
     }
