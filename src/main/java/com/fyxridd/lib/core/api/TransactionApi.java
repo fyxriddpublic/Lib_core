@@ -1,17 +1,53 @@
 package com.fyxridd.lib.core.api;
 
 import com.fyxridd.lib.core.CoreMain;
-import com.fyxridd.lib.core.api.inter.TipTransaction;
-import com.fyxridd.lib.core.api.inter.TransactionUser;
+import com.fyxridd.lib.core.api.inter.*;
 import com.fyxridd.lib.core.transaction.TransactionManager;
-import com.fyxridd.lib.core.api.inter.FancyMessage;
 import com.fyxridd.lib.core.transaction.TipTransactionImpl;
+import org.bukkit.configuration.file.YamlConfiguration;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class TransactionApi {
+    /**
+     * @see #reloadTips(String, org.bukkit.configuration.file.YamlConfiguration)
+     */
+    public static void reloadTips(String plugin, File file) {
+        CoreMain.tipTransactionManager.reloadTips(plugin, file);
+    }
+
+    /**
+     * 重新读取Tips信息
+     * @param plugin 插件名(null时无效果)
+     * @param config 配置(null时无效果)
+     */
+    public static void reloadTips(String plugin, YamlConfiguration config) {
+        CoreMain.tipTransactionManager.reloadTips(plugin, config);
+    }
+
+    /**
+     * 注册提示的Params处理器
+     * @param plugin 插件名
+     * @param getName 获取名
+     * @param tipMapsHandler 处理器
+     */
+    public static void registerParamsHandler(String plugin, String getName, TipParamsHandler tipMapsHandler) {
+        CoreMain.tipTransactionManager.registerParamsHandler(plugin, getName, tipMapsHandler);
+    }
+
+    /**
+     * 注册提示的Recommends处理器
+     * @param plugin 插件名
+     * @param getName 获取名
+     * @param tipRecommendsHandler 处理器
+     */
+    public static void registerRecommendsHandler(String plugin, String getName, TipRecommendsHandler tipRecommendsHandler) {
+        CoreMain.tipTransactionManager.registerRecommendsHandler(plugin, getName, tipRecommendsHandler);
+    }
+
     /**
      * @see com.fyxridd.lib.core.transaction.TransactionManager#getTransactionUser(String)
      */

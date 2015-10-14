@@ -1,5 +1,6 @@
 package com.fyxridd.lib.core.transaction;
 
+import com.fyxridd.lib.core.CoreMain;
 import com.fyxridd.lib.core.api.*;
 import com.fyxridd.lib.core.api.inter.FancyMessage;
 import com.fyxridd.lib.core.api.inter.InputHandler;
@@ -12,6 +13,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 提示事务<br>
@@ -52,12 +54,17 @@ public class TipTransactionImpl extends TipTransaction {
         this.instant = instant;
         this.cmd = cmd;
         this.tip = tip;
-        if (!this.tip.isEmpty()) this.tip.get(0).combine(TipTransactionManager.getPrefix(), true);
+        if (!this.tip.isEmpty()) this.tip.get(0).combine(CoreMain.tipTransactionManager.getPrefix(), true);
         this.map = map;
         this.recommend = recommend;
         if (recommend != null && !recommend.isEmpty()) {
             this.recommendPosHash = new HashMap<>();
             for (String s:recommend.keySet()) this.recommendPosHash.put(s, 0);
+
+            //将recommend里对应的第一项值更新到map里
+            for (Map.Entry<String, List<Object>> entry:recommend.entrySet()) {
+                if (map.containsKey(entry.getKey()) && !entry.getValue().isEmpty()) map.put(entry.getKey(), entry.getValue().get(0));
+            }
         }
         //
         setKey(key, false);
@@ -65,13 +72,13 @@ public class TipTransactionImpl extends TipTransaction {
         Player p = Bukkit.getPlayerExact(name);
         if (p != null) {
             //删除旧的
-            TipTransaction pre = TipTransactionManager.getPlayerTipTransactionHashMap().remove(p);
+            TipTransaction pre = CoreMain.tipTransactionManager.getPlayerTipTransactionHashMap().remove(p);
             if (pre != null) {
                 TransactionUser tu = TransactionApi.getTransactionUser(name);
                 tu.delTransaction(pre.getId());
             }
             //设置新的
-            TipTransactionManager.getPlayerTipTransactionHashMap().put(p, this);
+            CoreMain.tipTransactionManager.getPlayerTipTransactionHashMap().put(p, this);
         }
     }
 
@@ -118,9 +125,9 @@ public class TipTransactionImpl extends TipTransaction {
                     //删除输入注册
                     InputManager.del(p, false);
                     //删除事务
-                    TipTransaction t = TipTransactionManager.getPlayerTipTransactionHashMap().get(p);
+                    TipTransaction t = CoreMain.tipTransactionManager.getPlayerTipTransactionHashMap().get(p);
                     if (t != null && t.getId() == getId()) {
-                        TipTransactionManager.getPlayerTipTransactionHashMap().remove(p);
+                        CoreMain.tipTransactionManager.getPlayerTipTransactionHashMap().remove(p);
                         //清空提示
                         ShowApi.tip(p, "", true);
                     }

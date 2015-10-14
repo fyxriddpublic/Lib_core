@@ -65,6 +65,51 @@ public class CoreApi {
     private static ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 
     /**
+     * 变量转换,包括:
+     * {x}
+     * {x,}
+     * {,y}
+     * {x,y}
+     * {,}
+     * 如args为['set','name','Jim','Kate'],s为'{4}',则转换后的值为'Kate'
+     * @param args 变量来源
+     * @param s 不为null
+     * @return 转换后的值
+     */
+    public static String convertArg(String[] args, String s) {
+        try {
+            if (s.length() >= 3 && s.charAt(0) == '{' && s.charAt(s.length()-1) == '}') {//{...}
+                String content = s.substring(1, s.length()-1).toLowerCase();
+                if (content.indexOf(',') == -1) {//{1}
+                    int pos = Integer.parseInt(content);
+                    if (pos < 1 || pos > args.length) return "";
+                    return args[pos-1];
+                }else if (s.length() == 3){//{,}
+                    return CoreApi.combine(args, " ", 0, args.length);
+                }else {
+                    int index = content.indexOf(",");
+                    if (index == 0) {//{,1}
+                        int endPos = Integer.parseInt(content.substring(1));
+                        if (endPos < 1) return "";
+                        return CoreApi.combine(args, " ", 0, endPos-1);
+                    }else if (index == content.length()-1) {//{1,}
+                        int startPos = Integer.parseInt(content.substring(0, index));
+                        if (startPos < 1 || startPos > args.length) return "";
+                        return CoreApi.combine(args, " ", startPos-1, args.length);
+                    }else {//{1,2}
+                        int startPos = Integer.parseInt(content.substring(0, index));
+                        int endPos = Integer.parseInt(content.substring(index+1));
+                        if (startPos < 1 || endPos < 1 || startPos > endPos || startPos > args.length) return "";
+                        return CoreApi.combine(args, " ", startPos-1, endPos-1);
+                    }
+                }
+            }
+        } catch (Exception e) {
+        }
+        return s;
+    }
+
+    /**
      * 获取随机元素
      * @param c 集合(null时返回null)
      * @return 异常返回null
@@ -868,17 +913,18 @@ public class CoreApi {
 
     /**
      * 把变量重新组合成字符串
+     * (包含开始与结束位置)
      * @param args 变量
      * @param separator 变量之间用这个分隔
      * @param start 开始位置,0-(args.length-1)
-     * @param end 结束位置,0-args.length
+     * @param end 结束位置,0-(args.length-1),大于最大时不会出异常
      * @return 组合后的字符串
      */
     public static String combine(String[] args, String separator, int start, int end) {
         String result = "";
         for (int i=0;i<args.length;i++) {
             if (i < start) continue;
-            if (i >= end) break;
+            if (i > end) break;
             if (i > start) result += separator;
             result += args[i];
         }
