@@ -56,6 +56,7 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
      * 功能名
      */
     private static final String FUNC_NAME = "ShowManager";
+    private static final String GET_PLAYER_CONTEXT = "getPlayerContext";
 
     public static ShowListManager showListManager;
     public static ShowMapManager showMapManager;
@@ -104,6 +105,25 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
             @Override
             public void onPacketSending(PacketEvent event) {
                 if (isInPage(event.getPlayer())) event.setCancelled(true);
+            }
+        });
+        //注册Params获取器
+        Bukkit.getScheduler().scheduleSyncDelayedTask(CorePlugin.instance, new Runnable() {
+            @Override
+            public void run() {
+                TransactionApi.registerParamsHandler(CorePlugin.pn, GET_PLAYER_CONTEXT, new TipParamsHandler() {
+                    @Override
+                    public Object get(Player p, String arg) {
+                        //当前没有查看的页面
+                        PlayerContext pc = playerContextHash.get(p);
+                        if (pc == null) {
+                            tip(p, ShowManager.get(665), true);
+                            return null;
+                        }
+                        //返回
+                        return pc;
+                    }
+                });
             }
         });
     }
@@ -796,7 +816,6 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
      * 'p b' 返回上一页<br>
      * 'p e' 退出页面<br>
      * 'p/l p/n/f/l' 页面/列表 前一页/后一页/第一页/最后页<br>
-     * 'p/l tip' 提示 页面/列表 前往指定页<br>
      * 'p/l to 页面' 页面/列表 前往指定页<br>
      * 's 页面名' 显示自定义页面<br>
      */
@@ -858,24 +877,6 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
                                 if (page == null) return;//异常
                                 toPage(p, page.getPageMax(), false);
                                 return;
-                            } else if (args[1].equalsIgnoreCase("tip")) {//提示页面前往指定页
-                                //cmd
-                                String cmd = "/f sm p to {page}";
-                                //tip
-                                List<FancyMessage> tip = new ArrayList<FancyMessage>();
-                                tip.add(get(680));
-                                //map
-                                HashMap<String, Object> map = new HashMap<String, Object>();
-                                map.put("page", pc.pageNow);
-                                //key
-                                String key = "page";
-                                //tipTransaction
-                                TipTransaction tipTransaction = TransactionApi.newTipTransaction(true, p.getName(), -1, -1, cmd, tip, map, key);
-                                TransactionUser tu = TransactionApi.getTransactionUser(p.getName());
-                                tu.addTransaction(tipTransaction);
-                                tu.setRunning(tipTransaction.getId());
-                                tipTransaction.updateShow();
-                                return;
                             } else if (args[1].equalsIgnoreCase("b")) {//返回上一页
                                 back(p);
                                 return;
@@ -900,24 +901,6 @@ public class ShowManager implements Listener, FunctionInterface, ShowInterface {
                                 if (pc.list == null) listMax = 0;
                                 else listMax = pc.list.getMaxPage(pc.listSize);
                                 toListPage(p, listMax, false);
-                                return;
-                            } else if (args[1].equalsIgnoreCase("tip")) {//提示列表前往指定页
-                                //cmd
-                                String cmd = "/f sm l to {page}";
-                                //tip
-                                List<FancyMessage> tip = new ArrayList<FancyMessage>();
-                                tip.add(get(690));
-                                //map
-                                HashMap<String, Object> map = new HashMap<String, Object>();
-                                map.put("page", pc.listNow);
-                                //key
-                                String key = "page";
-                                //tipTransaction
-                                TipTransaction tipTransaction = TransactionApi.newTipTransaction(true, p.getName(), -1, -1, cmd, tip, map, key);
-                                TransactionUser tu = TransactionApi.getTransactionUser(p.getName());
-                                tu.addTransaction(tipTransaction);
-                                tu.setRunning(tipTransaction.getId());
-                                tipTransaction.updateShow();
                                 return;
                             }
                         }

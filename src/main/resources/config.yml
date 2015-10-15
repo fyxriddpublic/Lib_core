@@ -116,7 +116,7 @@ funcManager:
     - "ah Auth"                  #登录
     - "tt Ticket"                #点券
     - "vp Vip"                   #VIP
-    - "se SignEdit"              #牌子编辑
+    - "se SkillEasy"             #简易技能
     - "ve Vote"                  #投票
     - "sp Shop"                  #商店
     - "an Auction"               #拍卖

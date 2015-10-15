@@ -279,9 +279,7 @@ public class ConfigManager implements FunctionInterface, Listener, ShowInterface
     }
 
     /**
-     * 命令:<br>
      * 'a' 打开注册的插件列表页面<br>
-     * 'r 插件名' 提示重新读取指定插件的配置<br>
      * 's 插件名' 重新读取指定插件的配置<br>
      */
     @Override
@@ -300,20 +298,7 @@ public class ConfigManager implements FunctionInterface, Listener, ShowInterface
                     break;
                 case 2:
                     String pluginName = args[1];
-                    if (args[0].equalsIgnoreCase("r")) {//提示重新读取指定插件的配置
-                        //cmd
-                        String cmd = "/f cm s "+args[1];
-                        //tip
-                        List<FancyMessage> tip = new ArrayList<FancyMessage>();
-                        tip.add(get(415, args[1]));
-                        //TipTransaction
-                        TipTransaction tipTransaction = TransactionApi.newTipTransaction(true, p.getName(), -1, -1, cmd, tip, null, null);
-                        TransactionUser tu = TransactionApi.getTransactionUser(p.getName());
-                        tu.addTransaction(tipTransaction);
-                        tu.setRunning(tipTransaction.getId());
-                        tipTransaction.updateShow();
-                        return;
-                    }else if (args[0].equalsIgnoreCase("s")) {//重新读取指定插件的配置
+                    if (args[0].equalsIgnoreCase("s")) {//重新读取指定插件的配置
                         if (loadConfig(pluginName)) msg = get(400);
                         else msg = get(405);
                         ShowApi.tip(p, msg, true);

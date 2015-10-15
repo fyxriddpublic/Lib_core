@@ -36,11 +36,11 @@ show-300: "{0}"
 show-400: "&a重新读取配置成功."
 show-405: "&c重新读取配置文件失败."
 show-410: "&c操作异常."
-show-415: "&e确认重新读取插件&d{0}&e的配置吗?  <0>  <1>"
+show-415: "&e确认重新读取插件&d{plugin}&e的配置吗?  <0>  <1>"
 info-415:
   0:
     text: "[确认]"
-    color: "3"
+    color: "a"
     onClick: "cmd /f tm a"
   1:
     text: "[取消]"
@@ -150,7 +150,7 @@ info-720:
   4:
     text: "{pageNow}"
     color: "3"
-    onClick: "cmd /f sm p tip"
+    onClick: "cmd /f tp Lib_core toPage"
     onHover: "&7指定页"
   5:
     text: "-->"
@@ -205,7 +205,7 @@ info-725:
   4:
     text: "{listNow}"
     color: "3"
-    onClick: "cmd /f sm l tip"
+    onClick: "cmd /f tp Lib_core toList"
     onHover: "&7指定页"
   5:
     text: "-->"

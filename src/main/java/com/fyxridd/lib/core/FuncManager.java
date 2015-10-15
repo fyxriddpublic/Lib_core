@@ -1,6 +1,7 @@
 package com.fyxridd.lib.core;
 
 import com.fyxridd.lib.core.api.ConfigApi;
+import com.fyxridd.lib.core.api.CoreApi;
 import com.fyxridd.lib.core.api.CorePlugin;
 import com.fyxridd.lib.core.api.FormatApi;
 import com.fyxridd.lib.core.api.event.PlayerOperateEvent;
@@ -34,6 +35,8 @@ public class FuncManager implements Listener, CommandExecutor {
 	private static HashList<String> banFuncs;
     //使用名 功能名
 	private static HashMap<String, String> funcMap;
+    //功能名 使用名
+    private static HashMap<String, String> funcMap2;
 
     //缓存
 
@@ -154,6 +157,24 @@ public class FuncManager implements Listener, CommandExecutor {
         return !banFuncs.has(func.getName());
     }
 
+    /**
+     * @see com.fyxridd.lib.core.api.FuncApi#convert(String, String)
+     */
+    public String convert(String funcName, String arg) {
+        if (arg == null) return null;
+
+        String mapKey = funcMap2.get(funcName);
+        if (mapKey == null) return null;
+        return "/f "+mapKey+" "+arg;
+    }
+
+    /**
+     * @see com.fyxridd.lib.core.api.FuncApi#convert(String, String[])
+     */
+    public String convert(String funcName, String[] args) {
+        return convert(funcName, CoreApi.combine(args, " ", 0, args.length));
+    }
+
 	/**
 	 * 设置格式
 	 * @param mp MessagePart
@@ -191,15 +212,17 @@ public class FuncManager implements Listener, CommandExecutor {
 		index = 0;
 		for (char c:s.toCharArray()) offFormat[index++] = ChatColor.getByChar(c);
 		//banFuncs
-		banFuncs = new HashListImpl<String>();
+		banFuncs = new HashListImpl<>();
 		banFuncs.convert(config.getStringList("banFuncs"), false);
         //func map
-        funcMap = new HashMap<String, String>();
+        funcMap = new HashMap<>();
+        funcMap2 = new HashMap<>();
         for (String func:config.getStringList("funcManager.funcMap")) {
             String[] ss = func.split(" ");
             String key = ss[0];
             String value = ss[1];
             funcMap.put(key, value);
+            funcMap2.put(value, key);
         }
 	}
 

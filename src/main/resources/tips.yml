@@ -71,3 +71,39 @@ certTipSetName:
   #>提交后执行的变量(是提示事务自行保证的):
   #  MAP名变量
   cmd: "/f Cert ab {1} {newName}"
+
+#配置变量: '插件名'
+reloadConfig:
+  params:
+    plugin: "3 {1}"
+  tips:
+    - "415"
+  cmd: "/f cm s {plugin}"
+
+#getPlayerContext
+#  >pageNow
+#  >listNow
+
+#配置变量: 无
+toPage:
+  instant: true
+  params:
+    pageNow: "2 getPlayerContext:pageNow"
+  maps:
+    - "page {pageNow}"
+  key: "page"
+  tips:
+    - "680"
+  cmd: "/f sm p to {page}"
+
+#配置变量: 无
+toList:
+  instant: true
+  params:
+    pageNow: "2 getPlayerContext:listNow"
+  maps:
+    - "page {pageNow}"
+  key: "page"
+  tips:
+    - "690"
+  cmd: "/f sm l to {page}"
