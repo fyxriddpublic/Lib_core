@@ -121,7 +121,7 @@ public class ConfigManager implements FunctionInterface, Listener, ShowInterface
         List<String> list = config.getStringList("description");
         if (list == null) return;
 
-        HashList<String> description = new HashListImpl<String>();
+        HashList<String> description = new HashListImpl<>();
         for (String s:list) description.add(CoreApi.convert(s));
         ConfigManager.setDescription(e.getPlugin(), description);
     }
@@ -284,6 +284,9 @@ public class ConfigManager implements FunctionInterface, Listener, ShowInterface
      */
     @Override
     public void onOperate(Player p, String... args) {
+        //权限检测
+        if (!PerApi.checkPer(p, adminPer)) return;
+
         try {
             FancyMessage msg;
 
