@@ -426,16 +426,14 @@ public class TipTransactionManager implements Listener, FunctionInterface {
         ShowApi.tip(p, get(5), true);
     }
 
-    /**
-     * @see com.fyxridd.lib.core.api.TransactionApi#reloadTips(String, java.io.File)
-     */
+    public void reloadTips(String plugin) {
+        reloadTips(plugin, CoreApi.loadConfigByUTF8(new File(CoreApi.pluginPath, plugin+"/tips.yml")));
+    }
+
     public void reloadTips(String plugin, File file) {
         reloadTips(plugin, CoreApi.loadConfigByUTF8(file));
     }
 
-    /**
-     * @see com.fyxridd.lib.core.api.TransactionApi#reloadTips(String, org.bukkit.configuration.file.YamlConfiguration)
-     */
     public void reloadTips(String plugin, YamlConfiguration config) {
         if (plugin == null || config == null) return;
 

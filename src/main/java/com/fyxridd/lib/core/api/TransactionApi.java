@@ -4,28 +4,18 @@ import com.fyxridd.lib.core.CoreMain;
 import com.fyxridd.lib.core.api.inter.*;
 import com.fyxridd.lib.core.transaction.TransactionManager;
 import com.fyxridd.lib.core.transaction.TipTransactionImpl;
-import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class TransactionApi {
     /**
-     * @see #reloadTips(String, org.bukkit.configuration.file.YamlConfiguration)
+     * 重新读取提示信息
+     * 会读取'插件名/tips.yml'文件
      */
-    public static void reloadTips(String plugin, File file) {
-        CoreMain.tipTransactionManager.reloadTips(plugin, file);
-    }
-
-    /**
-     * 重新读取Tips信息
-     * @param plugin 插件名(null时无效果)
-     * @param config 配置(null时无效果)
-     */
-    public static void reloadTips(String plugin, YamlConfiguration config) {
-        CoreMain.tipTransactionManager.reloadTips(plugin, config);
+    public static void reloadTips(String plugin) {
+        CoreMain.tipTransactionManager.reloadTips(plugin);
     }
 
     /**
