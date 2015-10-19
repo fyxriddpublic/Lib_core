@@ -1,17 +1,16 @@
 package com.fyxridd.lib.core.api;
 
 import com.fyxridd.lib.core.ConfigManager;
-import com.fyxridd.lib.core.api.hashList.HashList;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 
 public class ConfigApi {
     /**
-	 * @see ConfigManager#register(java.io.File, String, String, com.fyxridd.lib.core.api.hashList.HashList)
+	 * @see ConfigManager#register(java.io.File, String, String)
 	 */
-	public static void register(File sourceJarFile,String destPath, String pluginName, HashList<String> description) {
-		ConfigManager.register(sourceJarFile, destPath, pluginName, description);
+	public static void register(File sourceJarFile,String destPath, String pluginName) {
+		ConfigManager.register(sourceJarFile, destPath, pluginName);
 	}
 
 	/**
@@ -33,13 +32,6 @@ public class ConfigApi {
      */
     public static void log(String plugin, String msg) {
         ConfigManager.log(plugin, msg);
-    }
-
-    /**
-     * @see ConfigManager#setDescription(String, com.fyxridd.lib.core.api.hashList.HashList)
-     */
-    public static void setDescription(String pluginName, HashList<String> description) {
-        ConfigManager.setDescription(pluginName, description);
     }
 
     /**

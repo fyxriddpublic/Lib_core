@@ -110,7 +110,7 @@ public class CoreMain implements Listener{
     }
 
     private void initConfig() {
-        ConfigManager.register(CorePlugin.file, CorePlugin.dataPath, CorePlugin.pn, null);
+        ConfigManager.register(CorePlugin.file, CorePlugin.dataPath, CorePlugin.pn);
 
         configManager = new ConfigManager();
 

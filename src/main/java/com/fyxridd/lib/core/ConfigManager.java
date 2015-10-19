@@ -30,11 +30,10 @@ public class ConfigManager implements FunctionInterface, Listener, ShowInterface
 		String pluginName;
         HashList<String> description;
 
-		public ConfigContext(File sourceJarFile, String destPath, String pluginName, HashList<String> description) {
+		public ConfigContext(File sourceJarFile, String destPath, String pluginName) {
 			this.sourceJarFile = sourceJarFile;
 			this.destPath = destPath;
 			this.pluginName = pluginName;
-            this.description = description;
 		}
 
         public String getDescription() {
@@ -123,7 +122,9 @@ public class ConfigManager implements FunctionInterface, Listener, ShowInterface
 
         HashList<String> description = new HashListImpl<>();
         for (String s:list) description.add(CoreApi.convert(s));
-        ConfigManager.setDescription(e.getPlugin(), description);
+
+        ConfigContext configContext = contextHash.get(e.getPlugin());
+        if (configContext != null) configContext.description = description;
     }
 
     @EventHandler(priority= EventPriority.LOW)
@@ -170,12 +171,11 @@ public class ConfigManager implements FunctionInterface, Listener, ShowInterface
 	 * @param sourceJarFile 配置文件所在的jar文件
 	 * @param destPath 放置配置文件的目标文件夹路径
 	 * @param pluginName 注册的插件名
-     * @param description 描述,具体描述重新读取配置文件将会读取的内容,可为null
      * @return 注册是否成功.如果插件名已经被注册则返回false
 	 */
-	public static boolean register(File sourceJarFile, String destPath, String pluginName, HashList<String> description) {
+	public static boolean register(File sourceJarFile, String destPath, String pluginName) {
         if (contextHash.containsKey(pluginName)) return false;
-		ConfigContext configItem = new ConfigContext(sourceJarFile, destPath, pluginName, description);
+		ConfigContext configItem = new ConfigContext(sourceJarFile, destPath, pluginName);
 		contextHash.put(pluginName, configItem);
 		generateFiles(sourceJarFile, pluginName);
         return true;
@@ -212,16 +212,6 @@ public class ConfigManager implements FunctionInterface, Listener, ShowInterface
 	public static YamlConfiguration getConfig(String pluginName) {
 		return configHash.get(pluginName);
 	}
-
-    /**
-     * 设置描述
-     * @param pluginName 插件名,不为null
-     * @param description 描述,可为null
-     */
-    public static void setDescription(String pluginName, HashList<String> description) {
-        ConfigContext configContext = contextHash.get(pluginName);
-        if (configContext != null) configContext.description = description;
-    }
 
     /**
      * @see com.fyxridd.lib.core.api.ConfigApi#generateFiles(java.io.File, String)
