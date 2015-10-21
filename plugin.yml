@@ -17,3 +17,6 @@ commands:
   group:
     description: CmdManager
     usage: /<command> ?
+  stop:
+    description: none
+    usage: /<command> ?

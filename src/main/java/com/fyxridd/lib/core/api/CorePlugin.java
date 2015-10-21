@@ -1,7 +1,12 @@
 package com.fyxridd.lib.core.api;
 
 import com.fyxridd.lib.core.*;
+import com.fyxridd.lib.core.api.event.ServerCloseEvent;
+import com.fyxridd.lib.core.api.inter.FancyMessage;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.hibernate.SessionFactory;
 
@@ -70,6 +75,19 @@ public class CorePlugin extends JavaPlugin{
         CoreApi.sendConsoleMessage(FormatApi.get(pn, 30, pn, ver).getText());
     }
 
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (cmd.getName().equalsIgnoreCase("stop")) {
+            //先T人
+            for (Player p:Bukkit.getOnlinePlayers()) p.kickPlayer(get(70).getText());
+            //发出关服事件
+            Bukkit.getPluginManager().callEvent(new ServerCloseEvent());
+            //再关服
+            Bukkit.shutdown();
+        }
+        return true;
+    }
+
     /**
      * 注册hbm<br>
      * 所有使用hibernate的插件都必须使用此方法注册hbm文件
@@ -86,4 +104,7 @@ public class CorePlugin extends JavaPlugin{
         return Dao.getSessionFactory();
     }
 
+    private static FancyMessage get(int id, Object... args) {
+        return FormatApi.get(CorePlugin.pn, id, args);
+    }
 }
