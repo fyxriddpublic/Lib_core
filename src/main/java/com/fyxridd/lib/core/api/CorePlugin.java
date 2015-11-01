@@ -78,6 +78,7 @@ public class CorePlugin extends JavaPlugin{
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (cmd.getName().equalsIgnoreCase("stop")) {
+            if (sender instanceof Player && !sender.isOp()) return true;
             //先T人
             for (Player p:Bukkit.getOnlinePlayers()) p.kickPlayer(get(70).getText());
             //发出关服事件
