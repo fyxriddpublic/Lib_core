@@ -20,7 +20,6 @@ import java.util.Map;
  * 本身并非实际的功能,而是作为玩家与功能的一个接口
  */
 public class TipTransactionImpl extends TipTransaction {
-    private static final String SHORT_CHANGE = "st_ttc";
     //是否输入后自动确认提交
     private boolean instant;
     //命令文本,包含{名称}这样的替换符
@@ -33,6 +32,8 @@ public class TipTransactionImpl extends TipTransaction {
     private HashMap<String, List<Object>> recommend;
     //玩家正在修改的名
     private String key;
+    //是否在显示时转换颜色字符
+    private boolean convert;
 
     //缓存
     private HashMap<String, Integer> recommendPosHash;
@@ -42,15 +43,16 @@ public class TipTransactionImpl extends TipTransaction {
      */
     public TipTransactionImpl(boolean instant, String name, long last, int tipInterval, String cmd,
                               List<FancyMessage> tip, HashMap<String, Object> map, String key) {
-        this(instant, name, last, tipInterval, cmd, tip, map, null, key);
+        this(instant, name, last, tipInterval, cmd, tip, map, null, key, false);
     }
 
     /**
      * @see com.fyxridd.lib.core.api.TransactionApi#newTipTransaction(boolean, String, long, int, String, java.util.List, java.util.HashMap, java.util.HashMap, String)
      */
     public TipTransactionImpl(boolean instant, String name, long last, int tipInterval, String cmd,
-                              List<FancyMessage> tip, HashMap<String, Object> map, HashMap<String, List<Object>> recommend, String key) {
+                              List<FancyMessage> tip, HashMap<String, Object> map, HashMap<String, List<Object>> recommend, String key, boolean convert) {
         super(name, last, tipInterval);
+        this.convert = convert;
         this.instant = instant;
         this.cmd = cmd;
         this.tip = tip;
@@ -165,25 +167,8 @@ public class TipTransactionImpl extends TipTransaction {
         if (key != null && map != null && map.containsKey(key)) {
             Player p = Bukkit.getPlayerExact(getName());
             if (p != null) {
-                this.key = key;
-                //推荐值
-                if (change && recommend != null) {
-                    List<Object> recommendValues = recommend.get(key);
-                    if (recommendValues != null) {
-                        //pos
-                        int pos;
-                        if (recommendPosHash.containsKey(key)) pos = recommendPosHash.get(key);
-                        else pos = 0;
-                        pos ++;
-                        if (pos >= recommendValues.size()) pos = 0;
-                        recommendPosHash.put(key, pos);
-                        //
-                        Object recommendValue = recommendValues.get(pos);
-                        map.put(key, recommendValue);
-                    }
-                }
                 //注册输入
-                InputManager.register(p, new InputHandler() {
+                if (InputManager.register(p, new InputHandler() {
                     @Override
                     public boolean onInput(String s) {
                         if (instant) {
@@ -199,7 +184,26 @@ public class TipTransactionImpl extends TipTransaction {
                             return false;
                         }
                     }
-                }, false);
+                }, false)) {
+                    //注册输入成功
+                    this.key = key;
+                    //推荐值
+                    if (change && recommend != null) {
+                        List<Object> recommendValues = recommend.get(key);
+                        if (recommendValues != null) {
+                            //pos
+                            int pos;
+                            if (recommendPosHash.containsKey(key)) pos = recommendPosHash.get(key);
+                            else pos = 0;
+                            pos ++;
+                            if (pos >= recommendValues.size()) pos = 0;
+                            recommendPosHash.put(key, pos);
+                            //
+                            Object recommendValue = recommendValues.get(pos);
+                            map.put(key, recommendValue);
+                        }
+                    }
+                }
             }
         }
     }
@@ -215,12 +219,12 @@ public class TipTransactionImpl extends TipTransaction {
             HashMap<String, Object> copy = null;
             //代入值
             if (key != null && map != null && map.containsKey(key)) {
-                copy = new HashMap<String, Object>();
-                for (String key:map.keySet()) copy.put(key, map.get(key));
-                copy.put(key, ">"+map.get(key)+"<");
+                copy = new HashMap<>();
+                for (String key:map.keySet()) copy.put(key, convert?convert(map.get(key)):map.get(key));
+                copy.put(key, ">"+(convert?convert(map.get(key)):map.get(key))+"<");
             }
             //转换替换符
-            List<FancyMessage> result = new ArrayList<FancyMessage>();
+            List<FancyMessage> result = new ArrayList<>();
             for (FancyMessage fmi : this.tip) {
                 FancyMessage fmi2 = fmi.clone();
                 MessageApi.convert(fmi2, copy);
@@ -245,5 +249,10 @@ public class TipTransactionImpl extends TipTransaction {
 
     public void setTip(List<FancyMessage> tip) {
         this.tip = tip;
+    }
+
+    private String convert(Object obj) {
+        if (obj == null) return null;
+        return CoreApi.convert(obj.toString());
     }
 }

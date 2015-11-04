@@ -53,11 +53,28 @@ public class TransactionApi {
     }
 
     /**
-     * @see #newTipTransaction(boolean, String, long, int, String, java.util.List, java.util.HashMap, java.util.HashMap, String)
+     * @see #newTipTransaction(boolean, String, long, int, String, java.util.List, java.util.HashMap, java.util.HashMap, String, boolean)
      */
     public static TipTransaction newTipTransaction(boolean instant, String name, long last, int tipInterval, String cmd,
                                                    List<FancyMessage> tip, HashMap<String, Object> map, String key){
         return new TipTransactionImpl(instant, name, last, tipInterval, cmd, tip, map, key);
+    }
+
+    /**
+     * @see #newTipTransaction(boolean, String, long, int, String, java.util.List, java.util.HashMap, java.util.HashMap, String, boolean)
+     */
+    public static TipTransaction newTipTransaction(boolean instant, String name, long last, int tipInterval, String cmd,
+                                                   List<FancyMessage> tip, HashMap<String, Object> map, String key, boolean convert){
+        return new TipTransactionImpl(instant, name, last, tipInterval, cmd, tip, map, null, key, convert);
+    }
+
+    /**
+     * @see #newTipTransaction(boolean, String, long, int, String, java.util.List, java.util.HashMap, java.util.HashMap, String, boolean)
+     */
+    public static TipTransaction newTipTransaction(boolean instant, String name, long last, int tipInterval, String cmd,
+                                                   List<FancyMessage> tip, HashMap<String, Object> map,
+                                                   HashMap<String, List<Object>> recommend, String key) {
+        return new TipTransactionImpl(instant, name, last, tipInterval, cmd, tip, map, recommend, key, false);
     }
 
     /**
@@ -72,21 +89,21 @@ public class TransactionApi {
      * @param map 名-值映射表,可为null,值可以为null或空,但名必须全
      * @param recommend 名-推荐值列表,可为null或空,名可以不全
      * @param key 正在修改的名,可为null
+     * @param convert 是否在显示输入的内容时转换颜色字符
      */
     public static TipTransaction newTipTransaction(boolean instant, String name, long last, int tipInterval, String cmd,
                                                    List<FancyMessage> tip, HashMap<String, Object> map,
-                                                   HashMap<String, List<Object>> recommend, String key) {
-        return new TipTransactionImpl(instant, name, last, tipInterval, cmd, tip, map, recommend, key);
+                                                   HashMap<String, List<Object>> recommend, String key, boolean convert) {
+        return new TipTransactionImpl(instant, name, last, tipInterval, cmd, tip, map, recommend, key, convert);
     }
 
-
     /**
-     * @see #tip(boolean, String, String, java.util.List, java.util.HashMap, java.util.HashMap, String)
+     * @see #tip(boolean, String, String, java.util.List, java.util.HashMap, java.util.HashMap, String, boolean)
      */
     public static void tip(boolean instant, String name, String cmd, FancyMessage tip, HashMap<String, Object> map, HashMap<String, List<Object>> recommend, String key) {
         List<FancyMessage> tips = new ArrayList<>();
         tips.add(tip);
-        tip(instant, name, cmd, tips, map, recommend, key);
+        tip(instant, name, cmd, tips, map, recommend, key, false);
     }
 
     /**
@@ -98,8 +115,9 @@ public class TransactionApi {
      * @param map 名-值映射表,可为null,值可以为null或空,但名必须全
      * @param recommend 名-推荐值列表,可为null或空,名可以不全
      * @param key 正在修改的名,可为null
+     * @param convert 是否在显示输入的内容时转换颜色字符
      */
-    public static void tip(boolean instant, String name, String cmd, List<FancyMessage> tips, HashMap<String, Object> map, HashMap<String, List<Object>> recommend, String key) {
-        CoreMain.tipTransactionManager.tip(instant, name, cmd, tips, map, recommend, key);
+    public static void tip(boolean instant, String name, String cmd, List<FancyMessage> tips, HashMap<String, Object> map, HashMap<String, List<Object>> recommend, String key, boolean convert) {
+        CoreMain.tipTransactionManager.tip(instant, name, cmd, tips, map, recommend, key, convert);
     }
 }

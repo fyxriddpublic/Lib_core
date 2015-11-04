@@ -489,10 +489,14 @@ public class CoreApi {
     }
 
     /**
-     * @see com.fyxridd.lib.core.InputManager#register(org.bukkit.entity.Player, InputHandler)
+     * 注册玩家输入事件
+     * @param p 玩家,不为null
+     * @param inputHandler 处理者,不为null
+     * @param tip 成功删除旧的注册输入是否提示玩家
+     * @return 是否注册成功
      */
-    public static void registerInput(Player p, InputHandler inputHandler) {
-        InputManager.register(p, inputHandler);
+    public static boolean registerInput(Player p, InputHandler inputHandler, boolean tip) {
+        return InputManager.register(p, inputHandler, tip);
     }
 
     /**

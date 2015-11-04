@@ -20,6 +20,9 @@ certTipSetName:
   #输入后是否立即自动确认(默认false)
   instant: true
 
+  #是否在显示输入的内容时转换颜色字符(默认false)
+  convert: false
+
   #提示变量(格式为{变量名})(默认只包含name变量)
   #默认提供以下变量:
   #  name: 玩家名

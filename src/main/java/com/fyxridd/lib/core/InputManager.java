@@ -97,21 +97,7 @@ public class InputManager implements Listener, CommandExecutor {
     }
 
     /**
-	 * 注册玩家输入事件
-	 * @param p 玩家,不为null
-	 * @param inputHandler 处理者,不为null
-	 * @return 是否注册成功
-	 */
-	public static boolean register(Player p, InputHandler inputHandler) {
-        return register(p, inputHandler, true);
-	}
-
-    /**
-     * 注册玩家输入事件
-     * @param p 玩家,不为null
-     * @param inputHandler 处理者,不为null
-     * @param tip 成功删除旧的注册输入是否提示玩家
-     * @return 是否注册成功
+     * @see com.fyxridd.lib.core.api.CoreApi#registerInput(org.bukkit.entity.Player, com.fyxridd.lib.core.api.inter.InputHandler, boolean)
      */
     public static boolean register(Player p, InputHandler inputHandler, boolean tip) {
         //速度检测

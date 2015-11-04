@@ -196,8 +196,9 @@ public class TipTransactionManager implements Listener, FunctionInterface {
         String key;
         List<TipInfo> tips;
         String cmd;
+        boolean convert;
 
-        public Info(String per, boolean instant, HashMap<String, ParamInfo> params, HashMap<String, String> maps, HashMap<String, RecommendInfo> recommends, String key, List<TipInfo> tips, String cmd) {
+        public Info(String per, boolean instant, HashMap<String, ParamInfo> params, HashMap<String, String> maps, HashMap<String, RecommendInfo> recommends, String key, List<TipInfo> tips, String cmd, boolean convert) {
             this.per = per;
             this.instant = instant;
             this.params = params;
@@ -206,6 +207,7 @@ public class TipTransactionManager implements Listener, FunctionInterface {
             this.key = key;
             this.tips = tips;
             this.cmd = cmd;
+            this.convert = convert;
         }
     }
 
@@ -291,6 +293,8 @@ public class TipTransactionManager implements Listener, FunctionInterface {
                 if (!PerApi.checkPer(p, info.per)) return;
                 //instant
                 boolean instant = info.instant;
+                //convert
+                boolean convert = info.convert;
                 //params
                 HashMap<String, Object> params = new HashMap<>();
                 params.put("name", p.getName());//默认变量
@@ -413,7 +417,7 @@ public class TipTransactionManager implements Listener, FunctionInterface {
                 //cmd
                 String cmd = convert(params, info.cmd);
                 //提示事务
-                tip(instant, p.getName(), cmd, tips, map, recommend, key);
+                tip(instant, p.getName(), cmd, tips, map, recommend, key, convert);
                 return;
             }
         } catch (Exception e) {
@@ -484,8 +488,11 @@ public class TipTransactionManager implements Listener, FunctionInterface {
             //cmd
             String cmd = ms.getString("cmd");
 
+            //convert
+            boolean convert = ms.getBoolean("convert");
+
             //添加缓存
-            this.tips.get(plugin).put(name, new Info(per, instant, params, maps, recommends, key, tips, cmd));
+            this.tips.get(plugin).put(name, new Info(per, instant, params, maps, recommends, key, tips, cmd, convert));
         }
     }
 
@@ -514,10 +521,10 @@ public class TipTransactionManager implements Listener, FunctionInterface {
     }
 
     /**
-     * @see com.fyxridd.lib.core.api.TransactionApi#tip(boolean, String, String, java.util.List, java.util.HashMap, java.util.HashMap, String)
+     * @see com.fyxridd.lib.core.api.TransactionApi#tip(boolean, String, String, java.util.List, java.util.HashMap, java.util.HashMap, String, boolean)
      */
-    public void tip(boolean instant, String name, String cmd, List<FancyMessage> tips, HashMap<String, Object> map, HashMap<String, List<Object>> recommend, String key) {
-        TipTransaction tipTransaction = TransactionApi.newTipTransaction(instant, name, -1, -1, cmd, tips, map, recommend, key);
+    public void tip(boolean instant, String name, String cmd, List<FancyMessage> tips, HashMap<String, Object> map, HashMap<String, List<Object>> recommend, String key, boolean convert) {
+        TipTransaction tipTransaction = TransactionApi.newTipTransaction(instant, name, -1, -1, cmd, tips, map, recommend, key, convert);
         TransactionUser tu = TransactionManager.getTransactionUser(name);
         tu.addTransaction(tipTransaction);
         tu.setRunning(tipTransaction.getId());
