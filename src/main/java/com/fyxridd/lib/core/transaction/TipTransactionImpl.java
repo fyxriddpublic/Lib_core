@@ -221,7 +221,7 @@ public class TipTransactionImpl extends TipTransaction {
             if (key != null && map != null && map.containsKey(key)) {
                 copy = new HashMap<>();
                 for (String key:map.keySet()) copy.put(key, convert?convert(map.get(key)):map.get(key));
-                copy.put(key, ">"+(convert?convert(map.get(key)):map.get(key))+"<");
+                copy.put(key, "\u00A7d\u00A7n>"+(convert?convert(map.get(key)):map.get(key))+"\u00A7d\u00A7n<");
             }
             //转换替换符
             List<FancyMessage> result = new ArrayList<>();
