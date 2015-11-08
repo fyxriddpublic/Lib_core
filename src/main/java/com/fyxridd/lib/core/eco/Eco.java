@@ -36,7 +36,7 @@ public class Eco implements EcoHandler, Listener {
             public void run() {
                 saveAll();
             }
-        }, 326, 326);
+        }, 726, 726);
     }
 
     public void onDisable() {
