@@ -29,6 +29,8 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.entity.Entity;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
@@ -366,6 +368,21 @@ public class CoreApi {
             if (ps != null && ps instanceof Player) return (Player) ps;
             else return null;
         }else return null;
+    }
+
+    /**
+     * 是否指定玩家的最后一击杀死了生物
+     * @param entity 被杀死的生物
+     * @param killer 杀死生物的玩家的名字
+     */
+    public static boolean isLastDamagedByPlayer(LivingEntity entity, String killer) {
+        EntityDamageEvent entityDamageEvent = entity.getLastDamageCause();
+        if (entityDamageEvent != null && entityDamageEvent instanceof EntityDamageByEntityEvent) {
+            EntityDamageByEntityEvent entityDamageByEntityEvent = (EntityDamageByEntityEvent) entityDamageEvent;
+            Player damager = CoreApi.getPlayerDamager(entityDamageByEntityEvent.getDamager());
+            return damager != null && damager.getName().equals(killer);
+        }
+        return false;
     }
 
     /**
