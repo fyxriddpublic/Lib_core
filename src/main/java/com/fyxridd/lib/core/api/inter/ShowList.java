@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * 显示用的列表类
  */
-public interface ShowList<T extends Object> {
+public interface ShowList<T> {
     /**
      * 获取指定页的对象列表
      * @param pageSize 分页大小,>=0,0时返回空列表

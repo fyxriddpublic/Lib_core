@@ -1,16 +1,14 @@
 package com.fyxridd.lib.core.show;
 
-import com.fyxridd.lib.core.api.hashList.HashList;
+import com.fyxridd.lib.core.api.CoreApi;
 import com.fyxridd.lib.core.api.inter.ShowList;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
  * 显示用的列表类
  */
-public class ShowListImpl<T extends Object> implements ShowList<T> {
+public class ShowListImpl<T> implements ShowList<T> {
     /**
      * 传入的列表类型:<br>
      * 0:  指List类型<br>
@@ -48,42 +46,7 @@ public class ShowListImpl<T extends Object> implements ShowList<T> {
      * @return 对象列表,异常返回空列表
      */
     public List<T> getPage(int pageSize, int page) {
-        List<T> result = new ArrayList<T>();
-        if (list == null) return result;
-        if (pageSize == 0) return result;
-        int maxPage = getMaxPage(pageSize);
-        if (page >= 1 && page <= maxPage) {
-            int begin = (page-1)*pageSize;
-            int end = (page == maxPage)?getListSize():page*pageSize;
-            switch (type) {
-                case 0:
-                    List<T> list = (List<T>)this.list;
-                    for (int i=begin;i<end;i++) {
-                        result.add(list.get(i));
-                    }
-                    break;
-                case 1:
-                    T[] array = (T[])this.list;
-                    for (int i=begin;i<end;i++) {
-                        result.add(array[i]);
-                    }
-                    break;
-                case 2:
-                    Collection<T> collection = (Collection<T>)this.list;
-                    int index = 0;
-                    for (T t:collection) {
-                        if (index >= end) break;//结束
-                        if (index >= begin) result.add(t);
-                        index ++;
-                    }
-                    break;
-                case 3:
-                    HashList<T> hashList = (HashList<T>) this.list;
-                    result = hashList.getPage(page, pageSize);
-                    break;
-            }
-        }
-        return result;
+        return CoreApi.getPage(list, type, pageSize, page);
     }
 
     /**
@@ -92,38 +55,10 @@ public class ShowListImpl<T extends Object> implements ShowList<T> {
      * @return 最大页面数,0表示无元素,有元素则最小页面数为1
      */
     public int getMaxPage(int pageSize) {
-        if (list == null) return 0;
-        if (pageSize <= 0) return 0;
-        int listSize = getListSize();
-        if (listSize%pageSize == 0) return listSize/pageSize;
-        return listSize/pageSize+1;
+        return CoreApi.getMaxPage(CoreApi.getTotal(list, type), pageSize);
     }
 
     public Class getClassType() {
         return classType;
-    }
-
-    /**
-     * 获取列表大小
-     * @return 列表大小,异常返回0
-     */
-    private int getListSize() {
-        if (list == null) return 0;
-        int result = 0;
-        switch (type) {
-            case 0:
-                result = ((List<T>)list).size();
-                break;
-            case 1:
-                result = ((T[])list).length;
-                break;
-            case 2:
-                result = ((Collection<T>)list).size();
-                break;
-            case 3:
-                result = ((HashList<T>)list).size();
-                break;
-        }
-        return result;
     }
 }

@@ -9,6 +9,7 @@ import com.comphenix.protocol.wrappers.BlockPosition;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedBlockData;
 import com.fyxridd.lib.core.*;
+import com.fyxridd.lib.core.api.hashList.HashList;
 import com.fyxridd.lib.core.api.inter.FancyMessage;
 import com.fyxridd.lib.core.api.inter.InputHandler;
 import com.fyxridd.lib.core.api.inter.LastType;
@@ -65,6 +66,82 @@ public class CoreApi {
     private static Pattern pattern = Pattern.compile(PatternStr);
 
     private static ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
+
+    /**
+     * 获取列表元素总数
+     * @param list 列表对象,null时返回0
+     * @param type 传入的列表类型: 0指List类型,1指Object[]类型,2指Collection类型,3指HashList类型,其它情况下返回0
+     * @return 列表元素数量,>=0
+     */
+    public static int getTotal(Object list, int type) {
+        if (list == null) return 0;
+        switch (type) {
+            case 0:
+                return ((List)list).size();
+            case 1:
+                return ((Object[])list).length;
+            case 2:
+                return ((Collection)list).size();
+            case 3:
+                return ((HashList)list).size();
+        }
+        return 0;
+    }
+
+    /**
+     * 获取最大页面数
+     * @param total 总数,<=0时返回0
+     * @param pageSize 分页大小,<=0时返回0
+     * @return 最大页面数,0表示无元素,有元素则最小页面数为1
+     */
+    public static int getMaxPage(int total, int pageSize) {
+        if (total <= 0 || pageSize <= 0) return 0;
+        if (total%pageSize == 0) return total/pageSize;
+        return total/pageSize+1;
+    }
+
+    /**
+     * 获取指定页的对象列表
+     * @param list 列表对象
+     * @param type 传入的列表类型: 0指List类型,1指Object[]类型,2指Collection类型,3指HashList类型
+     * @param pageSize 分页大小,>=0,0时返回空列表
+     * @param page 指定页,页面从1开始
+     * @return 对象列表,异常返回空列表
+     */
+    public static List getPage(Object list, int type, int pageSize, int page) {
+        List result = new ArrayList();
+        if (list == null) return result;
+        if (pageSize == 0) return result;
+        int total = getTotal(list, type);
+        int maxPage = getMaxPage(total, pageSize);
+        if (page >= 1 && page <= maxPage) {
+            int begin = (page-1)*pageSize;
+            int end = (page == maxPage)?total:page*pageSize;
+            switch (type) {
+                case 0:
+                    List list2 = (List)list;
+                    for (int i=begin;i<end;i++) result.add(list2.get(i));
+                    break;
+                case 1:
+                    Object[] array = (Object[])list;
+                    for (int i=begin;i<end;i++) result.add(array[i]);
+                    break;
+                case 2:
+                    Collection c = (Collection)list;
+                    int index = 0;
+                    for (Object o:c) {
+                        if (index >= end) break;//结束
+                        if (index >= begin) result.add(o);
+                        index ++;
+                    }
+                    break;
+                case 3:
+                    result = ((HashList) list).getPage(page, pageSize);
+                    break;
+            }
+        }
+        return result;
+    }
 
     /**
      * 变量转换,包括:
