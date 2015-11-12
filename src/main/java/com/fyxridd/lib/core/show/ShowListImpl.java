@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 显示用的列表类
  */
-public class ShowListImpl<T extends Object> implements ShowList<T>{
+public class ShowListImpl<T extends Object> implements ShowList<T> {
     /**
      * 传入的列表类型:<br>
      * 0:  指List类型<br>
@@ -72,7 +72,7 @@ public class ShowListImpl<T extends Object> implements ShowList<T>{
                     Collection<T> collection = (Collection<T>)this.list;
                     int index = 0;
                     for (T t:collection) {
-                        if (index > end) break;//结束
+                        if (index >= end) break;//结束
                         if (index >= begin) result.add(t);
                         index ++;
                     }

@@ -21,5 +21,8 @@ public interface ShowList<T extends Object> {
      */
     public int getMaxPage(int pageSize);
 
+    /**
+     * null表示使用元素自带类名
+     */
     public Class getClassType();
 }
