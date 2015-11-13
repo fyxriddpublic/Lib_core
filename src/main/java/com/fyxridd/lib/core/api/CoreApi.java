@@ -583,14 +583,22 @@ public class CoreApi {
     }
 
     /**
-     * 注册玩家输入事件
-     * @param p 玩家,不为null
-     * @param inputHandler 处理者,不为null
-     * @param tip 成功删除旧的注册输入是否提示玩家
-     * @return 是否注册成功
+     * @see #registerInput(org.bukkit.entity.Player, com.fyxridd.lib.core.api.inter.InputHandler, boolean, boolean)
      */
     public static boolean registerInput(Player p, InputHandler inputHandler, boolean tip) {
         return InputManager.register(p, inputHandler, tip);
+    }
+
+    /**
+     * 注册玩家输入事件
+     * @param p 玩家,不为null
+     * @param inputHandler 处理者,不为null
+     * @param ignoreSpeed 是否忽略速度检测,true时不进行速度检测
+     * @param tip 成功删除旧的注册输入是否提示玩家
+     * @return 是否注册成功
+     */
+    public static boolean registerInput(Player p, InputHandler inputHandler, boolean ignoreSpeed, boolean tip) {
+        return InputManager.register(p, inputHandler, ignoreSpeed, tip);
     }
 
     /**

@@ -168,7 +168,7 @@ public class TipTransactionImpl extends TipTransaction {
             Player p = Bukkit.getPlayerExact(getName());
             if (p != null) {
                 //注册输入
-                if (InputManager.register(p, new InputHandler() {
+                if (CoreApi.registerInput(p, new InputHandler() {
                     @Override
                     public boolean onInput(String s) {
                         if (instant) {
@@ -184,7 +184,7 @@ public class TipTransactionImpl extends TipTransaction {
                             return false;
                         }
                     }
-                }, false)) {
+                }, true, false)) {
                     //注册输入成功
                     this.key = key;
                     //推荐值

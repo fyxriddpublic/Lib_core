@@ -100,8 +100,15 @@ public class InputManager implements Listener, CommandExecutor {
      * @see com.fyxridd.lib.core.api.CoreApi#registerInput(org.bukkit.entity.Player, com.fyxridd.lib.core.api.inter.InputHandler, boolean)
      */
     public static boolean register(Player p, InputHandler inputHandler, boolean tip) {
+        return register(p, inputHandler, false, tip);
+    }
+
+    /**
+     * @see com.fyxridd.lib.core.api.CoreApi#registerInput(org.bukkit.entity.Player, com.fyxridd.lib.core.api.inter.InputHandler, boolean)
+     */
+    public static boolean register(Player p, InputHandler inputHandler, boolean ignoreSpeed, boolean tip) {
         //速度检测
-        if (!SpeedApi.checkShort(p, CorePlugin.pn, INPUT, 2)) return false;
+        if (!ignoreSpeed && !SpeedApi.checkShort(p, CorePlugin.pn, INPUT, 2)) return false;
         //取消先前的
         if (inputHash.remove(p) != null) {
             if (tip) ShowManager.tip(p, get(800), false);
