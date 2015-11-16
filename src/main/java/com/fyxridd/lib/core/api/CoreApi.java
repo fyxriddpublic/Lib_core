@@ -10,14 +10,14 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedBlockData;
 import com.fyxridd.lib.core.*;
 import com.fyxridd.lib.core.api.hashList.HashList;
-import com.fyxridd.lib.core.api.inter.FancyMessage;
-import com.fyxridd.lib.core.api.inter.InputHandler;
-import com.fyxridd.lib.core.api.inter.LastType;
+import com.fyxridd.lib.core.api.inter.*;
 import com.fyxridd.lib.core.api.nbt.AttributeStorage;
 import net.minecraft.server.v1_8_R3.*;
 import org.apache.commons.lang.Validate;
 import org.bukkit.*;
+import org.bukkit.Chunk;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
@@ -66,6 +66,42 @@ public class CoreApi {
     private static Pattern pattern = Pattern.compile(PatternStr);
 
     private static ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
+
+    /**
+     * 获取范围内的所有实体
+     * @param range 范围
+     * @param accurate 是否精确(不精确时会将范围涉及的区块内所有实体都获取到,这样效率更高)
+     * @return 实体列表,不为null
+     */
+    public static List<Entity> getEntities(Range range, boolean accurate) {
+        List<Entity> result = new ArrayList<>();
+        Range rangeCopy = range.clone();
+        rangeCopy.fit();
+        Pos p1 = rangeCopy.getP1();
+        Pos p2 = rangeCopy.getP2();
+        int xMin = p1.getX()/16 - (p1.getX() < 0?1:0);
+        int zMin = p1.getZ()/16 - (p1.getZ() < 0?1:0);
+        int xMax = p2.getX()/16 - (p2.getX() < 0?1:0);
+        int zMax = p2.getZ()/16 - (p2.getZ() < 0?1:0);
+        World w = Bukkit.getWorld(p1.getWorld());
+        if (w != null) {
+            for (int x = xMin;x<=xMax;x++) {
+                for (int z = zMin;z<=zMax;z++) {
+                    Chunk c = w.getChunkAt(x, z);
+                    if (c != null) {
+                        if (c.isLoaded() || c.load(false)) {
+                            if (accurate) {
+                                for (Entity e:c.getEntities()) {
+                                    if (rangeCopy.checkPos(Pos.getPos(e.getLocation()))) result.add(e);
+                                }
+                            }else Collections.addAll(result, c.getEntities());
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
 
     /**
      * 获取列表元素总数
