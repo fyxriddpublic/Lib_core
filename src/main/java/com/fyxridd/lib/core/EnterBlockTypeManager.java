@@ -6,6 +6,7 @@ import com.fyxridd.lib.core.api.event.EnterBlockTypeEvent;
 import com.fyxridd.lib.core.api.event.ReloadConfigEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -32,7 +33,8 @@ public class EnterBlockTypeManager implements Listener {
     private long interval;
 
     //缓存
-    private HashMap<Player, Material> inTypeHash = new HashMap<>();
+    private HashMap<Player, Material> inTypeHash = new HashMap<>();//进入方块类型
+    private HashMap<Player, Material> onTypeHash = new HashMap<>();//走上方块类型
 
     private Check check = new Check();
 
@@ -54,6 +56,7 @@ public class EnterBlockTypeManager implements Listener {
     public void onPlayerQuit(PlayerQuitEvent e) {
         check(e.getPlayer(), true);
         inTypeHash.remove(e.getPlayer());
+        onTypeHash.remove(e.getPlayer());
     }
 
     /**
@@ -62,15 +65,30 @@ public class EnterBlockTypeManager implements Listener {
      * @param exit 玩家是否退服
      */
     private void check(Player p, boolean exit) {
-        Material oldType = inTypeHash.get(p);
-        Material newType = exit?null:p.getLocation().getBlock().getType();
-        boolean change = false;
-        if (newType != null) change = oldType == null || !oldType.equals(newType);
-        else if (oldType != null) change = true;
-        if (change) {
-            inTypeHash.put(p, newType);
-            EnterBlockTypeEvent event = new EnterBlockTypeEvent(p, oldType, newType);
-            Bukkit.getPluginManager().callEvent(event);
+        {
+            Material oldType = inTypeHash.get(p);
+            Material newType = exit?null:p.getLocation().getBlock().getType();
+            boolean change = false;
+            if (newType != null) change = oldType == null || !oldType.equals(newType);
+            else if (oldType != null) change = true;
+            if (change) {
+                inTypeHash.put(p, newType);
+                EnterBlockTypeEvent event = new EnterBlockTypeEvent(p, oldType, newType, true);
+                Bukkit.getPluginManager().callEvent(event);
+            }
+        }
+
+        {
+            Material oldType = onTypeHash.get(p);
+            Material newType = exit?null:p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType();
+            boolean change = false;
+            if (newType != null) change = oldType == null || !oldType.equals(newType);
+            else if (oldType != null) change = true;
+            if (change) {
+                onTypeHash.put(p, newType);
+                EnterBlockTypeEvent event = new EnterBlockTypeEvent(p, oldType, newType, false);
+                Bukkit.getPluginManager().callEvent(event);
+            }
         }
     }
 
