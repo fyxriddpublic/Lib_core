@@ -100,7 +100,7 @@ public class CoreApi {
     /**
      * 获取物品的Uid,不存在则会新建
      * (同时会修正物品的伤害值)
-     * @param is 物品
+     * @param is 物品,不为null
      * @return uid信息
      */
     public static ItemUidReturn getUid(ItemStack is) {
