@@ -101,15 +101,18 @@ public class CoreApi {
      * 获取物品的Uid,不存在则会新建
      * (同时会修正物品的伤害值)
      * @param is 物品,不为null
-     * @return uid信息
+     * @param generate 没有时是否生成
+     * @return uid信息,可为null
      */
-    public static ItemUidReturn getUid(ItemStack is) {
+    public static ItemUidReturn getUid(ItemStack is, boolean generate) {
         String data = getData(is, itemUid);
         boolean create = false;
         if (data == null) {
-            create = true;
-            data = UUID.randomUUID().toString();
-            is = setData(is, itemUid, data, true);
+            if (generate) {
+                create = true;
+                data = UUID.randomUUID().toString();
+                is = setData(is, itemUid, data, true);
+            }else return null;
         }
         return new ItemUidReturn(is, data, create);
     }
