@@ -49,6 +49,33 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CoreApi {
+    public static class ItemUidReturn {
+        private ItemStack is;
+        private String uid;
+        private boolean create;
+
+        public ItemUidReturn(ItemStack is, String uid, boolean create) {
+            this.is = is;
+            this.uid = uid;
+            this.create = create;
+        }
+
+        public ItemStack getIs() {
+            return is;
+        }
+
+        public String getUid() {
+            return uid;
+        }
+
+        /**
+         * 是否新建(新建指物品需要更新)
+         */
+        public boolean isCreate() {
+            return create;
+        }
+    }
+
     //服务端所在的文件夹路径
     public static String serverPath;
     //插件文件夹路径
@@ -63,11 +90,29 @@ public class CoreApi {
     public static final Random Random = new Random();
     private static final String VERSION_PATTERN = "\\(MC: [0-9.]{5}\\)";
     private static UUID fixDamageUid = UUID.fromString("0dd52480-7e43-41e2-8a43-e0af83c614ec");
+    private static UUID itemUid = UUID.fromString("24ca113c-6c2e-49e8-b41a-535156a6febc");
 
     private static final String PatternStr = "&[0123456789abcdeflmnor]";
     private static Pattern pattern = Pattern.compile(PatternStr);
 
     private static ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
+
+    /**
+     * 获取物品的Uid,不存在则会新建
+     * (同时会修正物品的伤害值)
+     * @param is 物品
+     * @return uid信息
+     */
+    public static ItemUidReturn getUid(ItemStack is) {
+        String data = getData(is, itemUid);
+        boolean create = false;
+        if (data == null) {
+            create = true;
+            data = UUID.randomUUID().toString();
+            is = setData(is, itemUid, data, true);
+        }
+        return new ItemUidReturn(is, data, create);
+    }
 
     /**
      * 获取范围内的所有实体
