@@ -1,7 +1,7 @@
 package com.fyxridd.lib.core;
 
-import com.fyxridd.lib.core.api.event.RealDamageEvent;
 import com.fyxridd.lib.core.api.CorePlugin;
+import com.fyxridd.lib.core.api.event.RealDamageEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
