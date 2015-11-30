@@ -12,6 +12,7 @@ import com.fyxridd.lib.core.*;
 import com.fyxridd.lib.core.api.hashList.HashList;
 import com.fyxridd.lib.core.api.inter.*;
 import com.fyxridd.lib.core.api.nbt.AttributeStorage;
+import com.fyxridd.lib.core.api.nbt.Attributes;
 import net.minecraft.server.v1_8_R3.*;
 import org.apache.commons.lang.Validate;
 import org.bukkit.*;
@@ -61,6 +62,7 @@ public class CoreApi {
     public static final long DAY = HOUR*24;
     public static final Random Random = new Random();
     private static final String VERSION_PATTERN = "\\(MC: [0-9.]{5}\\)";
+    private static UUID fixDamageUid = UUID.fromString("0dd52480-7e43-41e2-8a43-e0af83c614ec");
 
     private static final String PatternStr = "&[0123456789abcdeflmnor]";
     private static Pattern pattern = Pattern.compile(PatternStr);
@@ -556,16 +558,50 @@ public class CoreApi {
     }
 
     /**
+     * 不修正伤害
+     * @see #setData(org.bukkit.inventory.ItemStack, java.util.UUID, String, boolean)
+     */
+    public static ItemStack setData(ItemStack is, UUID key, String data) {
+        return setData(is, key, data, false);
+    }
+
+    /**
      * 设置保存在物品上的数据
      * @param is 物品,不为null
      * @param key 唯一的key,不为null
      * @param data 数据,null表示删除
+     * @param fixDamage 是否修正伤害
      * @return 设置后的物品
      */
-    public static ItemStack setData(ItemStack is, UUID key, String data) {
+    public static ItemStack setData(ItemStack is, UUID key, String data, boolean fixDamage) {
         AttributeStorage as = AttributeStorage.newTarget(is, key);
         as.setData(data);
-        return as.getTarget();
+        is = as.getTarget();
+        //修正伤害
+        if (fixDamage) {
+            Integer damage = CoreMain.fixDamage.get(is.getTypeId());
+
+            if (damage != null && damage > 0) {
+                Attributes.Attribute a = null;
+                Attributes attributes = new Attributes(is);
+                if (attributes.size() > 0) {
+                    for (Attributes.Attribute attribute:attributes.values()) {
+                        if (attribute.getUUID().equals(fixDamageUid)) {
+                            a = attribute;
+                            break;
+                        }
+                    }
+                }
+                //检测新建
+                if (a == null) a = Attributes.Attribute.newBuilder().uuid(fixDamageUid).type(Attributes.AttributeType.GENERIC_ATTACK_DAMAGE).amount(0).name("fixDamage").operation(Attributes.Operation.ADD_NUMBER).build();
+                //设置数量
+                a.setAmount(damage);
+                //更新物品
+                is = attributes.getStack();
+            }
+        }
+        //返回
+        return is;
     }
 
     /**

@@ -18,6 +18,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import java.util.HashMap;
+
 public class CoreMain implements Listener{
     public static boolean vaultHook, libMsgHook;
 
@@ -50,6 +52,7 @@ public class CoreMain implements Listener{
     public static HashList<String> description;
     public static String lib_core_admin;
     public static boolean debug;
+    public static HashMap<Integer, Integer> fixDamage;
 
     //启动插件
     public CoreMain() {
@@ -125,5 +128,13 @@ public class CoreMain implements Listener{
 
         //debug
         debug = config.getBoolean("debug");
+
+        //fixDamage
+        fixDamage = new HashMap<>();
+        for (String s:config.getStringList("fixDamage")) {
+            int id = Integer.parseInt(s.split(" ")[0]);
+            int damage = Integer.parseInt(s.split(" ")[1]);
+            fixDamage.put(id, damage);
+        }
     }
 }
