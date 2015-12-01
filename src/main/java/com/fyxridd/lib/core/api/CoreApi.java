@@ -270,6 +270,7 @@ public class CoreApi {
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return s;
     }
@@ -641,11 +642,12 @@ public class CoreApi {
                     }
                 }
                 //检测新建
-                if (a == null) a = Attributes.Attribute.newBuilder().uuid(fixDamageUid).type(Attributes.AttributeType.GENERIC_ATTACK_DAMAGE).amount(0).name("fixDamage").operation(Attributes.Operation.ADD_NUMBER).build();
+                if (a == null) {
+                    a = Attributes.Attribute.newBuilder().uuid(fixDamageUid).type(Attributes.AttributeType.GENERIC_ATTACK_DAMAGE).amount(0).name("fixDamage").operation(Attributes.Operation.ADD_NUMBER).build();
+                    attributes.add(a);
+                }
                 //设置数量
                 a.setAmount(damage);
-                //添加
-                attributes.add(a);
                 //更新物品
                 is = attributes.getStack();
             }
