@@ -88,6 +88,7 @@ public class CoreApi {
     public static final long HOUR = MINUTE*60;
     public static final long DAY = HOUR*24;
     public static final Random Random = new Random();
+    public static final ItemMeta EmptyIm = new ItemStack(1).getItemMeta();
     private static final String VERSION_PATTERN = "\\(MC: [0-9.]{5}\\)";
     private static UUID fixDamageUid = UUID.fromString("0dd52480-7e43-41e2-8a43-e0af83c614ec");
     private static UUID itemUid = UUID.fromString("24ca113c-6c2e-49e8-b41a-535156a6febc");
