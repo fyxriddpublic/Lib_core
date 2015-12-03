@@ -236,6 +236,7 @@ public class Attributes {
 
     // This may be modified
     public ItemStack stack;
+    //可为null
     private NbtFactory.NbtList attributes;
 
     public Attributes(ItemStack stack) {
@@ -346,8 +347,8 @@ public class Attributes {
      */
     private void loadAttributes(boolean createIfMissing) {
         if (this.attributes == null) {
-            NbtFactory.NbtCompound nbt = NbtFactory.fromItemTag(this.stack);
-            this.attributes = nbt.getList("AttributeModifiers", createIfMissing);
+            NbtFactory.NbtCompound nbt = NbtFactory.fromItemTag(this.stack, createIfMissing);
+            if (nbt != null) this.attributes = nbt.getList("AttributeModifiers", createIfMissing);
         }
     }
 
@@ -355,8 +356,8 @@ public class Attributes {
      * Remove the NBT list from the TAG compound.
      */
     private void removeAttributes() {
-        NbtFactory.NbtCompound nbt = NbtFactory.fromItemTag(this.stack);
-        nbt.remove("AttributeModifiers");
+        NbtFactory.NbtCompound nbt = NbtFactory.fromItemTag(this.stack, false);
+        if (nbt != null) nbt.remove("AttributeModifiers");
         this.attributes = null;
     }
 }

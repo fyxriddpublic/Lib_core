@@ -495,23 +495,25 @@ String name = server != null ? server.getClass().getPackage().getName() : null;
 * material, damage value or count.
 * <p>
 * The item stack must be a wrapper for a CraftItemStack.
+     * 注意!createIfMissing为true时物品可能被改变
 * @param stack - the item stack.
-* @return A wrapper for its NBT tag.
+     *         @param createIfMissing false时可能返回null
+* @return A wrapper for its NBT tag.可能为null
 */
-    public static NbtCompound fromItemTag(ItemStack stack) {
+    public static NbtCompound fromItemTag(ItemStack stack, boolean createIfMissing) {
         checkItemStack(stack);
         Object nms = getFieldValue(get().CRAFT_HANDLE, stack);
         Object tag = getFieldValue(get().STACK_TAG, nms);
         
-        // Create the tag if it doesn't exist
         if (tag == null) {
-            NbtCompound compound = createCompound();
-            setItemTag(stack, compound);
-            return compound;
-        }
-        return fromCompound(tag);
+            if (createIfMissing) {
+                NbtCompound compound = createCompound();
+                setItemTag(stack, compound);
+                return compound;
+            }else return null;
+        }else return fromCompound(tag);
     }
-    
+
     /**
 * Retrieve a CraftItemStack version of the stack.
 * @param stack - the stack to convert.
@@ -634,7 +636,7 @@ String name = server != null ? server.getClass().getPackage().getName() : null;
 * Retrieve the nearest NBT type for a given primitive type.
 * @param primitive - the primitive type.
 * @return The corresponding type.
-*/
+     */
     private NbtType getPrimitiveType(Object primitive) {
         NbtType type = NBT_ENUM.get(NBT_CLASS.inverse().get(
             Primitives.unwrap(primitive.getClass())
