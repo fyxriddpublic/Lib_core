@@ -98,6 +98,9 @@ public class CoreApi {
 
     private static ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
 
+    //有延时更新的玩家列表
+    private static HashSet<String> updateInvs = new HashSet<>();
+
     /**
      * 获取物品的Uid,不存在则会新建
      * (同时会修正物品的伤害值)
@@ -296,9 +299,17 @@ public class CoreApi {
      * 延时(0tick)更新背包
      */
     public static void updateInventoryDelay(final Player p) {
+        //已经有更新延时
+        if (updateInvs.contains(p.getName())) return;
+        //添加缓存
+        updateInvs.add(p.getName());
+        //延时更新
         Bukkit.getScheduler().scheduleSyncDelayedTask(CorePlugin.instance, new Runnable() {
             @Override
             public void run() {
+                //删除缓存
+                updateInvs.remove(p.getName());
+                //检测更新
                 if (p.isOnline() && !p.isDead()) p.updateInventory();
             }
         });
