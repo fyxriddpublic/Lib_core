@@ -1344,39 +1344,26 @@ public class CoreApi {
     }
 
     /**
-     * 在指定位置显示闪电+声音
+     * 显示闪电
      * @param loc 位置
-     * @param range 显示的范围
+     * @param range 范围
+     * @param effect 是否有闪电效果(着火)
+     * @param silent 是否安静(无声音)
      */
-    public static void strikeLightning(Location loc, int range) {
+    public static void strikeLightning(Location loc, int range, boolean effect, boolean silent) {
         CraftWorld cw = (CraftWorld)loc.getWorld();
         net.minecraft.server.v1_8_R3.World w = cw.getHandle();
-        EntityLightning lightning = new EntityLightning(w, loc.getX(), loc.getY(), loc.getZ());
+        EntityLightning lightning = new EntityLightning(w, loc.getX(), loc.getY(), loc.getZ(), !effect);
         PacketPlayOutSpawnEntityWeather pc = new PacketPlayOutSpawnEntityWeather(lightning);
         PacketPlayOutNamedSoundEffect pc1 = new PacketPlayOutNamedSoundEffect("random.explode", loc.getX(), loc.getY(), loc.getZ(), 2f, 0f);
         PacketPlayOutNamedSoundEffect pc2 = new PacketPlayOutNamedSoundEffect("ambient.weather.thunder", loc.getX(), loc.getY(), loc.getZ(), 2f, 0f);
         for (Player p:loc.getWorld().getPlayers()) {
             if (p.getLocation().distance(loc) < range) {
                 ((CraftPlayer) p).getHandle().playerConnection.sendPacket(pc);
-                ((CraftPlayer) p).getHandle().playerConnection.sendPacket(pc1);
-                ((CraftPlayer) p).getHandle().playerConnection.sendPacket(pc2);
-            }
-        }
-    }
-
-    /**
-     * 在指定位置显示闪电(无声音)
-     * @param loc 位置
-     * @param range 显示的范围
-     */
-    public static void strikeLightningEffect(Location loc, int range) {
-        CraftWorld cw = (CraftWorld)loc.getWorld();
-        net.minecraft.server.v1_8_R3.World w = cw.getHandle();
-        EntityLightning lightning = new EntityLightning(w, loc.getX(), loc.getY(), loc.getZ());
-        PacketPlayOutSpawnEntityWeather pc = new PacketPlayOutSpawnEntityWeather(lightning);
-        for (Player p:loc.getWorld().getPlayers()) {
-            if (p.getLocation().distance(loc) < range) {
-                ((CraftPlayer) p).getHandle().playerConnection.sendPacket(pc);
+                if (!silent) {
+                    ((CraftPlayer) p).getHandle().playerConnection.sendPacket(pc1);
+                    ((CraftPlayer) p).getHandle().playerConnection.sendPacket(pc2);
+                }
             }
         }
     }
