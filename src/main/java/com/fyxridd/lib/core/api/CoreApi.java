@@ -29,8 +29,8 @@ import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.*;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
@@ -639,31 +639,41 @@ public class CoreApi {
         as.setData(data);
         is = as.getTarget();
         //修正伤害
-        if (fixDamage) {
-            Integer damage = CoreMain.fixDamage.get(is.getTypeId());
+        if (fixDamage) is = fixDamage(is);
+        //返回
+        return is;
+    }
 
-            if (damage != null && damage > 0) {
-                Attributes.Attribute a = null;
-                Attributes attributes = new Attributes(is);
-                if (attributes.size() > 0) {
-                    for (Attributes.Attribute attribute:attributes.values()) {
-                        if (attribute.getUUID().equals(fixDamageUid)) {
-                            a = attribute;
-                            break;
-                        }
+    /**
+     * 修正伤害
+     * @param is 物品
+     * @return 修正后的物品,可能与原来的相同或不同
+     */
+    public static ItemStack fixDamage(ItemStack is) {
+        Integer damage = CoreMain.fixDamage.get(is.getTypeId());
+
+        if (damage != null && damage > 0) {
+            Attributes.Attribute a = null;
+            Attributes attributes = new Attributes(is);
+            if (attributes.size() > 0) {
+                for (Attributes.Attribute attribute:attributes.values()) {
+                    if (attribute.getUUID().equals(fixDamageUid)) {
+                        a = attribute;
+                        break;
                     }
                 }
-                //检测新建
-                if (a == null) {
-                    a = Attributes.Attribute.newBuilder().uuid(fixDamageUid).type(Attributes.AttributeType.GENERIC_ATTACK_DAMAGE).amount(0).name("fixDamage").operation(Attributes.Operation.ADD_NUMBER).build();
-                    attributes.add(a);
-                }
-                //设置数量
-                a.setAmount(damage);
-                //更新物品
-                is = attributes.getStack();
             }
+            //检测新建
+            if (a == null) {
+                a = Attributes.Attribute.newBuilder().uuid(fixDamageUid).type(Attributes.AttributeType.GENERIC_ATTACK_DAMAGE).amount(0).name("fixDamage").operation(Attributes.Operation.ADD_NUMBER).build();
+                attributes.add(a);
+            }
+            //设置数量
+            a.setAmount(damage);
+            //更新物品
+            is = attributes.getStack();
         }
+
         //返回
         return is;
     }
@@ -1355,7 +1365,7 @@ public class CoreApi {
     }
 
     /**
-     * 在指定位置显示闪电
+     * 在指定位置显示闪电(无声音)
      * @param loc 位置
      * @param range 显示的范围
      */
