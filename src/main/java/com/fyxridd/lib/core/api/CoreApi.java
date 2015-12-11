@@ -9,6 +9,7 @@ import com.comphenix.protocol.wrappers.BlockPosition;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedBlockData;
 import com.fyxridd.lib.core.*;
+import com.fyxridd.lib.core.api.event.FixDamageEvent;
 import com.fyxridd.lib.core.api.hashList.HashList;
 import com.fyxridd.lib.core.api.inter.*;
 import com.fyxridd.lib.core.api.nbt.AttributeStorage;
@@ -115,7 +116,7 @@ public class CoreApi {
             if (generate) {
                 create = true;
                 data = UUID.randomUUID().toString();
-                is = setData(is, itemUid, data, true);
+                is = setData(is, itemUid, data);
             }else return null;
         }
         return new ItemUidReturn(is, data, create);
@@ -619,27 +620,18 @@ public class CoreApi {
     }
 
     /**
-     * 不修正伤害
-     * @see #setData(org.bukkit.inventory.ItemStack, java.util.UUID, String, boolean)
-     */
-    public static ItemStack setData(ItemStack is, UUID key, String data) {
-        return setData(is, key, data, false);
-    }
-
-    /**
      * 设置保存在物品上的数据
      * @param is 物品,不为null
      * @param key 唯一的key,不为null
      * @param data 数据,null表示删除
-     * @param fixDamage 是否修正伤害
      * @return 设置后的物品
      */
-    public static ItemStack setData(ItemStack is, UUID key, String data, boolean fixDamage) {
+    public static ItemStack setData(ItemStack is, UUID key, String data) {
         AttributeStorage as = AttributeStorage.newTarget(is, key);
         as.setData(data);
         is = as.getTarget();
         //修正伤害
-        if (fixDamage) is = fixDamage(is);
+        is = fixDamage(is);
         //返回
         return is;
     }
@@ -651,8 +643,8 @@ public class CoreApi {
      */
     public static ItemStack fixDamage(ItemStack is) {
         Integer damage = CoreMain.fixDamage.get(is.getTypeId());
-
-        if (damage != null && damage > 0) {
+        if (damage != null && damage > 0) {//物品本身是有伤害的,需要检测
+            //解析
             Attributes.Attribute a = null;
             Attributes attributes = new Attributes(is);
             if (attributes.size() > 0) {
@@ -663,15 +655,29 @@ public class CoreApi {
                     }
                 }
             }
-            //检测新建
-            if (a == null) {
-                a = Attributes.Attribute.newBuilder().uuid(fixDamageUid).type(Attributes.AttributeType.GENERIC_ATTACK_DAMAGE).amount(0).name("fixDamage").operation(Attributes.Operation.ADD_NUMBER).build();
-                attributes.add(a);
+
+            //发出事件
+            FixDamageEvent fixDamageEvent = new FixDamageEvent(is, damage, true);
+            Bukkit.getPluginManager().callEvent(fixDamageEvent);
+
+            //处理
+            if (fixDamageEvent.isSet()) {//设置
+                //检测新建
+                if (a == null) {
+                    a = Attributes.Attribute.newBuilder().uuid(fixDamageUid).type(Attributes.AttributeType.GENERIC_ATTACK_DAMAGE).amount(0).name("fixDamage").operation(Attributes.Operation.ADD_NUMBER).build();
+                    attributes.add(a);
+                }
+                //设置数量
+                a.setAmount(damage);
+                //更新物品
+                is = attributes.getStack();
+            }else {//删除
+                if (a != null) {
+                    attributes.remove(a);
+                    //更新物品
+                    is = attributes.getStack();
+                }
             }
-            //设置数量
-            a.setAmount(damage);
-            //更新物品
-            is = attributes.getStack();
         }
 
         //返回
