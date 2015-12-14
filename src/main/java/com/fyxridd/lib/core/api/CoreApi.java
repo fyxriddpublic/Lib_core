@@ -103,6 +103,15 @@ public class CoreApi {
     private static HashSet<String> updateInvs = new HashSet<>();
 
     /**
+     * 获取随机Long
+     * @param max 最大值
+     * @return [0,max)之间的随机值
+     */
+    public static long nextLong(long max) {
+        return Math.abs(Random.nextLong())%max;
+    }
+
+    /**
      * 获取物品的Uid,不存在则会新建
      * (同时会修正物品的伤害值)
      * @param is 物品,不为null
