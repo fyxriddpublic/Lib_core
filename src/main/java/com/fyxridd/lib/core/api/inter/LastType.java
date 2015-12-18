@@ -7,5 +7,7 @@ public enum LastType {
     Seconds,
     //xx天xx时xx分
     Minute,
+    //xx时xx分xx秒
+    HourMinuteSeconds,
     ;
 }

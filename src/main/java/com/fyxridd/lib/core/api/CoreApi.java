@@ -461,6 +461,13 @@ public class CoreApi {
             last -= hour*HOUR;
             long minute = last/MINUTE;
             return get(65, day, hour, minute).getText();
+        }else if (type.equals(LastType.HourMinuteSeconds)) {
+            long hour = last/HOUR;
+            last -= hour*HOUR;
+            long minute = last/MINUTE;
+            last -= minute*MINUTE;
+            long seconds = last/SECONDS;
+            return get(67, hour, minute, seconds).getText();
         }else return "";
     }
 
