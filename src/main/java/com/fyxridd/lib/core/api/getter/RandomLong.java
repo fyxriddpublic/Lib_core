@@ -13,7 +13,7 @@ public class RandomLong implements RandomGetter{
      * @param data 'min长整数->max长整数'或'长整数',其中max>=min
      */
     public RandomLong(String data) {
-        if (data.contains("-")) {
+        if (data.contains("->")) {
             String[] args = data.split("\\->");
             min = Long.parseLong(args[0]);
             max = Long.parseLong(args[1]);

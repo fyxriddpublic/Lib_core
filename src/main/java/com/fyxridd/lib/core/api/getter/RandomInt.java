@@ -14,7 +14,7 @@ public class RandomInt implements RandomGetter{
      * @param data 'min整数->max整数'或'整数',其中max>=min
      */
     public RandomInt(String data) {
-        if (data.contains("-")) {
+        if (data.contains("->")) {
             String[] args = data.split("\\->");
             min = Integer.parseInt(args[0]);
             max = Integer.parseInt(args[1]);
