@@ -4,7 +4,7 @@ import com.fyxridd.lib.core.api.hashList.ChanceHashList;
 import com.fyxridd.lib.core.api.hashList.ChanceHashListImpl;
 
 /**
- * 随机非负实数分段获取器(>=0.0)
+ * 随机实数分段获取器
  */
 public class MultiRandomDouble implements RandomGetter{
     private ChanceHashList<RandomDouble> chances = new ChanceHashListImpl<>();

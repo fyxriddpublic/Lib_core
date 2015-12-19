@@ -234,6 +234,12 @@
             <artifactId>SqliteDialect</artifactId>
             <version>1.0</version>
         </dependency>
+        <!--commons math-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-math3</artifactId>
+            <version>3.5</version>
+        </dependency>
         <!--spigot-->
         <dependency>
             <groupId>com.fyxridd.lib</groupId>
