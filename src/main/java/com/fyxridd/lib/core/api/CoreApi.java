@@ -42,6 +42,7 @@ import org.bukkit.projectiles.ProjectileSource;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.jar.JarEntry;
@@ -976,6 +977,8 @@ public class CoreApi {
         }
     }
 
+    private static final DecimalFormat format2 = new DecimalFormat("#.00");
+
     /**
      * 改变精度
      * @param num 需要改变的实数
@@ -984,11 +987,15 @@ public class CoreApi {
      */
     public static double getDouble(double num,int accuracy) {
         if (accuracy < 0) accuracy = 0;
-        String s = String.valueOf(num);
-        if (s.split("\\.").length == 2) {
-            String[] ss = s.split("\\.");
-            return Double.parseDouble(ss[0]+"."+ss[1].substring(0, Math.min(accuracy, ss[1].length())));
-        }else return num;
+
+        DecimalFormat format;
+        if (accuracy == 2) format = format2;
+        else {
+            String f = "#.";
+            for (int index=0;index<accuracy;index++) f += "0";
+            format = new DecimalFormat(f);
+        }
+        return Double.parseDouble(format.format(num));
     }
 
     /**
