@@ -10,20 +10,18 @@ public class MultiRandomInt implements RandomGetter{
     private ChanceHashList<RandomInt> chances = new ChanceHashListImpl<>();
 
     /**
-     * @param data '<概率>:<RandomInt>[,MultiRandomInt]',概率>=0
+     * @param data '[<概率>:]<RandomInt>[,MultiRandomInt]',概率>=0,默认为1
      */
     public MultiRandomInt(String data) {
         String[] args = data.split(",", 2);
         //chances
         {
-            String[] args2 = args[0].split(":");
-            chances.addChance(new RandomInt(args2[1]), Integer.parseInt(args2[0]));
+            String[] args2 = args[0].split(":", 2);
+            if (args2.length == 1) chances.addChance(new RandomInt(args2[0]), 1);
+            else chances.addChance(new RandomInt(args2[1]), Integer.parseInt(args2[0]));
         }
         //next
-        if (args.length > 1) {
-            MultiRandomInt next = new MultiRandomInt(args[1]);
-            chances.convert(next.chances, false);
-        }
+        if (args.length > 1) chances.convert(new MultiRandomInt(args[1]).chances, false);
     }
 
     /**

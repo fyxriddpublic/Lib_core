@@ -10,19 +10,18 @@ public class MultiRandomDouble implements RandomGetter{
     private ChanceHashList<RandomDouble> chances = new ChanceHashListImpl<>();
 
     /**
-     * @param data '<概率>:<RandomDouble>[,MultiRandomDouble]',概率>=0
+     * @param data '[<概率>:]<RandomDouble>[,MultiRandomDouble]',概率>=0,默认为1
      */
     public MultiRandomDouble(String data) {
         String[] args = data.split(",", 2);
         //chances
         {
-            String[] args2 = args[0].split(":");
-            chances.addChance(new RandomDouble(args2[1]), Integer.parseInt(args2[0]));
+            String[] args2 = args[0].split(":", 2);
+            if (args2.length == 1) chances.addChance(new RandomDouble(args2[0]), 1);
+            else chances.addChance(new RandomDouble(args2[1]), Integer.parseInt(args2[0]));
         }
         //next
-        if (args.length > 1) {
-            chances.convert(new MultiRandomDouble(args[1]).getChances(), false);
-        }
+        if (args.length > 1) chances.convert(new MultiRandomDouble(args[1]).getChances(), false);
     }
 
     public ChanceHashList<RandomDouble> getChances() {

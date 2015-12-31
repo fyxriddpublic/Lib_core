@@ -10,20 +10,18 @@ public class MultiRandomLong implements RandomGetter{
     private ChanceHashList<RandomLong> chances = new ChanceHashListImpl<>();
 
     /**
-     * @param data '<概率>:<RandomLong>[,MultiRandomLong]',概率>=0
+     * @param data '[<概率>:]<RandomLong>[,MultiRandomLong]',概率>=0
      */
     public MultiRandomLong(String data) {
         String[] args = data.split(",", 2);
         //chances
         {
-            String[] args2 = args[0].split(":");
-            chances.addChance(new RandomLong(args2[1]), Integer.parseInt(args2[0]));
+            String[] args2 = args[0].split(":", 2);
+            if (args2.length == 1) chances.addChance(new RandomLong(args2[0]), 1);
+            else chances.addChance(new RandomLong(args2[1]), Integer.parseInt(args2[0]));
         }
         //next
-        if (args.length > 1) {
-            MultiRandomLong next = new MultiRandomLong(args[1]);
-            chances.convert(next.chances, false);
-        }
+        if (args.length > 1) chances.convert(new MultiRandomLong(args[1]).chances, false);
     }
 
     /**
