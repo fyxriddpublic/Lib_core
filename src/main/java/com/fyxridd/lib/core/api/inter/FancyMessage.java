@@ -470,7 +470,6 @@ public interface FancyMessage extends Cloneable{
 	/**
 	 * 向玩家发送FancyMessage<br>
 	 * 会根据功能func检测更改显示!!!
-	 * @param player
 	 * @param check 是否检测,false的时候聊天信息不会被检测阻隔
 	 */
 	public void send(Player player, boolean check);
