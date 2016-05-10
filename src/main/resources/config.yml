@@ -163,6 +163,7 @@ funcManager:
     - "mz MonZone"             #副本
     - "st Store"               #店铺模型
     - "sv StoreView"           #店铺界面
+    - "ss StoreSign"           #店铺牌子
     - "cd Card"                 #卡密
 #################################
 #####       语言管理        #####
